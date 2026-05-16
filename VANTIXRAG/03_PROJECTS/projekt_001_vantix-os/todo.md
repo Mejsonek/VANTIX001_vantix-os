@@ -1,7 +1,7 @@
 # todo.md — Lista Zadań VANTIX001
 
 > Aktualizuj po każdej sesji. To jest żywy dokument — nie archiwum.
-> Ostatnia aktualizacja: 2026-05-16 (sesja 2)
+> Ostatnia aktualizacja: 2026-05-16 (sesja 3)
 
 ---
 
@@ -38,7 +38,9 @@
 
 ## 🟡 PHASE 1 — Mockupy modułów
 
-- [ ] Mockup Shell / Launcher (`app.vantix.pl` — punkt wejścia)
+- [x] Nowe repo `vantix-app` — Next.js 16 + Tailwind + lucide-react ✅ 2026-05-16
+- [x] Mockup Shell / Launcher (`app.vantix.pl` — punkt wejścia) ✅ 2026-05-16
+- [ ] Landing page `vantix.pl` — publiczna strona marki (formularz kontaktowy, prezentacja)
 - [ ] Mockup Personal Cockpit (taski, kalendarz, priorytety, rekomendacje AI)
 - [ ] Mockup CRM (lejek, leady, follow-up, routing)
 - [ ] Mockup Vantix DEV (projekty, roadmapa, TODO, logi, pamięć projektu)

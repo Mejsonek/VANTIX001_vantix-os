@@ -92,6 +92,42 @@ Commit: `f9e0e7e` + kolejny commit z Phase 0 sesja 2.
 
 ---
 
+## 2026-05-16 — Phase 1: Nowe repo + Shell Launcher mockup (sesja 3)
+
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+- Zainicjalizowano nowy projekt `vantix-app` (Next.js 16.2.6, Tailwind, TypeScript, lucide-react)
+- Zbudowano Shell / Launcher mockup — główna strona systemu (`/`)
+  - Topbar z logiem Vantix OS, wersją, wyszukiwarką ⌘K, dzwonkiem i avatarem KZ
+  - Nagłówek z powitaniem dynamicznym (Dzień dobry / Cześć / Dobry wieczór)
+  - AI Focus panel (placeholder, czeka na Brain integration)
+  - Grid 6 kart modułów ze statusami (Aktywny / Wkrótce / Planowane)
+  - Quick actions: Nowy lead / Nowy task / Nowa notatka
+  - System status bar: Neon DB, Claude API, Vercel, n8n
+- Naprawiono błąd Server/Client — `"use client"` na `page.tsx` (Lucide icons jako props)
+- Zaktualizowano `todo.md` — odhaczono Shell mockup, dodano landing page do backlogu
+
+### Gdzie skończono
+
+Shell mockup gotowy i renderuje się poprawnie na `localhost:3002`.
+Pliki: `vantix-app/app/page.tsx`, `components/shell/ModuleCard.tsx`, `components/shell/SystemStatus.tsx`
+
+### Następny krok
+
+Phase 1 ciąg dalszy — w następnej sesji:
+1. Mockup Personal Cockpit
+2. Mockup CRM (nowy, od zera w vantix-app)
+3. Landing page `vantix.pl`
+
+### Blokery
+
+- Brak (Shell mockup = gotowy)
+- Landing page dodana do backlogu Phase 1
+
+---
+
 ## Format kolejnych wpisów
 
 ```
