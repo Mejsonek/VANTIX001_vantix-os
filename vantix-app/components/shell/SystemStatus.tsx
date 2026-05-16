@@ -1,34 +1,40 @@
 "use client";
 
-interface StatusItem {
-  label: string;
-  status: "ok" | "warn" | "error";
-}
-
-const items: StatusItem[] = [
-  { label: "Neon DB",    status: "ok" },
-  { label: "Claude API", status: "ok" },
-  { label: "Vercel",     status: "ok" },
-  { label: "n8n",        status: "warn" },
+const items = [
+  { label: "Neon DB",    status: "ok"   as const },
+  { label: "Claude API", status: "ok"   as const },
+  { label: "Vercel",     status: "ok"   as const },
+  { label: "n8n",        status: "warn" as const },
 ];
 
-const dotClass: Record<StatusItem["status"], string> = {
-  ok:    "bg-emerald-400",
-  warn:  "bg-amber-400",
-  error: "bg-red-400",
-};
+const dotColor = { ok: "var(--green)", warn: "var(--orange)", error: "var(--red)" };
 
 export default function SystemStatus() {
   return (
-    <div className="flex items-center gap-1 flex-wrap">
-      {items.map((item) => (
-        <span
+    <div style={{ display: "flex", gap: 0, border: "var(--border-dim)", overflow: "hidden" }}>
+      {items.map((item, i) => (
+        <div
           key={item.label}
-          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900 px-2.5 py-1 text-[11px] text-zinc-400"
+          style={{
+            flex: 1,
+            padding: "10px 14px",
+            borderRight: i < items.length - 1 ? "var(--border-dim)" : "none",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
         >
-          <span className={`h-1.5 w-1.5 rounded-full ${dotClass[item.status]}`} />
-          {item.label}
-        </span>
+          <span style={{
+            width: 5, height: 5,
+            borderRadius: "50%",
+            background: dotColor[item.status],
+            display: "inline-block",
+            flexShrink: 0,
+          }} />
+          <span style={{ fontSize: 9, letterSpacing: ".2em", color: "var(--ivory-40)", textTransform: "uppercase" }}>
+            {item.label}
+          </span>
+        </div>
       ))}
     </div>
   );

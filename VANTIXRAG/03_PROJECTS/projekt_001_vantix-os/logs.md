@@ -128,6 +128,49 @@ Phase 1 ciąg dalszy — w następnej sesji:
 
 ---
 
+## 2026-05-16 — Phase 1: Shell redesign wg Vantix Design System (sesja 4)
+
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+- Wczytano i zaindeksowano `VANTIXRAG/04_KNOWLEDGE/vantix_design_system.html`
+- Przebudowano Shell od zera wg Vantix Design System (Cosmic Minimalism):
+  - Paleta: Void `#020202`, Surface `#0c0c0c`, Gold `#D4AF37`, Ivory `#F5F4F0`
+  - Typografia: Syne (display) + DM Mono (body) — załadowane przez next/font/google
+  - Grain overlay + grid background (subtelne złote linie)
+  - Sidebar z nawigacją i logo VANTIX (font Syne 800, złoty)
+  - Topbar ze stylem ds-nav (border-dim, backdrop-blur)
+  - Powitanie w Syne 800 z wyróżnieniem "Kacper" na złoto
+  - KPI bar (4 kolumny, border-dim, wartości w Syne 700)
+  - AI Focus panel (border-left 2px gold, agent-bubble styl, avatar VX)
+  - Grid modułów 3×2 z kartami vx-card (hover: top gradient + border-gold-40)
+  - Odznaki statusu: green/gold/dim/red (8px, letter-spacing, uppercase)
+  - System status bar (4 usługi, colored dots)
+- Naprawiono błąd `@import url()` po `@import "tailwindcss"` w PostCSS — przeniesiono fonty do layout.tsx (next/font)
+- Naprawiono błąd Server Component przekazującego Lucide icons do Client — `"use client"` na page.tsx
+- Stworzono skrót `Vantix OS.command` na biurku macOS — uruchamia serwer i otwiera przeglądarkę jednym kliknięciem
+- Zaktualizowano `todo.md` (sesja 3) i `logs.md` (sesja 3 + 4)
+
+### Gdzie skończono
+
+Shell v2 (Design System) gotowy — renderuje bez błędów na `localhost:3002`.
+Pliki: `vantix-app/app/globals.css`, `layout.tsx`, `page.tsx`, `components/shell/ModuleCard.tsx`, `SystemStatus.tsx`
+Skrót: `~/Desktop/Vantix OS.command`
+
+### Następny krok
+
+Następna sesja — Phase 1 ciąg dalszy:
+1. Mockup Personal Cockpit
+2. Mockup CRM (nowy, od zera w vantix-app)
+3. Mockup Vantix DEV
+
+### Blokery
+
+- Brak (koniec sesji na dziś)
+
+---
+
 ## Format kolejnych wpisów
 
 ```

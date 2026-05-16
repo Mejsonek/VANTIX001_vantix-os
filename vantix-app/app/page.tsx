@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  LayoutDashboard,
-  Users,
-  Code2,
-  Brain,
-  Settings,
-  Zap,
-  Plus,
-  Search,
-  Bell,
-} from "lucide-react";
+import { LayoutDashboard, Users, Code2, Brain, Settings, Zap, Search, Bell } from "lucide-react";
 import ModuleCard from "@/components/shell/ModuleCard";
 import SystemStatus from "@/components/shell/SystemStatus";
 
@@ -32,37 +22,37 @@ const modules = [
     shortcut: "⌘2",
     stats: [
       { label: "Aktywne leady", value: "0" },
-      { label: "Follow-up dziś", value: "0" },
+      { label: "Follow-up", value: "0" },
     ],
   },
   {
     icon: Code2,
     name: "Vantix DEV",
-    description: "Projekty, roadmapa, TODO, logi, pamięć projektu",
+    description: "Projekty, roadmapa, TODO, logi, pamięć",
     status: "active" as const,
     href: "/dev",
     shortcut: "⌘3",
     stats: [
-      { label: "Projekty aktywne", value: "1" },
-      { label: "Otwarte taski", value: "—" },
+      { label: "Projekty", value: "1" },
+      { label: "Phase", value: "1" },
     ],
   },
   {
     icon: Brain,
     name: "Brain / VANTIXRAG",
-    description: "Pamięć AI, wiedza, decyzje, evolution proposals",
+    description: "Pamięć AI, wiedza, decyzje, evolution",
     status: "active" as const,
     href: "/brain",
     shortcut: "⌘4",
     stats: [
-      { label: "Sekcje pamięci", value: "0" },
-      { label: "Propozycje EVO", value: "0" },
+      { label: "Sekcje", value: "0" },
+      { label: "EVO", value: "0" },
     ],
   },
   {
     icon: Settings,
-    name: "Settings / Integrations",
-    description: "API keys, AI providerzy, integracje systemowe",
+    name: "Settings",
+    description: "API keys, AI providerzy, integracje",
     status: "soon" as const,
     href: "/settings",
     shortcut: "⌘5",
@@ -70,114 +60,285 @@ const modules = [
   {
     icon: Zap,
     name: "Workflows",
-    description: "Automatyzacje, webhooki, flow, retry blocks",
+    description: "Automatyzacje, webhooki, flow, retry",
     status: "planned" as const,
     shortcut: "⌘6",
   },
 ];
 
-const quickActions = [
-  { icon: Plus, label: "Nowy lead", href: "/crm?action=new" },
-  { icon: Plus, label: "Nowy task", href: "/cockpit?action=new" },
-  { icon: Plus, label: "Nowa notatka", href: "/brain?action=new" },
+const kpis = [
+  { label: "Leady aktywne", value: "0" },
+  { label: "Projekty",      value: "1" },
+  { label: "Cashflow EST",  value: "—" },
+  { label: "Phase",         value: "1" },
 ];
 
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Dzień dobry";
-  if (hour < 18) return "Cześć";
+const navItems = [
+  { icon: "⌂", label: "Shell",      href: "/",       active: true,  badge: "" },
+  { icon: "◈", label: "CRM",        href: "/crm",    active: false, badge: "0" },
+  { icon: "⟐", label: "DEV Tool",   href: "/dev",    active: false, badge: "1" },
+  { icon: "◉", label: "Brain",      href: "/brain",  active: false, badge: "" },
+  { icon: "⚡", label: "Workflows",  href: "/flows",  active: false, badge: "" },
+  { icon: "⚙", label: "Settings",   href: "/settings",active: false, badge: "" },
+];
+
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Dzień dobry";
+  if (h < 18) return "Cześć";
   return "Dobry wieczór";
 }
 
 export default function ShellPage() {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("pl-PL", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+  const date = new Date().toLocaleDateString("pl-PL", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      {/* Topbar */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-800/60 bg-zinc-950/90 px-6 py-3 backdrop-blur">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold tracking-widest text-violet-400 uppercase">Vantix OS</span>
-          <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-500 font-mono">v0.1-mockup</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-500 hover:border-zinc-700 hover:text-zinc-400 transition-colors">
-            <Search size={12} />
-            <span>Szukaj</span>
-            <kbd className="ml-2 rounded border border-zinc-700 bg-zinc-800 px-1 text-[10px]">⌘K</kbd>
-          </button>
-          <button className="relative rounded-lg border border-zinc-800 bg-zinc-900 p-1.5 text-zinc-500 hover:border-zinc-700 hover:text-zinc-400 transition-colors">
-            <Bell size={14} />
-          </button>
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-600 text-[11px] font-semibold text-white">
-            KZ
-          </div>
-        </div>
-      </header>
+    <div style={{ minHeight: "100vh", background: "var(--void)", position: "relative" }}>
+      <div className="grid-bg" />
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        {/* Hero header */}
-        <div className="mb-10 flex items-end justify-between">
-          <div>
-            <p className="text-xs text-zinc-600 mb-1 capitalize">{dateStr}</p>
-            <h1 className="text-2xl font-bold text-zinc-100">
-              {getGreeting()}, Kacper
-            </h1>
-            <p className="mt-1 text-sm text-zinc-500">
-              Co jest dziś najważniejsze?
-            </p>
-          </div>
-          <div className="flex gap-2">
-            {quickActions.map((action) => (
-              <a
-                key={action.label}
-                href={action.href}
-                className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-400 hover:border-zinc-700 hover:text-zinc-300 transition-colors"
-              >
-                <action.icon size={12} />
-                {action.label}
-              </a>
-            ))}
-          </div>
-        </div>
+      <div style={{ display: "flex", position: "relative", zIndex: 1 }}>
 
-        {/* Focus panel — placeholder */}
-        <div className="mb-8 rounded-xl border border-violet-500/20 bg-violet-500/5 p-5">
-          <div className="flex items-start gap-3">
-            <div className="mt-0.5 h-2 w-2 rounded-full bg-violet-400 shrink-0" />
-            <div>
-              <p className="text-sm font-medium text-violet-300">AI Focus — dziś</p>
-              <p className="mt-1 text-xs text-zinc-500 leading-relaxed">
-                System inicjalizuje kontekst. Po podłączeniu Brain / VANTIXRAG, tutaj pojawią się rekomendacje AI na podstawie Twoich leadów, tasków i priorytetów.
-              </p>
+        {/* ── SIDEBAR ── */}
+        <aside style={{
+          width: 220,
+          minHeight: "100vh",
+          background: "var(--surface)",
+          borderRight: "var(--border-dim)",
+          display: "flex",
+          flexDirection: "column",
+          flexShrink: 0,
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflow: "hidden",
+        }}>
+          {/* Logo */}
+          <div style={{
+            padding: "20px 16px 16px",
+            borderBottom: "var(--border-dim)",
+          }}>
+            <div style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 800,
+              fontSize: 16,
+              letterSpacing: ".15em",
+              color: "var(--gold)",
+            }}>
+              VANTIX
+            </div>
+            <div style={{ fontSize: 8, letterSpacing: ".2em", color: "var(--ivory-40)", marginTop: 2 }}>
+              OS v0.1-mockup
             </div>
           </div>
-        </div>
 
-        {/* Modules grid */}
-        <div className="mb-8">
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-600">
-            Moduły systemu
-          </h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {modules.map((mod) => (
-              <ModuleCard key={mod.name} {...mod} />
+          {/* Nav */}
+          <nav style={{ flex: 1, padding: "8px 0" }}>
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className={`sidebar-item${item.active ? " active" : ""}`}
+              >
+                <span className="sidebar-item-icon">{item.icon}</span>
+                <span className="sidebar-item-label">{item.label}</span>
+                {item.badge && (
+                  <span className="sidebar-item-badge">{item.badge}</span>
+                )}
+              </a>
             ))}
-          </div>
-        </div>
+          </nav>
 
-        {/* System status */}
-        <div className="flex items-center justify-between border-t border-zinc-800/60 pt-5">
-          <p className="text-[11px] text-zinc-700">Status systemu</p>
-          <SystemStatus />
+          {/* User */}
+          <div style={{
+            padding: "12px 16px",
+            borderTop: "var(--border-dim)",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}>
+            <div style={{
+              width: 28, height: 28,
+              border: "var(--border)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: "var(--font-display)",
+              fontWeight: 700,
+              fontSize: 9,
+              color: "var(--gold)",
+              background: "var(--gold-10)",
+              letterSpacing: ".1em",
+              flexShrink: 0,
+            }}>
+              KZ
+            </div>
+            <div>
+              <div style={{ fontSize: 10, color: "var(--ivory)", letterSpacing: ".05em" }}>Kacper Zdżałka</div>
+              <div style={{ fontSize: 8, color: "var(--ivory-40)", letterSpacing: ".1em" }}>Founder · Vantix</div>
+            </div>
+          </div>
+        </aside>
+
+        {/* ── MAIN ── */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+
+          {/* Topbar */}
+          <header style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 32px",
+            height: 52,
+            borderBottom: "var(--border-dim)",
+            background: "rgba(2,2,2,.9)",
+            backdropFilter: "blur(12px)",
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+          }}>
+            <div className="vx-label" style={{ color: "var(--ivory-40)" }}>
+              Shell — Launcher
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <button style={{
+                display: "flex", alignItems: "center", gap: 8,
+                border: "var(--border-dim)",
+                background: "var(--s2)",
+                padding: "6px 12px",
+                cursor: "pointer",
+              }}>
+                <Search size={11} style={{ color: "var(--ivory-40)" }} />
+                <span style={{ fontSize: 9, color: "var(--ivory-40)", letterSpacing: ".15em" }}>SZUKAJ</span>
+                <kbd style={{
+                  border: "var(--border-dim)",
+                  background: "var(--s3)",
+                  padding: "1px 5px",
+                  fontSize: 9,
+                  color: "var(--ivory-20)",
+                  marginLeft: 8,
+                }}>⌘K</kbd>
+              </button>
+              <button style={{
+                border: "var(--border-dim)",
+                background: "var(--s2)",
+                padding: "6px 8px",
+                cursor: "pointer",
+                display: "flex", alignItems: "center",
+              }}>
+                <Bell size={12} style={{ color: "var(--ivory-40)" }} />
+              </button>
+            </div>
+          </header>
+
+          <main style={{ padding: "40px 32px 80px", maxWidth: 900 }}>
+
+            {/* Greeting */}
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ fontSize: 9, letterSpacing: ".4em", color: "var(--gold-60)", textTransform: "uppercase", marginBottom: 8 }}>
+                {date}
+              </div>
+              <h1 style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 800,
+                fontSize: 36,
+                letterSpacing: "-.02em",
+                lineHeight: 1,
+                color: "var(--ivory)",
+                marginBottom: 6,
+              }}>
+                {getGreeting()}, <span style={{ color: "var(--gold)" }}>Kacper</span>
+              </h1>
+              <p style={{ fontSize: 12, color: "var(--ivory-40)", letterSpacing: ".05em" }}>
+                Co jest dziś najważniejsze?
+              </p>
+            </div>
+
+            {/* KPI row */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, border: "var(--border-dim)", marginBottom: 32, overflow: "hidden" }}>
+              {kpis.map((kpi, i) => (
+                <div key={kpi.label} style={{
+                  padding: "16px",
+                  borderRight: i < kpis.length - 1 ? "var(--border-dim)" : "none",
+                  background: "var(--surface)",
+                  textAlign: "center",
+                  transition: "border-color .2s",
+                }}>
+                  <div style={{
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 700,
+                    fontSize: 28,
+                    color: "var(--gold)",
+                    lineHeight: 1,
+                    marginBottom: 4,
+                  }}>
+                    {kpi.value}
+                  </div>
+                  <div className="vx-label">{kpi.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* AI Focus */}
+            <div style={{
+              border: "var(--border-dim)",
+              borderLeft: "2px solid var(--gold)",
+              background: "var(--surface)",
+              padding: "16px 20px",
+              marginBottom: 32,
+              display: "flex",
+              gap: 12,
+            }}>
+              <div style={{
+                width: 32, height: 32,
+                border: "var(--border)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: 8,
+                color: "var(--gold)",
+                background: "var(--gold-10)",
+                letterSpacing: ".1em",
+                flexShrink: 0,
+              }}>
+                VX
+              </div>
+              <div>
+                <div className="vx-label" style={{ marginBottom: 6 }}>AI Focus — dziś</div>
+                <div style={{ fontSize: 12, color: "var(--ivory-60)", lineHeight: 1.75 }}>
+                  System inicjalizuje kontekst. Po podłączeniu <strong style={{ color: "var(--ivory)" }}>Brain / VANTIXRAG</strong> tutaj pojawią się rekomendacje AI na podstawie Twoich leadów, tasków i priorytetów.
+                </div>
+                <div style={{ fontSize: 8, color: "var(--ivory-20)", letterSpacing: ".15em", marginTop: 8 }}>
+                  VANTIXRAG · master_context · Phase 1
+                </div>
+              </div>
+            </div>
+
+            {/* Modules */}
+            <div style={{ marginBottom: 32 }}>
+              <div className="vx-label" style={{ marginBottom: 16 }}>Moduły systemu</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 1, background: "var(--gold-10)" }}>
+                {modules.map((mod) => (
+                  <div key={mod.name} style={{ background: "var(--void)" }}>
+                    <ModuleCard {...mod} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="vx-divider" />
+
+            {/* System status */}
+            <div style={{ marginBottom: 8 }}>
+              <div className="vx-label" style={{ marginBottom: 12 }}>Status systemu</div>
+              <SystemStatus />
+            </div>
+
+          </main>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

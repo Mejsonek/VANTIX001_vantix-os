@@ -14,65 +14,96 @@ interface ModuleCardProps {
   stats?: { label: string; value: string }[];
 }
 
-const statusConfig: Record<ModuleStatus, { label: string; classes: string; dot: string }> = {
-  active:   { label: "Aktywny",    classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20", dot: "bg-emerald-400" },
-  planned:  { label: "Planowane",  classes: "bg-zinc-700/50 text-zinc-500 border-zinc-700",             dot: "bg-zinc-500" },
-  soon:     { label: "Wkrótce",    classes: "bg-violet-500/10 text-violet-400 border-violet-500/20",    dot: "bg-violet-400" },
-  blocked:  { label: "Blokada",    classes: "bg-red-500/10 text-red-400 border-red-500/20",             dot: "bg-red-400" },
+const statusCfg: Record<ModuleStatus, { label: string; cls: string }> = {
+  active:  { label: "Active",   cls: "vx-badge vx-badge-green" },
+  planned: { label: "Planned",  cls: "vx-badge vx-badge-dim" },
+  soon:    { label: "Wkrótce",  cls: "vx-badge vx-badge-gold" },
+  blocked: { label: "Blocker",  cls: "vx-badge vx-badge-red" },
 };
 
 export default function ModuleCard({ icon: Icon, name, description, status, href, shortcut, stats }: ModuleCardProps) {
-  const cfg = statusConfig[status];
-  const isClickable = status === "active" && href;
+  const cfg = statusCfg[status];
+  const isClickable = status === "active" && !!href;
 
-  const card = (
+  const inner = (
     <div
-      className={`
-        group relative flex flex-col gap-4 rounded-xl border p-5
-        transition-all duration-200
-        ${isClickable
-          ? "border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:bg-zinc-900/80 cursor-pointer"
-          : "border-zinc-800/50 bg-zinc-900/40 opacity-60 cursor-default"
-        }
-      `}
+      className="vx-card group h-full"
+      style={{ cursor: isClickable ? "pointer" : "default", opacity: isClickable ? 1 : 0.5 }}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`rounded-lg p-2 ${isClickable ? "bg-zinc-800 group-hover:bg-zinc-700" : "bg-zinc-800/50"} transition-colors`}>
-            <Icon size={18} className={isClickable ? "text-zinc-300" : "text-zinc-600"} />
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 32, height: 32,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            border: "var(--border-dim)",
+            background: "var(--s2)",
+          }}>
+            <Icon size={14} style={{ color: isClickable ? "var(--gold)" : "var(--ivory-20)" }} />
           </div>
           <div>
-            <p className={`text-sm font-semibold ${isClickable ? "text-zinc-100" : "text-zinc-500"}`}>{name}</p>
-            <p className="text-xs text-zinc-600 mt-0.5">{description}</p>
+            <div style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 600, fontSize: 14,
+              color: isClickable ? "var(--ivory)" : "var(--ivory-40)",
+              letterSpacing: ".01em",
+              marginBottom: 2,
+            }}>
+              {name}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--ivory-40)", letterSpacing: ".03em" }}>
+              {description}
+            </div>
           </div>
         </div>
-        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium ${cfg.classes}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
-          {cfg.label}
-        </span>
+        <span className={cfg.cls}>{cfg.label}</span>
       </div>
 
       {stats && stats.length > 0 && (
-        <div className="flex gap-4 border-t border-zinc-800 pt-3">
+        <div style={{
+          display: "flex", gap: 24,
+          borderTop: "var(--border-dim)",
+          paddingTop: 12, marginTop: 4,
+        }}>
           {stats.map((s) => (
             <div key={s.label}>
-              <p className="text-xs text-zinc-600">{s.label}</p>
-              <p className="text-sm font-semibold text-zinc-300">{s.value}</p>
+              <div className="vx-label" style={{ marginBottom: 2 }}>{s.label}</div>
+              <div style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 20, color: "var(--gold)",
+              }}>
+                {s.value}
+              </div>
             </div>
           ))}
         </div>
       )}
 
       {shortcut && isClickable && (
-        <div className="absolute bottom-3 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-          <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-500">{shortcut}</kbd>
+        <div style={{
+          position: "absolute", bottom: 12, right: 14,
+          opacity: 0, transition: "opacity .2s",
+        }}
+          className="group-hover:opacity-100"
+        >
+          <kbd style={{
+            border: "var(--border-dim)",
+            background: "var(--s2)",
+            padding: "2px 6px",
+            fontSize: 9,
+            color: "var(--ivory-40)",
+            letterSpacing: ".1em",
+          }}>{shortcut}</kbd>
         </div>
       )}
     </div>
   );
 
   if (isClickable) {
-    return <a href={href} className="block no-underline">{card}</a>;
+    return (
+      <a href={href} style={{ display: "block", textDecoration: "none", height: "100%" }}>
+        {inner}
+      </a>
+    );
   }
-  return card;
+  return inner;
 }
