@@ -7,8 +7,8 @@
 
 ## 🔴 KRYTYCZNE (blokery — zrobić pierwsze)
 
-- [ ] Uruchomić tabelę `leads` na Neon SQL Editor (CRM nie działa bez tego)
-- [ ] Uruchomić tabelę `brain_sections` na Neon SQL Editor (statusy Brain nie są persistowane)
+- [x] Uruchomić tabelę `leads` na Neon SQL Editor ✅ 2026-05-16
+- [x] Uruchomić tabelę `brain_sections` na Neon SQL Editor ✅ 2026-05-16
 
 > Skrypty są w `schema.sql` — skopiuj sekcje CRM i Brain do Neon SQL Editor.
 
