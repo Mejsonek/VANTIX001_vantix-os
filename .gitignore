@@ -1,0 +1,34 @@
+# Środowisko i sekrety — NIGDY nie commitować
+.env
+.env.local
+.env.*.local
+
+# Next.js
+.next/
+out/
+build/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Logi
+*.log
+
+# Testy
+coverage/
+
+# Misc
+*.pem
+.vercel

@@ -1,0 +1,80 @@
+# logs.md — Historia Sesji Projektu VANTIX001
+
+> Chronologiczny log wszystkich sesji pracy nad projektem. Nigdy nie usuwać wpisów — to jedyna ciągła pamięć projektu.
+
+---
+
+## 2026-05-16 — Phase 0: Inicjalizacja systemu i wypełnienie pamięci VANTIXRAG
+
+**Sesja:** Phase 0 — Blueprint i budowa pamięci systemu
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~1 sesja
+
+### Co zostało zrobione
+
+- Przeczytano i zaindeksowano `CLAUDE.md` — główny plik kontekstu systemu
+- Połączono się ze starym RAAG Vantix (Google Drive: folder "RAAG VANTIX")
+- Wyciągnięto dokumenty z 5 folderów starego RAAG:
+  - `00_PROFIL/` — 10 plików: osobowość, cele, ograniczenia, motywacje, mocne strony, słabe punkty, preferencje, styl pracy, komunikacja, learning roadmap
+  - `01_FINANSE/` — 3 pliki: koszty stałe, pricing, cele finansowe
+  - `02_PROJEKTY/` — standardy, fazy projektowe, workflow i zasady architektury, README vantix-app, TODO
+  - `04_OPERACJE/` — rytm dnia
+  - `05_KLIENCI_I_RYNEK/` — ICP, pipeline sprzedaży, objection handling, argumenty sprzedażowe, lokalny rynek
+
+### Pliki wypełnione
+
+| Plik | Status |
+|------|--------|
+| `01_MASTER/master_rules.md` | ✅ Wypełniony |
+| `01_MASTER/master_goals.md` | ✅ Wypełniony |
+| `02_PROFILE/osoba.md` | ✅ Wypełniony |
+| `02_PROFILE/workflow.md` | ✅ Wypełniony |
+| `03_PROJECTS/projekt_001_vantix-os/project.md` | ✅ Wypełniony |
+| `03_PROJECTS/projekt_001_vantix-os/roadmap.md` | ✅ Wypełniony |
+| `03_PROJECTS/projekt_001_vantix-os/logs.md` | ✅ Ten plik |
+
+### Gdzie skończono
+
+Phase 0 — rdzeń pamięci VANTIXRAG zapisany. Struktura projektu w repo:
+`VANTIX001_vantix-os/VANTIXRAG/`
+
+### Następny krok
+
+Phase 0 (dokończenie):
+- [ ] Wypełnić `01_MASTER/master_memory.md` i `master_context.md`
+- [ ] Wypełnić `02_PROFILE/rola.md` i `framework.md`
+- [ ] Wypełnić `03_PROJECTS/projekt_001_vantix-os/todo.md` i `decisions.md`
+- [ ] Usunąć blokery DB: uruchomić `leads` i `brain_sections` na Neon SQL Editor
+
+Phase 1 (następna sesja):
+- [ ] Mockupy wszystkich modułów systemu
+
+### Blokery i otwarte pytania
+
+- Tabele Neon (`leads`, `brain_sections`) wymagają ręcznego uruchomienia przez Kacpra w SQL Editor
+- Nie wiadomo czy stary RAAG zawierał jeszcze dokumenty poza pobranymi folderami — warto sprawdzić czy czegoś nie brakuje
+- `02_PROJEKTY/vantix-app/01_architektura/` — brak pliku z diagramem systemu (do stworzenia)
+
+---
+
+## Format kolejnych wpisów
+
+```
+## YYYY-MM-DD — [Nazwa sesji]
+
+**Sesja:** [Opis]
+**Agent:** [Model]
+**Czas:** [Szacowany]
+
+### Co zostało zrobione
+[Lista konkretnych działań]
+
+### Gdzie skończono
+[Plik, endpoint, moduł — punkt gdzie przerwano]
+
+### Następny krok
+[Co jest pierwsze w kolejnej sesji]
+
+### Blokery i otwarte pytania
+[Co blokuje, co wymaga decyzji Kacpra]
+```
