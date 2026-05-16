@@ -30,9 +30,9 @@
 - [x] `03_PROJECTS/projekt_001_vantix-os/todo.md` — ten plik
 - [x] `03_PROJECTS/projekt_001_vantix-os/logs.md` — log sesji
 - [x] `03_PROJECTS/projekt_001_vantix-os/decisions.md` — log decyzji technicznych
-- [ ] `vantix-app/01_architektura/` — diagram systemu (schemat modułów i zależności)
-- [ ] `vantix-app/02_realizacja/` — instrukcja uruchomienia lokalnego
-- [ ] `crm/03_decisions/` — decyzje techniczne CRM
+- [x] `memory/architektura.md` — decyzje techniczne i diagram systemu
+- [x] `memory/uruchomienie_lokalne.md` — instrukcja uruchomienia lokalnego
+- [x] `05_SHELL_MODULES/crm/` — scope, mini_rag, logic_links wypełnione
 
 ---
 

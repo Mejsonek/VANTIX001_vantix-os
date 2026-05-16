@@ -57,6 +57,41 @@ Phase 1 (następna sesja):
 
 ---
 
+## 2026-05-16 — Phase 0: Dokończenie pamięci systemu (sesja 2)
+
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+- Wypełniono `01_MASTER/`: master_memory, master_context, evolution_policy
+- Wypełniono `02_PROFILE/`: rola, framework
+- Wypełniono `03_PROJECTS/projekt_001_vantix-os/`: decisions (8 decyzji arch.)
+- Pobrano z Drive logi sesji (2026-05-15) — wyciągnięto decyzje techniczne i status modułu Settings
+- Stworzono `schema.sql` — 16 tabel gotowych do Neon SQL Editor
+- Stworzono `.env.example` i `.gitignore`
+- Wypełniono `memory/architektura.md` — decyzje Next.js, Neon, Vercel, separacja modułów
+- Wypełniono `memory/uruchomienie_lokalne.md` — instrukcja from scratch
+- Wypełniono `05_SHELL_MODULES/crm/` — scope, mini_rag, logic_links
+- Skonfigurowano remote SSH i wykonano pierwsze push na GitHub
+- Zaktualizowano `todo.md` — odhaczono wszystkie ukończone pozycje Phase 0
+
+### Gdzie skończono
+
+Phase 0 kompletna (poza blokerami Neon które wymaga Kacper ręcznie).
+Commit: `f9e0e7e` + kolejny commit z Phase 0 sesja 2.
+
+### Następny krok
+
+1. Kacper uruchamia `schema.sql` na Neon SQL Editor (blokery)
+2. Przejście do **Phase 1** — mockupy modułów
+
+### Blokery
+
+- Neon SQL — `leads` i `brain_sections` wymagają ręcznego uruchomienia przez Kacpra
+- Moduł Settings (AI Providers, Integracje) — zbudowany w starym repo, wymaga migracji kontekstu do VANTIXRAG `05_SHELL_MODULES/settings/`
+
+---
+
 ## Format kolejnych wpisów
 
 ```
