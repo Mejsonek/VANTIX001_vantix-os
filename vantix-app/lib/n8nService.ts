@@ -81,7 +81,7 @@ export function validateForm(data: {
 export async function sendToN8N(payload: N8NPayload): Promise<void> {
   const webhookUrl =
     process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL ||
-    'https://mejsonek.app.n8n.cloud/webhook-test/715085bc-3b38-4080-aee7-814c923c92e2';
+    'https://SolutionKacper-VantixN8N.hf.space/webhook-test/715085bc-3b38-4080-aee7-814c923c92e2';
 
   const response = await fetch(webhookUrl, {
     method: 'POST',
