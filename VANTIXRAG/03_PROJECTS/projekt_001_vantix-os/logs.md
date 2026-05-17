@@ -1227,3 +1227,101 @@ Pliki zmienione:
 - Dashboard layout — wymaga weryfikacji wizualnej przez Kacpra (możliwe że `lg:` breakpoint był OK i problem był w czymś innym)
 - `WeekCalendar.tsx` — nie sprawdzany pod kątem Tailwind v4, może wymagać podobnego sweepu
 - n8n webhook URL — wciąż testowy w `.env.local`
+
+---
+
+## 2026-05-18 — TASK-S01: System Panel Sidebar Navigation (sesja 18)
+
+**Sesja:** Przepisanie `app/(system)/layout.tsx` — lewy sidebar 200px z nawigacją
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~10 min
+
+### Co zostało zrobione
+
+- Przepisano `app/(system)/layout.tsx` z minimalnego wrappera na pełny layout z sidebar nawigacją:
+  - **Layout**: `flex h-screen bg-void` — sidebar 200px + content flex-1
+  - **Sidebar**: `w-[200px] bg-void border-r border-gold/10 shrink-0`
+  - **Logo VX + "System" label** — klikalne, link do `/dashboard`
+  - **Sekcja SYSTEM**: 5 linków — Brain (BrainCircuit), Orchestration (Network), Workflows (Workflow), Analytics (BarChart3), Settings (Settings)
+  - **Sekcja powrotna**: link Dashboard (LayoutDashboard) — na dole sidebaru, oddzielony `border-t border-gold/10`
+  - **Aktywny link**: `text-gold border-l-2 border-gold bg-gold/5` — złoty tekst + lewy pasek
+  - **Domyślne linki**: `text-ivory/50`, hover `bg-gold/5 hover:border-gold/20`
+  - **Fonty**: `font-mono text-[10px] uppercase tracking-[0.1em]` dla linków, `font-display text-[14px] font-extrabold text-gold` dla logo
+  - **Bez rounded-\*** — ostre krawędzie na wszystkich linkach
+  - **`'use client'`** — wymagane przez `usePathname()`
+- Wzorzec inspirowany `LeftThreeDimensionalDock.tsx` (aktywny indykator, ikony, tooltips), ale layout pionowy z pełnymi etykietami zamiast samego docku ikon
+
+### Pliki zmienione
+| Plik | Akcja |
+|------|-------|
+| `app/(system)/layout.tsx` | Przepisany (z 3 linii → ~80 linii z full sidebar nav) |
+| `VANTIXRAG/03_PROJECTS/projekt_001_vantix-os/logs.md` | + ten wpis |
+
+### Stan po sesji
+
+- Sidebar 200px ✅ — 5 linków do `/system/*` + 1 link do `/dashboard`
+- Aktywny link wyróżniony złotem ✅ — `border-l-2 border-gold bg-gold/5`
+- Fonty `font-mono text-[10px]` ✅ — `text-ivory/50` domyślnie, `text-gold` aktywny
+- `'use client'` ✅
+- Ikony z lucide-react ✅ — BrainCircuit, Network, Workflow, BarChart3, Settings, LayoutDashboard
+
+### Następny krok
+
+1. [ ] TASK-S02: System Panel — Brain page (`/system/brain`) — przepisać z placeholder na funkcjonalny komponent
+2. [ ] Kolejne taski z backlogu System Panel
+3. [ ] Phase 2 — Prisma + NextAuth + Cognitive Mesh
+
+### Blokery i otwarte pytania
+
+- System Panel pages (`brain/page.tsx`, `orchestration/page.tsx`, itd.) — wszystkie to wciąż puste placeholdery
+- Sidebar wymaga weryfikacji wizualnej — czy renderuje się poprawnie na `/system/brain` i pozostałych stronach
+
+---
+
+## 2026-05-18 — TASK-S02: Brain Page — VANTIXRAG Section Browser (sesja 19)
+
+**Sesja:** Przepisanie `app/(system)/system/brain/page.tsx` — przeglądarka sekcji VANTIXRAG z search i kategoriami
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~15 min
+
+### Co zostało zrobione
+
+- Przepisano `app/(system)/system/brain/page.tsx` z placeholder "coming soon" na funkcjonalną przeglądarkę sekcji VANTIXRAG
+  - **Top bar**: etykieta "BRAIN / VANTIXRAG" (złota kreska + mono label, styl spójny z CentralBrainFocus) + search input 220px z ikoną Search
+  - **`useState`** na search query + **`useMemo`** do filtrowania w czasie rzeczywistym po `label` i `key`
+  - **Grid `grid-cols-2 gap-3`** z 10 kartami `vx-card` — staggerowane animacje `fade-up` + `delay-{1..10}`
+  - **Każda karta sekcji**:
+    - Key (np. `00_CORE`) — `font-mono text-[9px] text-gold/50 uppercase tracking-[0.16em]`
+    - Label (np. "Core Engine") — `font-mono text-[13px] text-ivory/80`
+    - Status badge: `vx-badge-green` dla `active`, `vx-badge-gold` dla `pending`
+    - Dolny rząd: liczba plików + separator + data updated
+  - **Empty state**: `col-span-2` komunikat "Brak wyników dla \"...\"" gdy search nie zwraca wyników
+  - **`'use client'`** na górze pliku (wymagane przez useState)
+
+### Mock data
+- 10 sekcji VANTIXRAG (00_CORE…09_EVAL), każda z type, files, updated, status
+- Jedyna sekcja z `status: 'pending'` to `08_EVOLUTION` — renderuje się ze złotym badge
+
+### Pliki zmienione
+
+| Plik | Akcja |
+|------|-------|
+| `app/(system)/system/brain/page.tsx` | Przepisany (z 7 linii placeholder → ~90 linii z full section browser) |
+| `VANTIXRAG/03_PROJECTS/projekt_001_vantix-os/logs.md` | + ten wpis |
+
+### Warunki akceptacji
+- [x] Search filtruje po label i key w czasie rzeczywistym
+- [x] 10 kart sekcji w grid-cols-2
+- [x] Status badge poprawnie kolorowany
+- [x] Top bar z labelką "BRAIN / VANTIXRAG" i search inputem
+- [x] `'use client'` (useState)
+
+### Następny krok
+
+1. [ ] TASK-S03: Kolejny placeholder System Panel — np. Orchestration lub Workflows
+2. [ ] Phase 2 — Prisma + NextAuth + Cognitive Mesh
+3. [ ] FAZA A pending: podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` na HF Space
+
+### Blokery i otwarte pytania
+
+- Brak (sesja wykonana i zamknięta)
