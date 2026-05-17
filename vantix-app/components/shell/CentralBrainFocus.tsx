@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Check, Target, ArrowRight, Clock, Zap, TrendingUp, Brain } from 'lucide-react';
-import PriorityMatrix from '@/components/shell/PriorityMatrix';
+import { Check, Target, Clock, Zap, Brain, GitBranch, Settings, Users, Code2, Zap as ZapIcon, X } from 'lucide-react';
+import Link from 'next/link';
 
 function getGreeting(): string {
   const h = new Date().getHours();
@@ -13,31 +13,43 @@ function getGreeting(): string {
 }
 
 const todayTasks = [
-  { id: 1, title: 'Nagraj Loom dla Sajida (StepUp Analytics)', priority: 'high',   done: false, time: '10:00' },
-  { id: 2, title: 'Follow-up Darek — brak odpowiedzi 48h',     priority: 'high',   done: false, time: '11:30' },
-  { id: 3, title: 'Przygotuj ofertę dla klienta z Reddita',    priority: 'medium', done: false, time: '14:00' },
-  { id: 4, title: 'Sprawdź status deployu n8n',                 priority: 'low',    done: true,  time: '09:00' },
-  { id: 5, title: 'Aktualizuj roadmapę Vantix OS',              priority: 'medium', done: false, time: '16:00' },
+  { id: 1, title: 'Nagraj Loom dla Sajida', priority: 'high',   time: '10:00' },
+  { id: 2, title: 'Follow-up Darek — 48h brak odpowiedzi', priority: 'high',   time: '11:30' },
+  { id: 3, title: 'Przygotuj ofertę dla klienta',    priority: 'medium', time: '14:00' },
+  { id: 4, title: 'Sprawdź status deployu n8n',                 priority: 'low',    time: '09:00' },
+  { id: 5, title: 'Aktualizuj roadmapę Vantix OS',              priority: 'medium', time: '16:00' },
 ];
 
 const stats = [
-  { label: 'Leady',      value: '2',    sub: '+1 dziś',      icon: Target, color: 'text-gold',     border: 'border-gold/40' },
-  { label: 'Projekty',   value: '1',    sub: 'aktywne',      icon: Zap,    color: 'text-vblue',    border: 'border-vblue/30' },
-  { label: 'Taski',      value: '4',    sub: 'do zrobienia', icon: Check,  color: 'text-ivory/70', border: 'border-gold/10' },
-  { label: 'Czas pracy', value: '4.2h', sub: 'dzisiaj',      icon: Clock,  color: 'text-vgreen',   border: 'border-vgreen/30' },
+  { label: 'Leady',      value: 2,     sub: '+1 dziś' },
+  { label: 'Taski',      value: 4,     sub: 'do zrobienia' },
+  { label: 'Projekty',   value: 1,     sub: 'aktywne' },
+  { label: 'Czas',       value: '4.2h', sub: 'dzisiaj' },
 ];
 
-const priorityStyle: Record<string, { border: string; dot: string; badge: string; label: string }> = {
-  high:   { border: 'border-l-vred',      dot: 'bg-vred',     badge: 'border-vred/40 text-vred/90 bg-vred/5',     label: 'HIGH' },
-  medium: { border: 'border-l-gold',      dot: 'bg-gold',     badge: 'border-gold/40 text-gold/90 bg-gold/5',     label: 'MED'  },
-  low:    { border: 'border-l-ivory/15',  dot: 'bg-ivory/20', badge: 'border-ivory/20 text-ivory/30 bg-ivory/5',  label: 'LOW'  },
+const initialRecommendations = [
+  { id: 1, type: 'critical', title: 'Sajid bez odpowiedzi 2 dni', action: 'Wyślij teraz', color: 'bg-vred/5 border-vred/30' },
+  { id: 2, type: 'warning', title: 'Phase 2 blokuje DB', action: 'Zaplanuj', color: 'bg-gold/5 border-gold/30' },
+  { id: 3, type: 'info', title: 'Evolution RAG — piątek', action: 'Otwórz notes', color: 'bg-ivory/5 border-ivory/20' },
+];
+
+const topPriorities = [
+  { id: 1, title: 'Szybki fix bugów w API', deadline: 'DZIŚ', progress: 75, color: '#d4af37' },
+  { id: 2, title: 'Review kod Fase 2', deadline: 'JUTRO', progress: 45, color: '#6B8FD4' },
+  { id: 3, title: 'Docs — migration guide', deadline: 'WTOREK', progress: 20, color: '#f5f4f0' },
+];
+
+const priorityStyle: Record<string, { label: string; color: string }> = {
+  high:   { label: 'HIGH', color: 'text-vred' },
+  medium: { label: 'MED',  color: 'text-gold' },
+  low:    { label: 'LOW',  color: 'text-ivory/40' },
 };
 
 export default function CentralBrainFocus() {
   const [greeting, setGreeting] = useState('');
-  const [tasks, setTasks] = useState(todayTasks);
-  const [clock, setClock] = useState({ time: '', date: '', seconds: '' });
+  const [clock, setClock] = useState({ time: '', seconds: '' });
   const [mounted, setMounted] = useState(false);
+  const [recommendations, setRecommendations] = useState(initialRecommendations);
 
   useEffect(() => {
     setMounted(true);
@@ -48,7 +60,6 @@ export default function CentralBrainFocus() {
       setClock({
         time:    now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }),
         seconds: now.toLocaleTimeString('pl-PL', { second: '2-digit' }),
-        date:    now.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' }),
       });
     };
     tick();
@@ -56,176 +67,215 @@ export default function CentralBrainFocus() {
     return () => clearInterval(id);
   }, []);
 
-  const toggleTask = (id: number) =>
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t));
-
-  const doneCount = tasks.filter(t => t.done).length;
-  const progress  = tasks.length > 0 ? Math.round((doneCount / tasks.length) * 100) : 0;
+  const dismissRecommendation = (id: number) => {
+    setRecommendations(prev => prev.filter(r => r.id !== id));
+  };
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden">
+    <div className="flex flex-col flex-1 overflow-hidden bg-void">
       <div className="grid-bg" />
 
-      {/* ── TOP BAR ── */}
-      <div className="relative z-10 flex items-center justify-between px-6 py-3 border-b border-gold/[0.07] bg-void/80 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-8 h-8 border border-gold/25 bg-gold/8 flex items-center justify-center">
-              <span className="font-display text-[11px] font-extrabold text-gold" style={{ letterSpacing: '0.08em' }}>VX</span>
-            </div>
-            <div className="absolute -inset-[3px] border border-gold/[0.08] pointer-events-none" style={{ animation: 'pulse 4s ease infinite' }} />
+      {/* ── TOPBAR (h-12) ── */}
+      <div className="relative z-20 h-12 flex items-center justify-between px-6 border-b border-gold/10 bg-void/95 backdrop-blur-sm">
+        {/* LEFT: Logo + Version + Clock + Online */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-gold font-display font-black text-sm">⚡ VANTIX OS</span>
+            <div className="w-px h-6 bg-gold/20" />
+            <span className="font-mono text-[10px] text-ivory/40">v0.1.0</span>
           </div>
-          <div>
-            <div className="font-display text-[10px] font-bold text-gold/80" style={{ letterSpacing: '0.14em' }}>VANTIX OS</div>
-            <div className="font-mono text-[8px] text-ivory/25" style={{ letterSpacing: '0.08em' }}>v0.1.0 — Phase 1</div>
-          </div>
+          {mounted && (
+            <>
+              <span className="font-mono text-[11px] text-ivory/50 tabular-nums">
+                {clock.time}:{clock.seconds}
+              </span>
+              <div className="flex items-center gap-1 px-2 py-1 bg-vgreen/10 border border-vgreen/30 rounded">
+                <span className="w-1.5 h-1.5 bg-vgreen rounded-full dot-live" />
+                <span className="font-mono text-[8px] text-vgreen/70 uppercase tracking-wider">ONLINE</span>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Live clock */}
-        <div className="flex items-center gap-6">
-          {mounted && (
-            <div className="text-right hidden sm:block">
-              <div className="font-mono text-[13px] text-ivory/55 leading-none tabular-nums">
-                {clock.time}
-                <span className="text-ivory/25 ml-0.5 text-[11px]">:{clock.seconds}</span>
-              </div>
-              <div className="font-mono text-[9px] text-ivory/25 mt-0.5">{clock.date}</div>
-            </div>
-          )}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 border border-vgreen/20 bg-vgreen/5">
-            <span className="w-1.5 h-1.5 rounded-full bg-vgreen dot-live" />
-            <span className="font-mono text-[8px] text-vgreen/70 uppercase" style={{ letterSpacing: '0.12em' }}>ONLINE</span>
+        {/* CENTER: Status Badges */}
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[9px] text-ivory/40 bg-s2/50 px-2 py-1 border border-gold/10">NEON ✓</span>
+          <span className="font-mono text-[9px] text-ivory/40 bg-s2/50 px-2 py-1 border border-gold/10">Claude ✓</span>
+          <span className="font-mono text-[9px] text-vorange bg-vorange/10 px-2 py-1 border border-vorange/30">n8n !</span>
+        </div>
+
+        {/* RIGHT: Avatar + Name */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full border border-gold/40 bg-gold/10 flex items-center justify-center">
+            <span className="font-display text-[10px] font-bold text-gold">KZ</span>
           </div>
+          <span className="font-mono text-[10px] text-ivory/60">Kacper Zdżałka</span>
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="relative z-10 flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-6 py-7">
+      {/* ── NAVIGATION (h-10) ── */}
+      <div className="relative z-19 h-10 flex items-center justify-between px-6 border-b border-ivory/5 bg-void/90">
+        {/* LEFT: CRM + Dev */}
+        <div className="flex items-center gap-6">
+          <Link href="/crm" className="flex items-center gap-2 font-mono text-[10px] text-ivory/40 hover:text-ivory/70 transition">
+            <Users size={14} /> CRM
+          </Link>
+          <Link href="/dev" className="flex items-center gap-2 font-mono text-[10px] text-ivory/40 hover:text-ivory/70 transition">
+            <Code2 size={14} /> DEV
+          </Link>
+        </div>
 
-          {/* ── GREETING ── */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-px w-8 bg-gold/40" />
-              <span className="font-mono text-[8px] text-gold/50 uppercase" style={{ letterSpacing: '0.3em' }}>CENTRAL BRAIN</span>
-            </div>
-            <div className="flex items-end justify-between gap-4">
-              <h1 className="font-display text-3xl lg:text-4xl font-extrabold text-ivory leading-tight fade-up">
-                {greeting},&nbsp;<span className="text-gold">Kacper</span>
-              </h1>
-              <div className="flex items-center gap-2 shrink-0">
-                <button className="btn btn-dim text-[9px]! px-3! py-1.5! flex items-center gap-1.5">
-                  <TrendingUp size={9} /> Nowy lead
-                </button>
-                <button className="btn btn-primary text-[9px]! px-3! py-1.5! flex items-center gap-1.5">
-                  <Check size={9} /> Nowy task
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* CENTER: Dashboard (Active) */}
+        <div className="flex items-center gap-2 font-display font-black text-gold text-sm" style={{ textShadow: '0 0 20px rgba(212,175,55,0.3)' }}>
+          <ZapIcon size={14} className="animate-pulse" /> DASHBOARD
+        </div>
 
-          {/* ── STAT CARDS ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-            {stats.map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <div
-                  key={s.label}
-                  className={`vx-card vx-3d p-4! border-l-2 ${s.border} fade-up delay-${i + 1}`}
-                  style={{ position: 'relative' }}
-                >
-                  <div className="stat-accent-line" />
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-[9px] text-ivory/35 uppercase" style={{ letterSpacing: '0.18em' }}>{s.label}</span>
-                    <Icon size={11} className={`${s.color} opacity-60`} />
-                  </div>
-                  <div className={`font-display text-2xl font-black ${s.color} num-animate delay-${i + 2}`}>{s.value}</div>
-                  <div className="font-mono text-[9px] text-ivory/30 mt-1">{s.sub}</div>
+        {/* RIGHT: Brain + Workflows + Settings */}
+        <div className="flex items-center gap-6">
+          <Link href="/brain" className="flex items-center gap-2 font-mono text-[10px] text-ivory/40 hover:text-ivory/70 transition">
+            <Brain size={14} /> Brain
+          </Link>
+          <Link href="/workflows" className="flex items-center gap-2 font-mono text-[10px] text-ivory/40 hover:text-ivory/70 transition">
+            <GitBranch size={14} /> Workflows
+          </Link>
+          <Link href="/settings" className="flex items-center gap-2 font-mono text-[10px] text-ivory/40 hover:text-ivory/70 transition">
+            <Settings size={14} /> Settings
+          </Link>
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT (3 columns) ── */}
+      <div className="relative z-10 flex-1 overflow-auto pt-6 px-6 pb-6">
+        <div className="grid grid-cols-12 gap-6 max-w-7xl mx-auto h-full">
+
+          {/* LEFT COLUMN (25%) — Stats */}
+          <div className="col-span-3 flex flex-col gap-4 fade-up" style={{ animationDelay: '0ms' }}>
+            {stats.map((s, i) => (
+              <div
+                key={s.label}
+                className="vx-card vx-3d p-4 border-l-2 border-gold/40 flex flex-col gap-2 fade-up"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[8px] text-ivory/35 uppercase tracking-wider">{s.label}</span>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* ── PRIORITY MATRIX ── */}
-          <div className="mb-5 fade-up delay-3">
-            <PriorityMatrix />
-          </div>
-
-          {/* ── TASK LIST ── */}
-          <div className="vx-card p-0! overflow-hidden mb-5 fade-up delay-4">
-            {/* Task header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gold/[0.07] bg-s2">
-              <div className="flex items-center gap-2">
-                <Check size={11} className="text-gold/50" />
-                <span className="font-mono text-[9px] text-ivory/45 uppercase" style={{ letterSpacing: '0.16em' }}>
-                  DZISIAJ — {doneCount}/{tasks.length} ZADAŃ
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-20 h-[4px] bg-gold/10 overflow-hidden">
-                    <div className="h-full bg-gold bar-animate" style={{ width: `${progress}%` }} />
-                  </div>
-                  <span className="font-mono text-[9px] text-gold/60 tabular-nums">{doneCount}/{tasks.length}</span>
+                <div className="font-display text-[28px] font-black text-gold num-animate">
+                  {typeof s.value === 'number' ? s.value : s.value}
                 </div>
-                <span className="font-mono text-[9px] text-gold/50 font-bold">{progress}%</span>
+                <div className="font-mono text-[9px] text-ivory/30">{s.sub}</div>
               </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Tasks */}
-            <div className="divide-y divide-gold/[0.04]">
-              {tasks.map((task, i) => {
-                const ps = priorityStyle[task.priority];
+          {/* CENTER COLUMN (50%) — Recommendations + Tasks */}
+          <div className="col-span-6 flex flex-col gap-6 fade-up" style={{ animationDelay: '150ms' }}>
+            {/* AI Recommendations */}
+            <div className="space-y-3">
+              <div className="font-mono text-[9px] text-ivory/35 uppercase tracking-wider">AI Rekomendacje</div>
+              {recommendations.map((rec) => {
+                const colorMap: Record<string, { bg: string; border: string; line: string }> = {
+                  critical: { bg: 'bg-vred/5', border: 'border-vred/30', line: 'border-l-vred' },
+                  warning: { bg: 'bg-gold/5', border: 'border-gold/30', line: 'border-l-gold' },
+                  info: { bg: 'bg-ivory/5', border: 'border-ivory/20', line: 'border-l-ivory/40' },
+                };
+                const colors = colorMap[rec.type] || colorMap.info;
                 return (
-                  <button
-                    key={task.id}
-                    onClick={() => toggleTask(task.id)}
-                    className={`vx-row w-full flex items-center gap-4 px-5 py-3.5 border-l-2 ${ps.border} text-left row-enter delay-${i + 4} group`}
+                  <div
+                    key={rec.id}
+                    className={`vx-card p-3 border-l-2 flex items-center justify-between fade-up ${colors.bg} ${colors.border} ${colors.line}`}
+                    style={{ animationDelay: `${150 + rec.id * 50}ms` }}
                   >
-                    {/* Checkbox */}
-                    <div className={`w-5 h-5 flex items-center justify-center border shrink-0 transition-all duration-200 ${task.done ? 'border-gold/50 bg-gold/15' : 'border-ivory/15 group-hover:border-gold/30'}`}>
-                      {task.done && <Check size={10} className="text-gold" />}
+                    <div className="flex-1">
+                      <p className="font-mono text-[12px] text-ivory/70">{rec.title}</p>
                     </div>
-
-                    {/* Title */}
-                    <span className={`font-mono text-[13px] flex-1 transition-all leading-snug ${task.done ? 'text-ivory/20 line-through decoration-ivory/20' : 'text-ivory/75'}`}>
-                      {task.title}
-                    </span>
-
-                    {/* Time */}
-                    <span className="font-mono text-[10px] text-ivory/25 shrink-0 tabular-nums">{task.time}</span>
-
-                    {/* Priority badge */}
-                    {!task.done && (
-                      <span className={`font-mono text-[8px] px-2 py-0.5 border uppercase tracking-widest shrink-0 ${ps.badge}`}>
-                        {ps.label}
-                      </span>
-                    )}
-                  </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button className="font-mono text-[8px] px-2 py-1 bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 transition">
+                        {rec.action}
+                      </button>
+                      <button
+                        onClick={() => dismissRecommendation(rec.id)}
+                        className="text-ivory/30 hover:text-ivory/60 transition"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
                 );
               })}
             </div>
+
+            {/* Task List */}
+            <div className="vx-card p-0 overflow-hidden fade-up" style={{ animationDelay: '300ms' }}>
+              <div className="px-4 py-3 border-b border-gold/10 bg-s2/50">
+                <span className="font-mono text-[9px] text-ivory/45 uppercase tracking-wider">Dzisiejsze Taski</span>
+              </div>
+              <div className="divide-y divide-gold/5">
+                {todayTasks.slice(0, 5).map((task, i) => {
+                  const ps = priorityStyle[task.priority];
+                  return (
+                    <div
+                      key={task.id}
+                      className="px-4 py-3 flex items-center gap-3 hover:bg-gold/3 transition fade-up"
+                      style={{ animationDelay: `${300 + i * 50}ms` }}
+                    >
+                      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${ps.color === 'text-vred' ? 'bg-vred' : ps.color === 'text-gold' ? 'bg-gold' : 'bg-ivory/30'}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-mono text-[11px] text-ivory/70 truncate">{task.title}</p>
+                      </div>
+                      <span className="font-mono text-[9px] text-ivory/30 tabular-nums shrink-0">{task.time}</span>
+                      <span className={`font-mono text-[7px] uppercase tracking-widest shrink-0 ${ps.color}`}>{ps.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          {/* ── AI RECOMMENDATION ── */}
-          <div className="flex items-start gap-3 px-4 py-3.5 border border-gold/15 bg-gold/3 fade-up delay-5" style={{ borderLeft: '2px solid rgba(212,175,55,0.5)' }}>
-            <div className="w-6 h-6 border border-gold/25 bg-gold/8 flex items-center justify-center shrink-0 mt-0.5">
-              <Brain size={11} className="text-gold/70" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-mono text-[9px] text-gold/50 uppercase mb-1" style={{ letterSpacing: '0.18em' }}>AI Rekomendacja</div>
-              <span className="font-mono text-[12px] text-ivory/60 leading-relaxed">
-                Sajid nie odpowiedział na wiadomość od 2 dni — wyślij przypomnienie dziś wieczorem lub zarchiwizuj lead.
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <button className="btn btn-dim text-[9px]! px-2.5! py-1.5! flex items-center gap-1">
-                <ArrowRight size={8} /> Akceptuj
-              </button>
-              <button className="btn btn-ghost text-[9px]! px-2! py-1.5! text-ivory/25 hover:text-ivory/50">✕</button>
-            </div>
-          </div>
+          {/* RIGHT COLUMN (25%) — Top Priorities */}
+          <div className="col-span-3 flex flex-col gap-4 fade-up" style={{ animationDelay: '300ms' }}>
+            <div className="font-mono text-[9px] text-ivory/35 uppercase tracking-wider">Top Priorytety</div>
+            {topPriorities.map((p, i) => (
+              <div
+                key={p.id}
+                className="vx-card vx-3d p-4 border-l-2 border-gold/40 flex flex-col gap-3 fade-up"
+                style={{ animationDelay: `${300 + i * 50}ms` }}
+              >
+                {/* Number circle + Title */}
+                <div className="flex items-start gap-2">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display font-black text-[12px] text-void"
+                    style={{ backgroundColor: p.color }}
+                  >
+                    #{i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-mono text-[11px] text-ivory/75">{p.title}</p>
+                  </div>
+                </div>
 
+                {/* Deadline Badge */}
+                <div className={`inline-flex items-center px-2 py-1 font-mono text-[8px] uppercase tracking-wider border rounded ${
+                  p.deadline === 'DZIŚ' ? 'bg-vred/10 border-vred/40 text-vred' :
+                  p.deadline === 'JUTRO' ? 'bg-gold/10 border-gold/40 text-gold' :
+                  'bg-ivory/10 border-ivory/20 text-ivory/60'
+                }`}>
+                  {p.deadline}
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full h-1 bg-ivory/10 overflow-hidden">
+                  <div
+                    className="h-full bar-animate"
+                    style={{
+                      background: `linear-gradient(to right, ${p.color}, ${p.color}dd)`,
+                      width: `${p.progress}%`
+                    }}
+                  />
+                </div>
+                <div className="font-mono text-[8px] text-ivory/40">{p.progress}% done</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
