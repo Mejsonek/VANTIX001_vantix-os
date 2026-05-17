@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import TodayTasks from '@/components/cockpit/TodayTasks';
-import WeekCalendar from '@/components/cockpit/WeekCalendar';
+
+import MonthCalendar from '@/components/cockpit/WeekCalendar';
 import PriorityList from '@/components/cockpit/PriorityList';
 import AIRecommendations from '@/components/cockpit/AIRecommendations';
 import { Crosshair, ListChecks, CalendarDays, Zap, TrendingUp, Clock } from 'lucide-react';
