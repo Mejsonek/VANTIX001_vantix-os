@@ -1090,3 +1090,12 @@ Kacper przegląda moduły lokalnie → decyzja: Chat 1 (Backend) czy Chat 2 (Fro
 
 - `.env.local` wciąż nie istnieje — do stworzenia przy Phase 2 (auth + n8n URL)
 - Ocena wizualna modułów przez Kacpra — feedback oczekiwany
+
+## 2025-07-15 — PriorityList redesign
+
+**Pliki zmienione:**
+- `components/cockpit/PriorityList.tsx` — pełny redesign: karty vx-card vx-3d, koła rangi (gold/vblue/ivory), deadline badge (vred/gold/ivory), gradient progress bary bar-animate, czyste funkcje pomocnicze getRankStyle / getDeadlineBadge / getProgressFill / getProgressTextColor
+
+**Problemy:** brak — redesign przebiegł bez błędów
+
+**Następny krok:** Kacper przegląda efekt wizualny → decyzja co dalej (TodayTasks / AIRecommendations redesign)
