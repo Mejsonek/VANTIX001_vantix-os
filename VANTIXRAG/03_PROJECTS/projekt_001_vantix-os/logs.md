@@ -1043,3 +1043,50 @@ Decyzja Kacpra: który chat pierwszy? (Chat 1: Backend / Chat 2: Frontend)
 - n8n webhook URL wciąż testowy — do podmiany na HF Space
 - LeadList.tsx nie używa initialLeads — bug do naprawy
 - Cockpit — część komponentów już przepisana na Vantix DS, TodayTasks wymaga dokończenia
+
+---
+
+## 2026-05-18 — FAZA C: Fix middleware Supabase + dev server restart (sesja 20)
+
+**Sesja:** FAZA C — Naprawa błędu Supabase w middleware + podgląd lokalny
+**Agent:** Claude Code (Orchestrator)
+**Czas:** ~10 min
+
+### Co zostało zrobione
+
+#### Problem
+Middleware (`vantix-app/middleware.ts`) próbował stworzyć klienta Supabase `createServerClient()` przy każdym requeście, ale `NEXT_PUBLIC_SUPABASE_URL` i `NEXT_PUBLIC_SUPABASE_ANON_KEY` nie były ustawione (brak pliku `.env.local`). To powodowało błąd na każdej stronie — `/crm`, `/cockpit`, `/dev`, `/dashboard`.
+
+#### Fix
+Dodano guard `hasSupabase` w middleware:
+```typescript
+const hasSupabase =
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!hasSupabase) {
+  console.log('[MIDDLEWARE] SUPABASE NOT CONFIGURED | skipping auth (Phase 1 mockup)');
+  supabaseResponse.headers.set('X-Correlation-ID', correlationId);
+  return supabaseResponse;
+}
+```
+Jeśli brak kluczy Supabase, middleware przechodzi w tryb **passthrough** — dodaje tylko Correlation ID, nie sprawdza autha. Wszystkie moduły dostępne bez logowania.
+
+#### Dev server
+- Odpalono `npm run dev` na porcie 3000 (Turbopack)
+- Serwer już działał z poprzedniej sesji
+
+### Gdzie skończono
+
+- Middleware naprawiony — Phase 1 mockupy działają bez Supabase
+- `npm run dev` stoi na localhost:3000
+- Otwarte linki do podglądu: `/dashboard`, `/crm`, `/cockpit`, `/dev`, `/system/*`, `/login`
+
+### Następny krok
+
+Kacper przegląda moduły lokalnie → decyzja: Chat 1 (Backend) czy Chat 2 (Frontend)?
+
+### Blokery i otwarte pytania
+
+- `.env.local` wciąż nie istnieje — do stworzenia przy Phase 2 (auth + n8n URL)
+- Ocena wizualna modułów przez Kacpra — feedback oczekiwany

@@ -7,7 +7,6 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('X-Correlation-ID', correlationId);
 
-  // Logowanie requestu
   console.log(
     `[MIDDLEWARE] ${request.method} ${request.nextUrl.pathname} | correlation_id=${correlationId}`
   );
@@ -17,6 +16,19 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   });
+
+  // Phase 1 mockup mode — Supabase nie jest skonfigurowany → passthrough
+  const hasSupabase =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!hasSupabase) {
+    console.log(
+      `[MIDDLEWARE] SUPABASE NOT CONFIGURED | path=${request.nextUrl.pathname} | skipping auth (Phase 1 mockup)`
+    );
+    supabaseResponse.headers.set('X-Correlation-ID', correlationId);
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -52,7 +64,6 @@ export async function middleware(request: NextRequest) {
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login');
 
-  // Jeśli user nie jest zalogowany i próbuje wejść na chronioną ścieżkę → redirect /login
   if (!user && isProtectedRoute) {
     console.log(
       `[MIDDLEWARE] UNAUTH | path=${request.nextUrl.pathname} | redirect=/login | correlation_id=${correlationId}`
@@ -61,7 +72,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Jeśli user jest zalogowany i wchodzi na /login → redirect /dashboard
   if (user && isAuthRoute) {
     console.log(
       `[MIDDLEWARE] AUTH | user=${user.email} | redirect=/dashboard | correlation_id=${correlationId}`
