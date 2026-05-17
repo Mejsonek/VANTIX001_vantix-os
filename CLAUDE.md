@@ -16,6 +16,12 @@
 
 Centralny system operacyjny dla pracy Kacpra. Nie aplikacja — **centrum sterowania**.
 
+Dwa osobne shelle w jednej aplikacji Next.js:
+- **Production Shell** (`app.vantix.pl/dashboard`, `/crm`, `/cockpit`, `/dev`) — codzienna praca. Cyborg design z 3D Dockiem.
+- **System Panel** (`app.vantix.pl/system/*`) — panel techniczny. Brain, Orchestration, Workflows, Analytics, Settings. Terminal/dashboard design.
+
+Struktura: route groups `(shell)/` i `(system)/` — osobne `layout.tsx`, osobny design, URL bez prefixu grupy.
+
 Wchodząc do systemu Kacper widzi natychmiast:
 - co jest najważniejsze dziś
 - status projektów i leadów
@@ -33,20 +39,27 @@ Wchodząc do systemu Kacper widzi natychmiast:
 | Warstwa | URL | Opis |
 |---------|-----|------|
 | Publiczna | `vantix.pl` | Landing, formularz kontaktowy, prezentacja marki |
-| Prywatna | `app.vantix.pl` | Shell, logowanie, launcher modułów |
-| Modułowa | — | Moduły robocze (CRM, DEV, Cockpit, itd.) |
+| Production Shell | `app.vantix.pl/dashboard` + `/crm` + `/cockpit` + `/dev` | Codzienna praca. Cyborg Shell z 3D Dockiem. |
+| System Panel | `app.vantix.pl/system/*` | Panel techniczny: Brain, Orchestration, Workflows, Analytics, Settings |
 
-### Moduły systemu
+### Production Shell — moduły `(shell)/`
 
-| Moduł | Opis |
-|-------|------|
-| **Shell / Launcher** | Punkt wejścia, nawigacja, szybkie akcje |
-| **Personal Cockpit** | Taski, kalendarz, notatki, priorytety, rekomendacje AI |
-| **CRM** | Leady, lejek, follow-up, routing, notatki, taski |
-| **Vantix DEV** | Projekty, roadmapa, TODO, logi, pamięć projektu, kontekst agentów |
-| **Settings / Integrations** | API keys, AI providerzy, integracje, automatyzacje |
-| **Workflows / Automation Studio** | Webhooki, flow, retry, reusable blocks |
-| **VANTIXRAG / Brain** | RAG-matka — wiedza, pamięć, prompty, decyzje, evolution proposals |
+| Moduł | URL | Opis |
+|-------|-----|------|
+| **Dashboard** | `/dashboard` | CentralBrainFocus, metryki, szybkie akcje |
+| **Personal Cockpit** | `/cockpit` | Taski, kalendarz, priorytety, rekomendacje AI |
+| **CRM** | `/crm` | Leady, lejek, follow-up, routing |
+| **Vantix DEV** | `/dev` | Projekty, roadmapa, TODO, logi |
+
+### System Panel — moduły `(system)/system/`
+
+| Moduł | URL | Opis |
+|-------|-----|------|
+| **Brain** | `/system/brain` | VANTIXRAG GUI — sekcje, search, ingest |
+| **Orchestration** | `/system/orchestration` | Cognitive Mesh jobs, koszty, statusy |
+| **Workflows** | `/system/workflows` | n8n flows, status, trigger |
+| **Analytics** | `/system/analytics` | Telemetria: tokeny, koszt AI, execution times |
+| **Settings** | `/system/settings` | API keys, model registry, integracje |
 
 ---
 

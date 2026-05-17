@@ -190,6 +190,41 @@
 
 ---
 
+### DEC-016: Dual-Shell Architecture — Production Shell + System Panel
+**Decyzja:** Dwa osobne layouty w Next.js App Router:
+- `(shell)/` — Production Shell: CRM, Cockpit, DEV, Tasks. Cyborg design. URL: `app.vantix.pl/dashboard`, `/crm`, `/cockpit`, `/dev`
+- `(system)/` — System Panel: Brain, Orchestration, Workflows, Analytics, Settings. Terminal/dashboard design. URL: `app.vantix.pl/system/*`
+
+```
+app/
+├── (shell)/
+│   ├── layout.tsx        ← Cyborg Shell layout (3D Dock, CentralBrainFocus)
+│   ├── dashboard/
+│   ├── crm/
+│   ├── cockpit/
+│   └── dev/
+└── (system)/
+    ├── layout.tsx        ← System Panel layout (terminal sidebar, dark grid)
+    └── system/
+        ├── brain/
+        ├── orchestration/
+        ├── workflows/
+        ├── analytics/
+        └── settings/
+```
+
+**Uzasadnienie:**
+- Codzienna praca (CRM, taski) nie powinna być zanieczyszczona panelem technicznym (logi AI, koszty, telemetria)
+- Dwa różne persony użytkownika: "operator" vs "architekt systemu"
+- Route groups (`()`) — URL bez prefixu grupy, czyste ścieżki
+- Osobne `layout.tsx` = niezależna nawigacja, styl i kontekst bez kolizji
+
+**Alternatywy odrzucone:**
+- Jeden layout z zakładkami — miesza konteksty, za dużo elementów w sidebarze
+- Osobna subdomena `system.vantix.pl` — niepotrzebna komplikacja na tym etapie
+
+---
+
 ## Format kolejnych wpisów
 
 ```

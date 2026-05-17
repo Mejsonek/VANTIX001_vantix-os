@@ -14,19 +14,32 @@
 
 ## 🟡 PHASE 1 — Dokończenie (mockupy + shell)
 
-**Cyborg Shell (zastępuje obecny /)**
+**Struktura plików (refactor przed UI)**
+- [ ] Stworzyć `app/(shell)/layout.tsx` — Cyborg Shell layout
+- [ ] Stworzyć `app/(system)/layout.tsx` — System Panel layout
+- [ ] Przenieść obecne strony do grup: `dashboard/`, `crm/`, `cockpit/`, `dev/`
+- [ ] Stworzyć strukturę `app/(system)/system/` z podfolderami
+
+**Cyborg Shell — `(shell)/`**
 - [ ] `components/shell/LeftThreeDimensionalDock.tsx` — 3D CSS dock, ikony modułów, tooltip on hover
 - [ ] `components/shell/CentralBrainFocus.tsx` — powitanie + lista tasków (mock) + pulsujące logo
 - [ ] `components/shell/IsometricMetricLedger.tsx` — metryki placeholder (leady, projekty, taski, flows)
-- [ ] `components/shell/SystemStatusBar.tsx` — pasek statusu systemu na dole
-- [ ] Przepisanie `app/page.tsx` — nowy layout `grid-cols-[auto_1fr_auto]`
-- [ ] Przepisanie `app/cockpit/page.tsx` — scalenie z nowym shellem
+- [ ] `components/shell/SystemStatusBar.tsx` — pasek statusu na dole
+- [ ] `app/(shell)/layout.tsx` — grid `[auto_1fr_auto]`, Dock + Focus + Metrics
+- [ ] `app/(shell)/dashboard/page.tsx` — główny ekran (przeniesiony z `/`)
 
-**Mockupy modułów**
-- [ ] `/crm` — lista leadów, lejek kanban, AddLeadModal
-- [ ] `/dev` — projekty, roadmapa, TODO, logi sesji
-- [ ] `/settings` — API keys, integracje, AI providers
-- [ ] `/workflows` — lista flows n8n, status, trigger button
+**Mockupy modułów — `(shell)/`**
+- [ ] `app/(shell)/crm/` — lista leadów, lejek kanban, AddLeadModal
+- [ ] `app/(shell)/cockpit/` — TodayTasks, WeekCalendar, PriorityList (przenieść z `/cockpit`)
+- [ ] `app/(shell)/dev/` — projekty, roadmapa, TODO, logi sesji
+
+**System Panel — `(system)/`**
+- [ ] `app/(system)/layout.tsx` — terminal sidebar, ciemny grid, inny design niż shell
+- [ ] `app/(system)/system/brain/` — VANTIXRAG GUI (sekcje, search, ingest status)
+- [ ] `app/(system)/system/orchestration/` — Cognitive Mesh jobs, koszty, statusy, KWARANTANNA
+- [ ] `app/(system)/system/workflows/` — n8n flow list, status, trigger button
+- [ ] `app/(system)/system/analytics/` — telemetria: tokeny, koszt AI, execution times
+- [ ] `app/(system)/system/settings/` — API keys, model registry, integracje
 
 ---
 
