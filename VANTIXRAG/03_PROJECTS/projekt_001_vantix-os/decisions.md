@@ -110,6 +110,86 @@
 
 ---
 
+## 2026-05-17 — Blueprint v3.0
+
+### DEC-010: Podział pracy Claude Code ↔ DeepSeek (NIENARUSZALNE)
+**Decyzja:** Claude Code = Orchestrator (architektura, dekompozycja, review). DeepSeek R1 = Worker (implementacja atomowych tasków wg specyfikacji).
+**Uzasadnienie:**
+- Claude Code zachowuje pełną kontrolę nad architekturą i jakością kodu
+- DeepSeek R1 jest tańszy i szybszy do generowania boilerplate/implementacji
+- Separacja odpowiedzialności eliminuje ryzyko "dryfu architektonicznego"
+- Każdy task dla DeepSeeka musi mieć: opis 1 zdanie, input, output format, warunki akceptacji
+- Jeśli output niezgodny ze spec → wraca do DeepSeeka, NIE do Claude
+
+**Alternatywy odrzucone:**
+- Jeden model do wszystkiego — droższe, wolniejsze, mniej kontroli
+- DeepSeek do architektury — za duże ryzyko błędnych decyzji projektowych
+
+---
+
+### DEC-011: Cognitive Mesh — Dual-Engine AI
+**Decyzja:** `lib/ai/cognitive-mesh.ts` — Claude Sonnet jako Orchestrator, DeepSeek R1 jako Worker, oba przez OpenAI-compatible API.
+**Uzasadnienie:**
+- Claude Sonnet najlepszy do dekompozycji złożonych zadań na JSON plan
+- DeepSeek R1 (OpenAI-compatible endpoint `https://api.deepseek.com/v1`) — tani, szybki do atomowych tasków
+- Zod validation na każdym etapie — AI output jest nieufny domyślnie (DEC-006)
+- Telemetria w DB (tokeny, koszt, czas) — pełna observability
+- Hard cap $0.50 per job — ochrona przed niekontrolowanymi kosztami
+
+**Wdrożenie:** Phase 2, Sesja C
+
+---
+
+### DEC-012: Prisma zamiast raw SQL
+**Decyzja:** `prisma db pull` z istniejącego Neon schema → nowe modele na wierzch. Nie pisać od zera.
+**Uzasadnienie:**
+- Istniejące 16 tabel w Neon są sprawdzone — `prisma db pull` je bezpiecznie importuje
+- Prisma daje TypeScript typy dla całej DB — zero ręcznego typowania
+- Migracje przez `prisma migrate dev` — historia zmian w repo
+- ORM eliminuje raw SQL w application code
+
+**Alternatywy odrzucone:**
+- Schema od zera w Prisma — ryzyko różnic z istniejącą DB
+- Zostanie przy raw SQL — brak typów, trudna maintainability
+
+---
+
+### DEC-013: VANTIXRAG GitHub Sync — to samo repo
+**Decyzja:** VANTIXRAG zostaje w tym samym repo (`VANTIX001_vantix-os`). Sync przez GitHub Raw API (`raw.githubusercontent.com/...`), trigger przez n8n webhook na GitHub push.
+**Uzasadnienie:**
+- Osobne repo = niepotrzebna komplikacja (2 repo do zarządzania, 2 zestawy credentiali)
+- GitHub Raw API jest publiczne dla publicznych repo — zero dodatkowej auth
+- n8n workflow prosty: push event → filter `VANTIXRAG/*.md` → fetch raw → UPSERT Neon
+
+**Alternatywy odrzucone:**
+- Osobne repo dla VANTIXRAG — overhead bez korzyści
+- Obsidian Sync zamiast GitHub — płatny, nie daje API
+
+---
+
+### DEC-014: Cyborg Shell zastępuje obecny, nie jest osobny
+**Decyzja:** Nowy Cyborg Shell (LeftDock + CentralBrainFocus + Metrics) przepisuje `/` i `/cockpit`. Jeden shell, nie dwa layouty.
+**Uzasadnienie:**
+- Jeden punkt wejścia eliminuje konfuzję "gdzie jestem"
+- Obecny shell (sesja 3-4) był mockupem — można zastąpić bez regresji
+- Layout `grid-cols-[auto_1fr_auto]` daje elastyczność bez złożoności
+
+**Zakres Phase 1:** tylko LeftDock + CentralBrainFocus. IsometricMetrics z placeholderami — dane dopiero w Phase 2.
+
+---
+
+### DEC-015: n8n na Hugging Face Spaces (free tier)
+**Decyzja:** n8n hostowany na HF Spaces CPU Basic (darmowy). SQLite w zamontowanym buckecie `vantix-n8n-data`.
+**Uzasadnienie:**
+- Zero kosztu na etapie bootstrapu
+- SQLite + bucket = dane przeżywają restarty kontenera
+- HF Spaces daje publiczny HTTPS URL dla webhooków
+- Ograniczenie: może zasnąć po ~48h braku ruchu — akceptowalne na Phase 1-2
+
+**Upgrade plan:** n8n Cloud ($20/mies.) gdy przychód >5k PLN/mies.
+
+---
+
 ## Format kolejnych wpisów
 
 ```

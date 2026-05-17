@@ -179,6 +179,21 @@ VANTIXRAG/
 
 ---
 
+## Podział pracy: Claude Code ↔ DeepSeek (NIENARUSZALNE)
+
+**Claude Code = Orchestrator.** DeepSeek = Worker.
+
+Claude Code analizuje feature i dekomponuje na atomowe taski dla DeepSeeka.
+Każdy task musi zawierać: opis (1 zdanie), input, output format, warunki akceptacji.
+DeepSeek nie podejmuje decyzji architektonicznych — tylko implementuje wg spec.
+Claude Code robi code review każdego outputu przed mergem.
+Output niezgodny ze spec → wraca do DeepSeeka z korektą, nie do Claude.
+
+Pełna dokumentacja: `VANTIXRAG/04_KNOWLEDGE/architecture/cognitive_mesh_v1.md`
+Pełna specyfikacja zasady: `VANTIXRAG/01_MASTER/master_rules.md`
+
+---
+
 ## Stack techniczny
 
 | Warstwa | Technologia |

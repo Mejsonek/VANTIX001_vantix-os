@@ -56,6 +56,59 @@ Kto, co, kiedy, rezultat, błąd, correlation ID. Brak logu = brak pamięci = ry
 
 ---
 
+## Zasada Podziału Pracy: Claude Code ↔ DeepSeek (NIENARUSZALNA)
+
+**Claude Code = Orchestrator.** DeepSeek = Worker.
+
+### Reguły
+
+- Claude Code analizuje feature/problem i dekomponuje na atomowe taski
+- Każdy task dla DeepSeeka musi zawierać:
+  1. Opis w 1 zdaniu (co zbudować)
+  2. Input (co dostaje na wejście)
+  3. Output (format: plik .tsx / .ts / JSON / tekst)
+  4. Warunki akceptacji (co musi być prawdą żeby task był done)
+- DeepSeek **nie podejmuje decyzji architektonicznych** — tylko implementuje wg specyfikacji
+- Claude Code robi **code review** każdego outputu DeepSeeka przed mergem
+- Output niezgodny ze specyfikacją → wraca do DeepSeeka z korektą, **NIE do Claude**
+
+### Przykład flow
+
+```
+Claude Code: "Zaimplementuj komponent TodayTasks"
+→ Task 1 dla DeepSeek:
+  Opis: Napisz TypeScript interface Task
+  Input: pola: id(string), title(string), status('todo'|'done'), priority(1-5)
+  Output: plik types/task.ts
+  Akceptacja: kompiluje się bez błędów TypeScript
+
+→ Task 2 dla DeepSeek:
+  Opis: Napisz komponent React TodayTasks
+  Input: przyjmuje Task[], używa Tailwind, void/gold/ivory design system
+  Output: components/cockpit/TodayTasks.tsx
+  Akceptacja: renderuje listę, obsługuje empty state, brak any/unknown
+
+→ Task 3 dla DeepSeek:
+  Opis: Napisz API route GET /api/tasks
+  Input: zwraca 5 ostatnich tasków z Neon przez Prisma
+  Output: app/api/tasks/route.ts
+  Akceptacja: zwraca { tasks: Task[] }, obsługuje błąd DB
+
+Claude Code: review → merge jeśli OK / odrzut z korektą do DeepSeeka
+```
+
+### Granica odpowiedzialności
+
+| Claude Code | DeepSeek |
+|------------|----------|
+| Architektura i podział modułów | Implementacja komponentów |
+| Decyzje o stack/bibliotekach | Boilerplate i CRUD |
+| Specyfikacja tasków | Kod wg specyfikacji |
+| Code review i merge | Testy jednostkowe wg spec |
+| Diagnostyka błędów architektury | Fixy bugów wg wskazówek Claude |
+
+---
+
 ## Zasady RAG-matki
 
 ### Hierarchia dostępu
