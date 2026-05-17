@@ -1,4 +1,4 @@
-"'use client';
+'use client';
 
 import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
@@ -20,40 +20,35 @@ interface CalendarDay {
 }
 
 const mockEventsByDate: Record<string, CalEvent[]> = {
-  '2025-07-15': [
-    { id: 'e1', title: 'Code Review', color: '#6B8FD4' },
-    { id: 'e2', title: 'Sync n8n', color: '#6B8FD4' },
+  '2026-05-18': [
+    { id: 'e1', title: 'Loom Sajid', color: '#ff5252' },
+    { id: 'e2', title: 'Follow-up Darek', color: '#d4af37' },
   ],
-  '2025-07-16': [
-    { id: 'e3', title: 'Demo Klient', color: '#d4af37' },
+  '2026-05-19': [
+    { id: 'e3', title: 'Oferta Reddit', color: '#d4af37' },
+    { id: 'e4', title: 'Code Review', color: '#6B8FD4' },
   ],
-  '2025-07-17': [
-    { id: 'e4', title: 'Standup', color: '#4ade80' },
-    { id: 'e5', title: 'Projekt', color: '#6B8FD4' },
-    { id: 'e6', title: 'Call BD', color: '#FF6D3F' },
+  '2026-05-20': [
+    { id: 'e5', title: 'Sync n8n', color: '#6B8FD4' },
+    { id: 'e6', title: 'Roadmapa Vantix', color: '#4ade80' },
   ],
-  '2025-07-18': [
-    { id: 'e7', title: 'Loom Sajid', color: '#ff5252' },
-    { id: 'e8', title: 'Follow-up', color: '#d4af37' },
+  '2026-05-21': [
+    { id: 'e7', title: 'Demo Klient', color: '#d4af37' },
   ],
-  '2025-07-19': [
-    { id: 'e9', title: 'Review', color: '#4ade80' },
+  '2026-05-22': [
+    { id: 'e8', title: 'Standup', color: '#4ade80' },
+    { id: 'e9', title: 'Deploy n8n', color: '#6B8FD4' },
+    { id: 'e10', title: 'Call BD', color: '#FF6D3F' },
   ],
-  '2025-07-22': [
-    { id: 'e10', title: 'Planowanie Sprint', color: '#6B8FD4' },
+  '2026-05-26': [
+    { id: 'e11', title: 'Phase 2 Kickoff', color: '#6B8FD4' },
   ],
-  '2025-07-24': [
-    { id: 'e11', title: '1:1 z Teamem', color: '#d4af37' },
+  '2026-05-28': [
+    { id: 'e12', title: '1:1 Review', color: '#d4af37' },
   ],
-  '2025-07-25': [
-    { id: 'e12', title: 'Deploy', color: '#ff5252' },
-    { id: 'e13', title: 'Retro', color: '#4ade80' },
-  ],
-  '2025-07-29': [
-    { id: 'e14', title: 'Client Pitch', color: '#d4af37' },
-  ],
-  '2025-07-30': [
-    { id: 'e15', title: 'Code Freeze', color: '#ff5252' },
+  '2026-05-29': [
+    { id: 'e13', title: 'Client Pitch', color: '#d4af37' },
+    { id: 'e14', title: 'Retro Sprint', color: '#4ade80' },
   ],
 };
 
@@ -314,4 +309,3 @@ export default function MonthCalendar() {
     </div>
   );
 }
-"

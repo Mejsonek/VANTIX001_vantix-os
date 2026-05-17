@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import TodayTasks from '@/components/cockpit/TodayTasks';
 
-import MonthCalendar from '@/components/cockpit/WeekCalendar';
+import MonthCalendar from '@/components/cockpit/WeekCalendar'; // komponent teraz pokazuje widok miesięczny
 import PriorityList from '@/components/cockpit/PriorityList';
 import AIRecommendations from '@/components/cockpit/AIRecommendations';
 import { Crosshair, ListChecks, CalendarDays, Zap, TrendingUp, Clock } from 'lucide-react';
