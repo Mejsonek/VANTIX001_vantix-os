@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VANTIX — Design System & Agent GUI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   VANTIX DESIGN SYSTEM v1.0
+   Cosmic Minimalism — Dark / Gold / Ivory
+   Fonts: Syne (display) + DM Mono (body/code)
+   ============================================================ */
+
+:root {
+  /* Core */
+  --void:    #020202;
+  --surface: #0c0c0c;
+  --s2:      #111111;
+  --s3:      #161616;
+
+  /* Brand */
+  --gold:    #D4AF37;
+  --gold-10: rgba(212,175,55,.10);
+  --gold-20: rgba(212,175,55,.20);
+  --gold-40: rgba(212,175,55,.40);
+  --gold-60: rgba(212,175,55,.60);
+
+  /* Text */
+  --ivory:    #F5F4F0;
+  --ivory-10: rgba(245,244,240,.10);
+  --ivory-20: rgba(245,244,240,.20);
+  --ivory-40: rgba(245,244,240,.40);
+  --ivory-60: rgba(245,244,240,.60);
+
+  /* Semantic */
+  --green:  #4ade80;
+  --red:    #ff5252;
+  --orange: #FF6D3F;
+  --blue:   #6B8FD4;
+
+  /* Green variants */
+  --green-10: rgba(74,222,128,.10);
+  --red-10:   rgba(255,82,82,.10);
+  --orange-10:rgba(255,109,63,.10);
+  --blue-10:  rgba(107,143,212,.10);
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  /* Spacing */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 40px;
+  --sp-2xl: 64px;
+
+  /* Border */
+  --border: 1px solid var(--gold-20);
+  --border-dim: 1px solid var(--gold-10);
+  --border-bright: 1px solid var(--gold-40);
+
+  /* Radius */
+  --r-none: 0;
+
+  /* Shadows */
+  --glow-gold: 0 0 20px rgba(212,175,55,.15);
+  --glow-gold-sm: 0 0 8px rgba(212,175,55,.2);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--void);
+  color: var(--ivory);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Grain overlay */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='.07'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:.35;
+}
+
+/* Grid background */
+.grid-bg {
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(212,175,55,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,.015) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Progress bar */
+#bar {
+  position:fixed; top:0; left:0;
+  height:1px; background:var(--gold);
+  z-index:999; width:0;
+  box-shadow: 0 0 8px var(--gold);
+  transition:width .05s;
+}
+
+.wrap {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding:0 40px 120px;
+}
+
+/* ── NAVIGATION ── */
+.ds-nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(2,2,2,.92);
+  backdrop-filter:blur(12px);
+  border-bottom: var(--border-dim);
+  padding:0 40px;
+  display:flex; gap:0;
+  overflow-x:auto;
+}
+.ds-nav-item {
+  padding:16px 20px;
+  font-size:9px; letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--ivory-40);
+  cursor:pointer;
+  border-bottom:1px solid transparent;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.ds-nav-item:hover,
+.ds-nav-item.active {
+  color:var(--gold);
+  border-bottom-color:var(--gold);
+}
+
+/* ── HEADER ── */
+.ds-header {
+  padding:80px 0 60px;
+  border-bottom:var(--border-dim);
+  margin-bottom:60px;
+}
+.ds-eyebrow {
+  font-size:8px; letter-spacing:.5em;
+  color:var(--gold-60); text-transform:uppercase;
+  margin-bottom:16px;
+}
+.ds-title {
+  font-family:var(--font-display);
+  font-size:52px; font-weight:800;
+  letter-spacing:-.02em; line-height:1;
+  color:var(--ivory);
+  margin-bottom:8px;
+}
+.ds-title em { color:var(--gold); font-style:normal; }
+.ds-subtitle {
+  font-size:12px; color:var(--ivory-40);
+  letter-spacing:.08em;
+}
+
+/* ── SECTIONS ── */
+.ds-section {
+  margin-bottom:80px;
+  scroll-margin-top:60px;
+}
+.ds-section-label {
+  font-size:8px; letter-spacing:.4em;
+  color:var(--gold); text-transform:uppercase;
+  margin-bottom:6px;
+}
+.ds-section-title {
+  font-family:var(--font-display);
+  font-size:28px; font-weight:700;
+  margin-bottom:32px;
+  padding-bottom:16px;
+  border-bottom:var(--border-dim);
+}
+
+/* ── COLORS ── */
+.color-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:12px;
+  margin-bottom:32px;
+}
+.color-card {
+  border:var(--border-dim);
+  overflow:hidden;
+}
+.color-swatch {
+  height:80px;
+}
+.color-info {
+  padding:12px;
+  background:var(--surface);
+}
+.color-name {
+  font-size:10px; color:var(--ivory);
+  letter-spacing:.08em; margin-bottom:2px;
+}
+.color-var {
+  font-size:9px; color:var(--ivory-40);
+  letter-spacing:.05em;
+}
+.color-hex {
+  font-size:9px; color:var(--gold);
+  letter-spacing:.05em;
+}
+
+/* ── TYPOGRAPHY ── */
+.type-specimen { margin-bottom:24px; border:var(--border-dim); padding:24px; background:var(--surface); }
+.type-label { font-size:8px; letter-spacing:.3em; color:var(--gold-60); text-transform:uppercase; margin-bottom:12px; }
+.type-display { font-family:var(--font-display); font-size:48px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+.type-heading-1 { font-family:var(--font-display); font-size:32px; font-weight:700; }
+.type-heading-2 { font-family:var(--font-display); font-size:24px; font-weight:600; }
+.type-heading-3 { font-family:var(--font-display); font-size:18px; font-weight:600; }
+.type-body { font-family:var(--font-mono); font-size:13px; color:var(--ivory-60); line-height:1.8; }
+.type-small { font-family:var(--font-mono); font-size:10px; color:var(--ivory-40); letter-spacing:.1em; }
+.type-label-ui { font-family:var(--font-mono); font-size:8px; letter-spacing:.35em; text-transform:uppercase; color:var(--gold); }
+.type-code { font-family:var(--font-mono); font-size:11px; color:var(--green); background:var(--s2); padding:2px 6px; }
+
+/* ── COMPONENTS ── */
+
+/* Buttons */
+.btn-group { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
+.btn {
+  font-family:var(--font-mono);
+  font-size:9px; letter-spacing:.2em;
+  text-transform:uppercase;
+  padding:10px 24px;
+  cursor:pointer;
+  transition:all .2s;
+  border:none;
+}
+.btn-primary {
+  background:var(--gold);
+  color:var(--void);
+  font-weight:500;
+}
+.btn-primary:hover { background:var(--ivory); box-shadow:var(--glow-gold); }
+.btn-ghost {
+  background:transparent;
+  border:var(--border);
+  color:var(--ivory);
+}
+.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+.btn-dim {
+  background:var(--gold-10);
+  border:var(--border-dim);
+  color:var(--gold);
+}
+.btn-dim:hover { background:var(--gold-20); }
+.btn-danger {
+  background:transparent;
+  border:1px solid rgba(255,82,82,.3);
+  color:var(--red);
+}
+.btn-danger:hover { background:var(--red-10); }
+
+/* Status badges */
+.badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.badge {
+  font-size:8px; letter-spacing:.2em;
+  text-transform:uppercase; padding:3px 10px;
+  border:1px solid;
+}
+.badge-gold { border-color:var(--gold); color:var(--gold); background:var(--gold-10); }
+.badge-green { border-color:var(--green); color:var(--green); background:var(--green-10); }
+.badge-red { border-color:var(--red); color:var(--red); background:var(--red-10); }
+.badge-orange { border-color:var(--orange); color:var(--orange); background:var(--orange-10); }
+.badge-blue { border-color:var(--blue); color:var(--blue); background:var(--blue-10); }
+.badge-dim { border-color:var(--ivory-20); color:var(--ivory-40); }
+
+/* Cards */
+.card {
+  background:var(--surface);
+  border:var(--border-dim);
+  padding:24px;
+  margin-bottom:12px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(to right, var(--gold), transparent);
+  opacity:0;
+  transition:opacity .2s;
+}
+.card:hover { border-color:var(--gold-40); }
+.card:hover::before { opacity:1; }
+.card-label { font-size:8px; letter-spacing:.35em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.card-title { font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:6px; }
+.card-body { font-size:11px; color:var(--ivory-40); line-height:1.75; }
+
+/* Input */
+.input-group { margin-bottom:16px; }
+.input-label { font-size:8px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold-60); margin-bottom:6px; display:block; }
+.input {
+  width:100%;
+  background:var(--s2);
+  border:var(--border-dim);
+  color:var(--ivory);
+  font-family:var(--font-mono);
+  font-size:12px;
+  padding:10px 14px;
+  outline:none;
+  transition:border-color .2s;
+}
+.input:focus { border-color:var(--gold-40); }
+.input::placeholder { color:var(--ivory-20); }
+.input-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+/* Table */
+.ds-table { width:100%; border-collapse:collapse; }
+.ds-table th {
+  text-align:left; padding:10px 16px;
+  font-size:8px; letter-spacing:.25em;
+  color:var(--gold); text-transform:uppercase;
+  border-bottom:var(--border-dim);
+  font-weight:400;
+}
+.ds-table td {
+  padding:12px 16px;
+  font-size:11px; color:var(--ivory-60);
+  border-bottom:1px solid var(--gold-10);
+}
+.ds-table tr:hover td { color:var(--ivory); background:var(--gold-10); }
+
+/* Divider */
+.ds-divider {
+  height:1px;
+  background:linear-gradient(to right, transparent, var(--gold-20), transparent);
+  margin:32px 0;
+}
+
+/* Code block */
+.code-block {
+  background:var(--s2);
+  border:var(--border-dim);
+  border-left:2px solid var(--gold);
+  padding:16px 20px;
+  font-size:11px;
+  line-height:1.8;
+  overflow-x:auto;
+  margin-bottom:16px;
+}
+.code-block .k { color:var(--gold); }
+.code-block .s { color:var(--green); }
+.code-block .c { color:var(--ivory-20); font-style:italic; }
+.code-block .v { color:var(--blue); }
+
+/* Status bar */
+.status-bar {
+  display:flex; gap:0;
+  border:var(--border-dim);
+  margin-bottom:24px;
+  overflow:hidden;
+}
+.status-item {
+  flex:1; padding:12px 16px;
+  border-right:var(--border-dim);
+  display:flex; flex-direction:column; gap:3px;
+}
+.status-item:last-child { border-right:none; }
+.status-item-label { font-size:8px; letter-spacing:.25em; text-transform:uppercase; color:var(--ivory-40); }
+.status-item-val { font-family:var(--font-display); font-size:20px; color:var(--gold); }
+
+/* Flow steps */
+.flow { display:flex; flex-direction:column; gap:0; }
+.flow-step {
+  display:grid; grid-template-columns:32px 1fr;
+  gap:0; position:relative;
+}
+.flow-step:not(:last-child)::after {
+  content:''; position:absolute;
+  left:15px; top:32px; bottom:0;
+  width:1px; background:var(--gold-20);
+}
+.flow-dot {
+  width:32px; height:32px;
+  border:var(--border-dim);
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; color:var(--gold);
+  background:var(--s2);
+  position:relative; z-index:1;
+  flex-shrink:0;
+}
+.flow-body { padding:8px 0 24px 16px; }
+.flow-title { font-size:12px; color:var(--ivory); margin-bottom:3px; font-weight:500; }
+.flow-desc { font-size:10px; color:var(--ivory-40); line-height:1.65; }
+
+/* Notification / toast */
+.toast {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:14px 16px;
+  border:var(--border-dim);
+  margin-bottom:8px;
+  background:var(--surface);
+}
+.toast-dot { width:6px; height:6px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+.toast-title { font-size:11px; color:var(--ivory); margin-bottom:2px; }
+.toast-body { font-size:10px; color:var(--ivory-40); line-height:1.6; }
+
+/* ── AGENT GUI COMPONENTS ── */
+
+/* Chat bubble — agent */
+.agent-msg {
+  display:flex; gap:12px; margin-bottom:16px;
+}
+.agent-avatar {
+  width:32px; height:32px; flex-shrink:0;
+  border:var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:8px; letter-spacing:.1em; color:var(--gold);
+  font-family:var(--font-display); font-weight:700;
+  background:var(--gold-10);
+}
+.agent-bubble {
+  background:var(--surface);
+  border:var(--border-dim);
+  border-left:2px solid var(--gold);
+  padding:14px 16px;
+  max-width:600px;
+  font-size:12px; color:var(--ivory-60);
+  line-height:1.75;
+}
+.agent-bubble strong { color:var(--ivory); font-weight:500; }
+.agent-bubble .highlight { color:var(--gold); }
+.agent-meta {
+  font-size:8px; letter-spacing:.15em;
+  color:var(--ivory-20);
+  margin-top:6px;
+}
+
+/* Chat bubble — user */
+.user-msg {
+  display:flex; gap:12px; margin-bottom:16px;
+  justify-content:flex-end;
+}
+.user-bubble {
+  background:var(--gold-10);
+  border:var(--border);
+  padding:14px 16px;
+  max-width:500px;
+  font-size:12px; color:var(--ivory);
+  line-height:1.75;
+}
+
+/* Command input */
+.cmd-input-wrap {
+  border:var(--border);
+  background:var(--surface);
+  display:flex; align-items:center;
+  padding:12px 16px; gap:12px;
+  margin-bottom:24px;
+}
+.cmd-prompt { color:var(--gold); font-size:13px; flex-shrink:0; }
+.cmd-input {
+  flex:1; background:transparent;
+  border:none; outline:none;
+  font-family:var(--font-mono);
+  font-size:12px; color:var(--ivory);
+}
+.cmd-input::placeholder { color:var(--ivory-20); }
+.cmd-shortcut {
+  font-size:9px; letter-spacing:.15em;
+  color:var(--ivory-20); flex-shrink:0;
+}
+
+/* Sidebar nav item */
+.sidebar-item {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 16px;
+  cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all .2s;
+}
+.sidebar-item:hover { background:var(--gold-10); border-left-color:var(--gold-40); }
+.sidebar-item.active { background:var(--gold-10); border-left-color:var(--gold); }
+.sidebar-item-icon { font-size:10px; color:var(--ivory-40); width:16px; text-align:center; }
+.sidebar-item.active .sidebar-item-icon { color:var(--gold); }
+.sidebar-item-label { font-size:10px; letter-spacing:.1em; color:var(--ivory-40); }
+.sidebar-item.active .sidebar-item-label { color:var(--ivory); }
+.sidebar-item-badge {
+  margin-left:auto;
+  font-size:8px; color:var(--gold);
+  background:var(--gold-10);
+  padding:2px 6px;
+  letter-spacing:.1em;
+}
+
+/* KPI row */
+.kpi-row {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:12px; margin-bottom:24px;
+}
+.kpi {
+  background:var(--surface);
+  border:var(--border-dim);
+  padding:20px 16px;
+  text-align:center;
+  transition:border-color .2s;
+}
+.kpi:hover { border-color:var(--gold-40); }
+.kpi-val {
+  font-family:var(--font-display);
+  font-size:32px; color:var(--gold);
+  line-height:1; margin-bottom:4px;
+}
+.kpi-label {
+  font-size:8px; letter-spacing:.2em;
+  color:var(--ivory-40); text-transform:uppercase;
+}
+
+/* Pipeline stages */
+.pipeline {
+  display:flex; gap:0;
+  border:var(--border-dim);
+  overflow:hidden; margin-bottom:24px;
+}
+.pipe-stage {
+  flex:1; padding:12px 8px;
+  text-align:center;
+  border-right:var(--border-dim);
+  cursor:pointer;
+  transition:background .2s;
+}
+.pipe-stage:last-child { border-right:none; }
+.pipe-stage:hover { background:var(--gold-10); }
+.pipe-stage.active { background:var(--gold-10); }
+.pipe-stage-label { font-size:8px; letter-spacing:.15em; color:var(--ivory-40); text-transform:uppercase; margin-bottom:4px; }
+.pipe-stage.active .pipe-stage-label { color:var(--gold); }
+.pipe-stage-count { font-family:var(--font-display); font-size:20px; color:var(--ivory-40); }
+.pipe-stage.active .pipe-stage-count { color:var(--gold); }
+
+/* ── GRID SYSTEM ── */
+.two { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.three { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:16px; }
+.four { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+
+/* ── UTILITIES ── */
+.mt-sm { margin-top:8px; }
+.mt-md { margin-top:16px; }
+.mt-lg { margin-top:24px; }
+.mb-sm { margin-bottom:8px; }
+.mb-md { margin-bottom:16px; }
+.mb-lg { margin-bottom:24px; }
+.text-gold { color:var(--gold); }
+.text-dim { color:var(--ivory-40); }
+.text-green { color:var(--green); }
+.text-red { color:var(--red); }
+.font-display { font-family:var(--font-display); }
+
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div id="bar"></div>
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <div class="ds-nav-item active" onclick="scrollTo('colors')">Kolory</div>
+  <div class="ds-nav-item" onclick="scrollTo('typography')">Typografia</div>
+  <div class="ds-nav-item" onclick="scrollTo('components')">Komponenty</div>
+  <div class="ds-nav-item" onclick="scrollTo('agent')">Agent GUI</div>
+  <div class="ds-nav-item" onclick="scrollTo('identity')">Identyfikacja</div>
+  <div class="ds-nav-item" onclick="scrollTo('tokens')">Tokeny CSS</div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="ds-header">
+    <div class="ds-eyebrow">VANTIX — Design System v1.0</div>
+    <h1 class="ds-title">Cosmic <em>Minimalism</em></h1>
+    <p class="ds-subtitle">Identyfikacja wizualna · Komponenty UI · Agent GUI · CSS Tokens</p>
+  </header>
+
+  <!-- ── KOLORY ── -->
+  <section class="ds-section" id="colors">
+    <div class="ds-section-label">01</div>
+    <h2 class="ds-section-title">Paleta kolorów</h2>
+
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background:#020202;border-bottom:1px solid #111;"></div>
+        <div class="color-info">
+          <div class="color-name">Void</div>
+          <div class="color-var">--void</div>
+          <div class="color-hex">#020202</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#0c0c0c;border-bottom:1px solid #111;"></div>
+        <div class="color-info">
+          <div class="color-name">Surface</div>
+          <div class="color-var">--surface</div>
+          <div class="color-hex">#0c0c0c</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#D4AF37;"></div>
+        <div class="color-info">
+          <div class="color-name">Gold</div>
+          <div class="color-var">--gold</div>
+          <div class="color-hex">#D4AF37</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#F5F4F0;"></div>
+        <div class="color-info">
+          <div class="color-name">Ivory</div>
+          <div class="color-var">--ivory</div>
+          <div class="color-hex">#F5F4F0</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#4ade80;"></div>
+        <div class="color-info">
+          <div class="color-name">Green</div>
+          <div class="color-var">--green</div>
+          <div class="color-hex">#4ade80</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#ff5252;"></div>
+        <div class="color-info">
+          <div class="color-name">Red</div>
+          <div class="color-var">--red</div>
+          <div class="color-hex">#ff5252</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#FF6D3F;"></div>
+        <div class="color-info">
+          <div class="color-name">Orange</div>
+          <div class="color-var">--orange</div>
+          <div class="color-hex">#FF6D3F</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:#6B8FD4;"></div>
+        <div class="color-info">
+          <div class="color-name">Blue</div>
+          <div class="color-var">--blue</div>
+          <div class="color-hex">#6B8FD4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TYPOGRAFIA ── -->
+  <section class="ds-section" id="typography">
+    <div class="ds-section-label">02</div>
+    <h2 class="ds-section-title">Typografia</h2>
+
+    <div class="type-specimen">
+      <div class="type-label">Display — Syne 800</div>
+      <div class="type-display">Vantix OS</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Heading 1 — Syne 700 · 32px</div>
+      <div class="type-heading-1">AI Systems Architecture</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Heading 2 — Syne 600 · 24px</div>
+      <div class="type-heading-2">Personal Cockpit</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Heading 3 — Syne 600 · 18px</div>
+      <div class="type-heading-3">Lead Pipeline</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Body — DM Mono 400 · 13px</div>
+      <div class="type-body">System operacyjny dla pracy Kacpra. Centrum sterowania — nie aplikacja. Wchodząc do systemu widzisz natychmiast co jest najważniejsze, status projektów, leadów i rekomendacje AI.</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Small — DM Mono 400 · 10px</div>
+      <div class="type-small">Kacper Zdżałka · Solution Architect · Mielec, PL</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Label UI — DM Mono · 8px · 0.35em spacing</div>
+      <div class="type-label-ui">Status aktywny · Phase 0 ukończona</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Code inline — DM Mono · zielony</div>
+      <span class="type-code">gen_random_uuid()</span>
+      <span class="type-code">--gold</span>
+      <span class="type-code">VANTIX001</span>
+    </div>
+  </section>
+
+  <!-- ── KOMPONENTY ── -->
+  <section class="ds-section" id="components">
+    <div class="ds-section-label">03</div>
+    <h2 class="ds-section-title">Komponenty</h2>
+
+    <!-- Buttons -->
+    <div class="type-label-ui mb-sm">Przyciski</div>
+    <div class="btn-group">
+      <button class="btn btn-primary">Potwierdź</button>
+      <button class="btn btn-ghost">Anuluj</button>
+      <button class="btn btn-dim">Eksportuj</button>
+      <button class="btn btn-danger">Usuń</button>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Badges -->
+    <div class="type-label-ui mb-sm">Statusy i etykiety</div>
+    <div class="badge-row">
+      <span class="badge badge-green">● Active</span>
+      <span class="badge badge-gold">● Phase 0</span>
+      <span class="badge badge-orange">● In Progress</span>
+      <span class="badge badge-red">● Blocker</span>
+      <span class="badge badge-blue">● Discovery</span>
+      <span class="badge badge-dim">● Archived</span>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Cards -->
+    <div class="type-label-ui mb-sm">Karty</div>
+    <div class="two">
+      <div class="card">
+        <div class="card-label">Projekt aktywny</div>
+        <div class="card-title">Vantix OS</div>
+        <div class="card-body">Centralny system operacyjny. Phase 0 ukończona. RAG-matka skonfigurowana, baza gotowa.</div>
+        <div class="mt-md">
+          <span class="badge badge-green">● Active</span>
+          <span class="badge badge-gold" style="margin-left:6px">Phase 0</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Lead — Hot</div>
+        <div class="card-title">Sajid · StepUp Analytics</div>
+        <div class="card-body">Amsterdam · Digital Marketing Agency · €1,500–1,800 MVP · Po callu, czeka na Loom i discovery questions.</div>
+        <div class="mt-md">
+          <span class="badge badge-orange">● Offer Sent</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Status bar -->
+    <div class="type-label-ui mb-sm">Status bar</div>
+    <div class="status-bar">
+      <div class="status-item">
+        <div class="status-item-label">Leady aktywne</div>
+        <div class="status-item-val">2</div>
+      </div>
+      <div class="status-item">
+        <div class="status-item-label">Projekty</div>
+        <div class="status-item-val">1</div>
+      </div>
+      <div class="status-item">
+        <div class="status-item-label">Cashflow EST</div>
+        <div class="status-item-val">€2.7k</div>
+      </div>
+      <div class="status-item">
+        <div class="status-item-label">Phase</div>
+        <div class="status-item-val">0 ✓</div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- KPI -->
+    <div class="type-label-ui mb-sm">KPI row</div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-val">792</div>
+        <div class="kpi-label">Leady total</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">2</div>
+        <div class="kpi-label">Hot pipeline</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">30%</div>
+        <div class="kpi-label">Conversion</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">€0</div>
+        <div class="kpi-label">MRR</div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Pipeline -->
+    <div class="type-label-ui mb-sm">Pipeline CRM</div>
+    <div class="pipeline">
+      <div class="pipe-stage">
+        <div class="pipe-stage-label">New</div>
+        <div class="pipe-stage-count">0</div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-stage-label">Qualification</div>
+        <div class="pipe-stage-count">0</div>
+      </div>
+      <div class="pipe-stage active">
+        <div class="pipe-stage-label">Offer</div>
+        <div class="pipe-stage-count">2</div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-stage-label">Negotiation</div>
+        <div class="pipe-stage-count">0</div>
+      </div>
+      <div class="pipe-stage">
+        <div class="pipe-stage-label">Won</div>
+        <div class="pipe-stage-count">0</div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Inputs -->
+    <div class="type-label-ui mb-sm">Formularze</div>
+    <div class="input-row">
+      <div class="input-group">
+        <label class="input-label">Nazwa klienta</label>
+        <input class="input" placeholder="np. Sajid — StepUp Analytics">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Wartość (EUR)</label>
+        <input class="input" placeholder="1500">
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Notifications -->
+    <div class="type-label-ui mb-sm">Powiadomienia</div>
+    <div class="toast">
+      <div class="toast-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="toast-title">Sajid odpowiedział na wiadomość</div>
+        <div class="toast-body">StepUp Analytics · Prosi o termin kolejnego calla · 2 min temu</div>
+      </div>
+    </div>
+    <div class="toast">
+      <div class="toast-dot" style="background:var(--orange)"></div>
+      <div>
+        <div class="toast-title">Follow-up — Darek nie odpowiedział 48h</div>
+        <div class="toast-body">Vidcon.io · Ostatni kontakt: 14.05.2026 · Wymagana akcja</div>
+      </div>
+    </div>
+    <div class="toast">
+      <div class="toast-dot" style="background:var(--red)"></div>
+      <div>
+        <div class="toast-title">Bloker — tabele Neon nie uruchomione</div>
+        <div class="toast-body">leads · brain_sections · Uruchom schema.sql w SQL Editor</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── AGENT GUI ── -->
+  <section class="ds-section" id="agent">
+    <div class="ds-section-label">04</div>
+    <h2 class="ds-section-title">Agent GUI — VANTIXRAG Brain</h2>
+
+    <!-- Sidebar -->
+    <div class="type-label-ui mb-sm">Nawigacja boczna</div>
+    <div style="border:var(--border-dim);background:var(--surface);width:220px;padding:12px 0;margin-bottom:24px;">
+      <div style="padding:12px 16px;border-bottom:var(--border-dim);margin-bottom:8px;">
+        <div style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--gold);">VANTIX</div>
+        <div style="font-size:8px;letter-spacing:.2em;color:var(--ivory-40);">OS v1.0</div>
+      </div>
+      <div class="sidebar-item active">
+        <div class="sidebar-item-icon">⌂</div>
+        <div class="sidebar-item-label">Cockpit</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item-icon">◈</div>
+        <div class="sidebar-item-label">CRM</div>
+        <div class="sidebar-item-badge">2</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item-icon">⟐</div>
+        <div class="sidebar-item-label">DEV Tool</div>
+        <div class="sidebar-item-badge">1</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item-icon">◉</div>
+        <div class="sidebar-item-label">Brain</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item-icon">⚡</div>
+        <div class="sidebar-item-label">Workflows</div>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item-icon">⚙</div>
+        <div class="sidebar-item-label">Settings</div>
+      </div>
+    </div>
+
+    <!-- Chat interface -->
+    <div class="type-label-ui mb-sm">Interfejs rozmowy z agentem</div>
+    <div style="border:var(--border-dim);background:var(--surface);padding:24px;margin-bottom:16px;">
+
+      <div class="agent-msg">
+        <div class="agent-avatar">VX</div>
+        <div>
+          <div class="agent-bubble">
+            Dzień dobry, Kacper. Oto Twój przegląd na dziś:<br><br>
+            <strong>Priorytety:</strong><br>
+            → Nagraj Loom dla Sajida (StepUp Analytics · €1,500)<br>
+            → Follow-up Darek — brak odpowiedzi 48h<br>
+            → PIP: 637-34-44<br><br>
+            <span class="highlight">Sajid nie odpowiedział na wiadomość z 16.05.</span> Sugeruję wysłać przypomnienie wieczorem jeśli brak odpowiedzi do 18:00.
+          </div>
+          <div class="agent-meta">VANTIXRAG · master_context · 2026-05-17 · 07:00</div>
+        </div>
+      </div>
+
+      <div class="user-msg">
+        <div class="user-bubble">
+          Jaki jest status projektu VANTIX001?
+        </div>
+      </div>
+
+      <div class="agent-msg">
+        <div class="agent-avatar">VX</div>
+        <div>
+          <div class="agent-bubble">
+            <strong>VANTIX001 — vantix-os</strong><br><br>
+            Phase: <span class="highlight">0 — ukończona ✓</span><br>
+            Baza: Neon eu-central-1 · 16 tabel · seed OK<br>
+            Repo: github.com/Mejsonek/Brainofvantix<br>
+            Deploy: vantix-dev-tool.vercel.app<br><br>
+            Następny krok: <strong>Phase 1 — mockupy modułów</strong><br>
+            Blokery: brak (wszystkie usunięte dziś w nocy)
+          </div>
+          <div class="agent-meta">VANTIXRAG · dev_mini_rag · projekt_001 · project.md</div>
+        </div>
+      </div>
+
+      <!-- Command input -->
+      <div class="cmd-input-wrap">
+        <span class="cmd-prompt">▸</span>
+        <input class="cmd-input" placeholder="Zapytaj Brain o projekt, lead, zadanie...">
+        <span class="cmd-shortcut">⌘ + K</span>
+      </div>
+
+    </div>
+
+    <!-- Flow — jak działa agent -->
+    <div class="type-label-ui mb-sm">Flow agenta</div>
+    <div class="two">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-dot">01</div>
+          <div class="flow-body">
+            <div class="flow-title">Zapytanie użytkownika</div>
+            <div class="flow-desc">Kacper wpisuje pytanie lub komendę w interfejsie Brain</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">02</div>
+          <div class="flow-body">
+            <div class="flow-title">Router określa scope</div>
+            <div class="flow-desc">Shell wybiera odpowiedni mini-RAG na podstawie kontekstu</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">03</div>
+          <div class="flow-body">
+            <div class="flow-title">Mini-RAG odpowiada</div>
+            <div class="flow-desc">Działa w swoim scope — CRM, DEV, Cockpit lub Settings</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">04</div>
+          <div class="flow-body">
+            <div class="flow-title">RAG-matka jeśli potrzeba</div>
+            <div class="flow-desc">Mini-RAG pyta matkę o szerszy kontekst przez logiczne połączenia</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot" style="border-color:var(--gold);color:var(--gold);">05</div>
+          <div class="flow-body">
+            <div class="flow-title">Owner decides</div>
+            <div class="flow-desc">Propozycje zmian trafiają do evolution layer — Kacper zatwierdza lub odrzuca</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px;">
+          <div class="card-label">Zasada nadrzędna</div>
+          <div class="card-title" style="font-size:15px;">AI explores<br>Owner decides</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Hierarchia RAG</div>
+          <div class="card-body" style="font-size:10px;line-height:2;">
+            RAG-matka → pełny dostęp<br>
+            CRM mini-RAG → leady, lejek<br>
+            DEV mini-RAG → projekty, logi<br>
+            Cockpit mini-RAG → taski, kalendarz<br>
+            Settings mini-RAG → konfiguracja
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── IDENTYFIKACJA ── -->
+  <section class="ds-section" id="identity">
+    <div class="ds-section-label">05</div>
+    <h2 class="ds-section-title">Identyfikacja wizualna</h2>
+
+    <!-- Logo -->
+    <div class="type-label-ui mb-sm">Logo i wordmark</div>
+    <div style="border:var(--border-dim);background:var(--surface);padding:48px;text-align:center;margin-bottom:16px;">
+      <div style="font-family:var(--font-display);font-size:10px;letter-spacing:.6em;color:var(--gold-60);margin-bottom:8px;text-transform:uppercase;">AI SYSTEMS</div>
+      <div style="font-family:var(--font-display);font-size:48px;font-weight:800;letter-spacing:.15em;color:var(--gold);line-height:1;">VANTIX</div>
+      <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.4em;color:var(--ivory-40);margin-top:6px;text-transform:uppercase;">Architecture & Automation</div>
+    </div>
+
+    <div class="two">
+      <div style="border:var(--border-dim);background:var(--gold);padding:32px;text-align:center;">
+        <div style="font-family:var(--font-display);font-size:36px;font-weight:800;letter-spacing:.15em;color:var(--void);">VANTIX</div>
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:.3em;color:rgba(2,2,2,.5);margin-top:4px;">Na złotym tle</div>
+      </div>
+      <div style="border:var(--border-dim);background:var(--ivory);padding:32px;text-align:center;">
+        <div style="font-family:var(--font-display);font-size:36px;font-weight:800;letter-spacing:.15em;color:var(--void);">VANTIX</div>
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:.3em;color:rgba(2,2,2,.4);margin-top:4px;">Na jasnym tle</div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Tone of voice -->
+    <div class="type-label-ui mb-sm">Ton komunikacji</div>
+    <div class="three">
+      <div class="card">
+        <div class="card-label">Bezpośredni</div>
+        <div class="card-body">Mówi wprost. Bez owijania w bawełnę. Konkretne liczby i fakty.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Architektoniczny</div>
+        <div class="card-body">Myśli systemami. Widzi całość. Nie rozwiązuje problemów — projektuje systemy.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Precyzyjny</div>
+        <div class="card-body">Zero ukrytej magii. Każda decyzja ma powód. Kod jest przewidywalny.</div>
+      </div>
+    </div>
+
+    <div class="ds-divider"></div>
+
+    <!-- Kacper identity -->
+    <div class="type-label-ui mb-sm">Identyfikacja — Kacper Zdżałka</div>
+    <div class="card">
+      <div class="card-label">Solution Architect · AI Systems</div>
+      <div class="card-title">Kacper Zdżałka</div>
+      <div style="color:var(--gold);font-size:10px;letter-spacing:.1em;margin-bottom:16px;">Founder · Vantix · Mielec, PL</div>
+      <div class="card-body">
+        Buduję systemy AI od architektury do delivery. Nie piszę kodu ręcznie — jestem architektem który deleguje do agentów AI. Specjalizuję się w systemach end-to-end: CRM, automatyzacje, RAG, agenty.
+      </div>
+      <div class="mt-md">
+        <span class="badge badge-gold">AI Architecture</span>
+        <span class="badge badge-blue" style="margin-left:6px">RAG Systems</span>
+        <span class="badge badge-green" style="margin-left:6px">Automation</span>
+        <span class="badge badge-orange" style="margin-left:6px">Next.js</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── CSS TOKENS ── -->
+  <section class="ds-section" id="tokens">
+    <div class="ds-section-label">06</div>
+    <h2 class="ds-section-title">CSS Tokens — skopiuj do globals.css</h2>
+
+    <div class="code-block">
+<span class="k">:root</span> {
+  <span class="c">/* Core backgrounds */</span>
+  <span class="k">--void</span>:    <span class="s">#020202</span>;
+  <span class="k">--surface</span>: <span class="s">#0c0c0c</span>;
+  <span class="k">--s2</span>:      <span class="s">#111111</span>;
+  <span class="k">--s3</span>:      <span class="s">#161616</span>;
+
+  <span class="c">/* Brand gold */</span>
+  <span class="k">--gold</span>:    <span class="s">#D4AF37</span>;
+  <span class="k">--gold-10</span>: <span class="s">rgba(212,175,55,.10)</span>;
+  <span class="k">--gold-20</span>: <span class="s">rgba(212,175,55,.20)</span>;
+  <span class="k">--gold-40</span>: <span class="s">rgba(212,175,55,.40)</span>;
+  <span class="k">--gold-60</span>: <span class="s">rgba(212,175,55,.60)</span>;
+
+  <span class="c">/* Text ivory */</span>
+  <span class="k">--ivory</span>:    <span class="s">#F5F4F0</span>;
+  <span class="k">--ivory-10</span>: <span class="s">rgba(245,244,240,.10)</span>;
+  <span class="k">--ivory-20</span>: <span class="s">rgba(245,244,240,.20)</span>;
+  <span class="k">--ivory-40</span>: <span class="s">rgba(245,244,240,.40)</span>;
+  <span class="k">--ivory-60</span>: <span class="s">rgba(245,244,240,.60)</span>;
+
+  <span class="c">/* Semantic */</span>
+  <span class="k">--green</span>:  <span class="s">#4ade80</span>;
+  <span class="k">--red</span>:    <span class="s">#ff5252</span>;
+  <span class="k">--orange</span>: <span class="s">#FF6D3F</span>;
+  <span class="k">--blue</span>:   <span class="s">#6B8FD4</span>;
+
+  <span class="c">/* Semantic with opacity */</span>
+  <span class="k">--green-10</span>:  <span class="s">rgba(74,222,128,.10)</span>;
+  <span class="k">--red-10</span>:    <span class="s">rgba(255,82,82,.10)</span>;
+  <span class="k">--orange-10</span>: <span class="s">rgba(255,109,63,.10)</span>;
+  <span class="k">--blue-10</span>:   <span class="s">rgba(107,143,212,.10)</span>;
+
+  <span class="c">/* Typography */</span>
+  <span class="k">--font-display</span>: <span class="s">'Syne', sans-serif</span>;
+  <span class="k">--font-mono</span>:    <span class="s">'DM Mono', monospace</span>;
+
+  <span class="c">/* Borders */</span>
+  <span class="k">--border</span>:        <span class="s">1px solid rgba(212,175,55,.20)</span>;
+  <span class="k">--border-dim</span>:    <span class="s">1px solid rgba(212,175,55,.10)</span>;
+  <span class="k">--border-bright</span>: <span class="s">1px solid rgba(212,175,55,.40)</span>;
+
+  <span class="c">/* Shadows */</span>
+  <span class="k">--glow-gold</span>:    <span class="s">0 0 20px rgba(212,175,55,.15)</span>;
+  <span class="k">--glow-gold-sm</span>: <span class="s">0 0 8px rgba(212,175,55,.2)</span>;
+}
+    </div>
+
+    <div class="type-label-ui mb-sm">Tailwind config — extend colors</div>
+    <div class="code-block">
+<span class="c">// tailwind.config.js</span>
+<span class="k">colors</span>: {
+  <span class="v">void</span>:    <span class="s">'#020202'</span>,
+  <span class="v">surface</span>: <span class="s">'#0c0c0c'</span>,
+  <span class="v">gold</span>:    <span class="s">'#D4AF37'</span>,
+  <span class="v">ivory</span>:   <span class="s">'#F5F4F0'</span>,
+  <span class="v">vgreen</span>:  <span class="s">'#4ade80'</span>,
+  <span class="v">vred</span>:    <span class="s">'#ff5252'</span>,
+  <span class="v">vorange</span>: <span class="s">'#FF6D3F'</span>,
+  <span class="v">vblue</span>:   <span class="s">'#6B8FD4'</span>,
+},
+<span class="k">fontFamily</span>: {
+  <span class="v">display</span>: <span class="s">['Syne', 'sans-serif']</span>,
+  <span class="v">mono</span>:    <span class="s">['DM Mono', 'monospace']</span>,
+},
+    </div>
+
+    <div class="type-label-ui mb-sm">Google Fonts import</div>
+    <div class="code-block">
+<span class="k">@import</span> <span class="s">url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap')</span>;
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+window.addEventListener('scroll', () => {
+  const p = scrollY / (document.body.scrollHeight - innerHeight) * 100;
+  document.getElementById('bar').style.width = p + '%';
+}, {passive:true});
+
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.ds-nav-item').forEach(i => i.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
