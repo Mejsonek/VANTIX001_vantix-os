@@ -20,5 +20,3 @@ ENV N8N_SECURE_COOKIE=false
 ENV GENERIC_TIMEZONE=Europe/Warsaw
 
 EXPOSE 7860
-
-CMD ["n8n", "start"]
