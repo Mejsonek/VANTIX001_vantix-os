@@ -1,7 +1,7 @@
 # todo.md — Lista Zadań VANTIX001
 
 > Aktualizuj po każdej sesji. To jest żywy dokument — nie archiwum.
-> Ostatnia aktualizacja: 2026-05-16 (sesja 3)
+> Ostatnia aktualizacja: 2026-05-17 (sesja 6)
 
 ---
 
@@ -40,8 +40,8 @@
 
 - [x] Nowe repo `vantix-app` — Next.js 16 + Tailwind + lucide-react ✅ 2026-05-16
 - [x] Mockup Shell / Launcher (`app.vantix.pl` — punkt wejścia) ✅ 2026-05-16
-- [ ] Landing page `vantix.pl` — publiczna strona marki (formularz kontaktowy, prezentacja)
-- [ ] Mockup Personal Cockpit (taski, kalendarz, priorytety, rekomendacje AI)
+- [x] Landing page `vantix.pl` — publiczna strona marki (formularz kontaktowy, prezentacja) ✅ 2026-05-17
+- [x] Mockup Personal Cockpit (taski, kalendarz, priorytety, rekomendacje AI) ✅ 2026-05-17
 - [ ] Mockup CRM (lejek, leady, follow-up, routing)
 - [ ] Mockup Vantix DEV (projekty, roadmapa, TODO, logi, pamięć projektu)
 - [ ] Mockup Brain / VANTIXRAG GUI
@@ -110,3 +110,7 @@
 - [x] Schema SQL: tabela `leads` + `brain_sections`
 - [x] Vercel deploy: https://vantix-dev-tool.vercel.app
 - [x] Refactor `components/devtool/` (ProjectCard, LaunchModal, 10 tabs)
+- [x] Shell redesign wg Vantix Design System (Cosmic Minimalism) ✅ 2026-05-16
+- [x] Personal Cockpit mockup — TodayTasks, WeekCalendar, PriorityList, AIRecommendations ✅ 2026-05-17
+- [x] Landing page vantix.pl — Navbar, Hero, Features, Contact, ContactForm, Footer ✅ 2026-05-17
+- [x] Vercel config — routing domen (vantix.pl + app.vantix.pl) ✅ 2026-05-17

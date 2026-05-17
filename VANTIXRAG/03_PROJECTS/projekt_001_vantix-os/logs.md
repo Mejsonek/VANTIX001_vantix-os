@@ -264,6 +264,39 @@ Mockupy do Phase 3:
 
 ---
 
+## 2026-05-17 — Phase 1: Przegląd systemu + deploy (sesja 6)
+
+**Sesja:** Aktualizacja dokumentów + deploy na Vercel + localhost
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+- Przegląd stanu całego projektu: pliki `project.md`, `todo.md`, `roadmap.md`, `logs.md`, `decisions.md`
+- Zaktualizowano `todo.md` — odhaczono sesje 4 i 5 (Shell redesign, Cockpit, Landing, Vercel config)
+- Dodano wpis sesji 6 do `logs.md`
+- Uruchomiono `npm run dev` na localhost:3000
+- Wykonano git commit + push na GitHub (main)
+- Vercel automatycznie deployuje po push — `vantix-dev-tool.vercel.app`
+
+### Gdzie skończono
+
+Shell (`/`) i Landing page (`/`) widoczne na localhost i Vercel.
+
+### Następny krok
+
+Phase 1 ciąg dalszy:
+1. [ ] Mockup CRM (`/crm`) — nowy od zera w vantix-app
+2. [ ] Mockup Vantix DEV (`/dev`)
+3. [ ] Mockup Settings (`/settings`)
+4. [ ] Mockup Workflows (`/workflows`)
+
+### Blokery i otwarte pytania
+
+- Feedback od Kacpra po obejrzeniu Shell + Landing na localhost
+- Decyzja: kolejność mockupów Phase 1 (CRM vs DEV najpierw?)
+
+---
+
 ## Format kolejnych wpisów
 
 ```
