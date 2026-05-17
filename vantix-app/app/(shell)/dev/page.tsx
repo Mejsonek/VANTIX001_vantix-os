@@ -60,7 +60,7 @@ export default function DevPage() {
   void totalCommits;
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="grid-bg" />
 
       {/* ── TOP BAR ── */}

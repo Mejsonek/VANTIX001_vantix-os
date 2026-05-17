@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-05-18 — Sesja 18: Audit frontu, bugfix shell pages, plan System Panel UI
+
+**Sesja:** Code review + bugfix + planowanie tasków DeepSeek (System Panel UI/UX)
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+**Audit projektu:**
+- Przejrzano wszystkie pliki `app/(shell)/` i `app/(system)/`
+- Odkryto że CRM i DEV mają bogate komponenty (nie placeholdery jak wskazywała stara pamięć)
+- System Panel: WSZYSTKIE 5 stron to "coming soon" — krytyczny gap
+- Brak nawigacji w System Panel layout (users stranded po wejściu)
+
+**Naprawione bugi:**
+1. `app/(shell)/cockpit/page.tsx` — `min-h-screen` → `flex flex-col flex-1 overflow-hidden`
+2. `app/(shell)/dev/page.tsx` — `min-h-screen` → `flex flex-col flex-1 overflow-hidden`
+3. `app/(shell)/crm/page.tsx` — `min-h-screen` + usunięto zbędny API fetch (LeadList używa mockLeads wewnętrznie), uproszczono komponent
+
+**Plan dla DeepSeeka:**
+- 6 atomowych tasków (TASK-S01 — TASK-S06) w AGENTS.md
+- Kolejność: S01 (layout+nav) → S02 (Brain) → S03 (Orchestration) → S04 (Workflows) → S05 (Analytics) → S06 (Settings)
+- Wszystko mock data, bez API calls
+
+### Stan po sesji
+
+| Obszar | Status |
+|--------|--------|
+| Production Shell (dashboard/cockpit/crm/dev) | ✅ Działa, bugfix aplikowany |
+| System Panel layout | ❌ Brak sidebar — TASK-S01 dla DeepSeeka |
+| System Panel pages | ❌ Wszystkie placeholder — TASK-S02-S06 dla DeepSeeka |
+
+### Następny krok
+
+Dać DeepSeekowi TASK-S01 (System Panel sidebar). Po code review — kolejne taski.
+
+---
+
 ## 2026-05-16 — Phase 0: Inicjalizacja systemu i wypełnienie pamięci VANTIXRAG
 
 **Sesja:** Phase 0 — Blueprint i budowa pamięci systemu

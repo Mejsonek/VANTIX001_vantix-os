@@ -1,33 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import LeadList from '@/components/crm/LeadList';
 import { Users } from 'lucide-react';
 
 export default function CrmPage() {
-  const [leads, setLeads] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [dateStr] = useState(() =>
-    new Date().toLocaleDateString('pl-PL', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  );
-
-  useEffect(() => {
-    fetch('/api/leads')
-      .then((res) => res.json())
-      .then((data) => {
-        setLeads(data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  const dateStr = new Date().toLocaleDateString('pl-PL', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="grid-bg" />
 
       {/* Top Bar */}
@@ -46,13 +31,7 @@ export default function CrmPage() {
 
       {/* Content */}
       <div className="relative z-10 flex-1 px-6 py-5 overflow-y-auto">
-        {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <span className="font-mono text-xs text-ivory/20">Ładowanie leadów...</span>
-          </div>
-        ) : (
-          <LeadList initialLeads={leads} />
-        )}
+        <LeadList />
       </div>
     </div>
   );
