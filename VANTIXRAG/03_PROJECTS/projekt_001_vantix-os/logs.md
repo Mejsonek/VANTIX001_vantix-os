@@ -855,6 +855,85 @@ Hero → VantixRoiTerminal → Ekosystem → PodMaska → DlaczegoMy → Bezpiec
 
 ---
 
+## 2026-05-18 — Landing DS fix + ROI Terminal redesign + Build fix (sesja 18)
+
+**Sesja:** FAZA A — Landing page dopracowanie + naprawa builda
+**Agent:** Claude Code (Orchestrator — implementacja bezpośrednia)
+**Czas:** ~1 sesja
+
+### Co zostało zrobione
+
+#### 1. Naprawa błędów Design System na landing page
+
+**Problem:** DeepSeek używał kolorów `amber-500`, `zinc-800/900/950`, `neutral-*` zamiast Vantix DS (`text-gold`, `bg-surface`, `border-gold/10`).
+
+**Naprawione pliki:**
+
+| Plik | Zmiana |
+|------|--------|
+| `app/globals.css` | `btn-primary`: `#f59e0b` (amber) → `#d4af37` (gold). `roi-slider`: amber → gold. Dodano `.result-card` (brakująca klasa). Dodano `.terminal-scan` (scanlines effect). |
+| `components/landing/VantixRoiTerminal.tsx` | Pełny rewrite: `zinc-800/900/950` → `bg-surface`/`border-gold/10`. Wszystkie `amber-500` → `text-gold`. `neutral-900/700` na rate input → `bg-surface/border-gold/20`. Usunięto nieużywane importy (`ShieldCheck`, `User`, `useCallback`). |
+| `components/landing/FAQ.tsx` | `bg-neutral-950` → `bg-void`. `border-neutral-800` → `border-gold/10`. `amber-500/30` → `gold/30`. |
+
+#### 2. VantixRoiTerminal — redesign UX
+
+**Layout swap:** Formularz przeniesiony na **lewą** kolumnę, kalkulator na **prawą** (poprzednio: kalkulator lewo, formularz prawo). `lg:grid-cols-2` — równe kolumny.
+
+**Walidacja real-time:**
+- Dodany `touched: Set<string>` state
+- Błąd pojawia się po `onBlur` (użytkownik opuszcza pole)
+- Błąd znika natychmiast przy poprawie — `useEffect` na `formData` re-waliduje tylko dotknięte pola
+- Animowane wejście/wyjście błędu przez `AnimatePresence`
+
+**UX improvements:**
+- Uproszczone etykiety pól: `IMIĘ I NAZWISKO` zamiast `IDENTYFIKATOR_KLIENTA (IMIĘ I NAZWISKO)`
+- `min-h-[48px]` na przycisku i rate input (finger-friendly)
+- `aria-describedby`, `role="alert"` na błędach, `aria-busy` na submit
+- `aria-label` na sliderach
+- CTA nudge pod wynikami kalkulatora: "Wypełnij formularz ← żeby poznać plan działania"
+- Kontakt email/telefon przeniesiony do stopki formularza (bardziej naturalny flow)
+
+#### 3. Naprawa krytycznego błędu builda
+
+**Problem:** `components/shell/IsometricMetricLedger.tsx` — `metric.trend` typowany jako `string` zamiast `'up' | 'down' | 'stable'`. To powodowało Turbopack panic (`parse_css failed`) — strona renderowała tylko canvas CosmosBackground (WebGL), cały tekst/layout był niewidoczny.
+
+**Fix:** Dodano `type TrendKey = 'up' | 'down' | 'stable'` i `type ColorKey` z `Record<>` na mapach `trendIcon`, `trendColor`, `valueColor`. Build przechodzi czysto.
+
+**Weryfikacja:** `next build` → ✅ 11 stron, zero błędów TypeScript w dotkniętych plikach.
+
+#### 4. DeepSeek — CRM i DEV mockupy (FAZA C)
+
+DeepSeek zaimplementował mockupy modułów CRM i DEV zgodnie z task speciem:
+
+**CRM (`app/(shell)/crm/page.tsx`)**
+- Nowy komponent `components/crm/LeadList.tsx`
+- Kanban lejek 4 kolumny + lista leadów
+
+**DEV (`app/(shell)/dev/page.tsx`)**
+- `components/dev/ProjectCard.tsx` — karta aktywnego projektu z progress
+- `components/dev/RoadmapTimeline.tsx` — wizualizacja faz Phase 0-4
+
+### Stan po sesji
+
+| Moduł | Status |
+|-------|--------|
+| Landing page | ✅ Vantix DS spójny, build działa |
+| `globals.css` | ✅ Naprawiony (btn-primary gold, result-card, terminal-scan) |
+| `VantixRoiTerminal` | ✅ Redesign: form lewo, kalkulator prawo, real-time validation |
+| `FAQ` | ✅ Vantix DS (gold/void, bez neutral-*) |
+| `IsometricMetricLedger` | ✅ TypeScript fix (TrendKey/ColorKey typy) |
+| CRM mockup | ✅ Skeleton gotowy (DeepSeek) |
+| DEV mockup | ✅ Skeleton gotowy (DeepSeek) |
+
+### Następne priorytety
+
+1. Podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` w `.env.local` na `https://SolutionKacper-VantixN8N.hf.space/webhook/lead-alert` *(Kacper)*
+2. Neon: `ALTER TABLE leads ADD COLUMN enrichment JSONB, ai_description TEXT, ai_score VARCHAR(10)`
+3. n8n: New Lead Alert flow (Webhook → INSERT → Claude Haiku AI profil → Telegram)
+4. Review CRM/DEV mockupów od DeepSeeka — dopracować UI jeśli potrzeba
+
+---
+
 ## 2026-05-18 — Fix duplikatu sesji 15 + review landing page (sesja 16)
 
 **Sesja:** FAZA A — Naprawa

@@ -33,7 +33,7 @@ export const FAQ: React.FC = () => {
   return (
     <section
       id="faq"
-      className="section bg-neutral-950 border-t-[0.5px] border-neutral-800"
+      className="section bg-void border-t-[0.5px] border-gold/10"
       aria-labelledby="faq-heading"
     >
       <div className="section-container">
@@ -54,8 +54,8 @@ export const FAQ: React.FC = () => {
             return (
               <div
                 key={index}
-                className={`group border-b border-neutral-800 transition-all duration-300 ${
-                  isOpen ? 'border-amber-500/30' : 'hover:border-amber-500/30'
+                className={`group border-b border-gold/10 transition-all duration-300 ${
+                  isOpen ? 'border-gold/30' : 'hover:border-gold/30'
                 }`}
               >
                 <button
@@ -64,7 +64,7 @@ export const FAQ: React.FC = () => {
                   aria-expanded={isOpen}
                 >
                   <span className="flex items-center gap-3 md:gap-4">
-                    <span className="hidden md:flex w-8 h-8 rounded-lg border border-neutral-800 items-center justify-center text-gold/30 group-hover:text-gold group-hover:border-gold/30 transition-all duration-300 shrink-0">
+                    <span className="hidden md:flex w-8 h-8 rounded-lg border border-gold/10 items-center justify-center text-gold/30 group-hover:text-gold group-hover:border-gold/30 transition-all duration-300 shrink-0">
                       <HelpCircle size={14} />
                     </span>
                     <span className="text-sm md:text-base font-light text-ivory/80 group-hover:text-ivory transition-colors leading-snug">

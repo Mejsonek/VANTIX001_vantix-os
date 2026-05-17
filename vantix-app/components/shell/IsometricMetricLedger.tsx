@@ -2,28 +2,31 @@
 
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
-const metrics = [
-  { label: 'Leady (aktywne)', value: '3', trend: 'up', change: '+1 dziś', color: 'gold' as const },
-  { label: 'Projekty', value: '1', trend: 'stable', change: 'Phase 0 ✓', color: 'ivory' as const },
-  { label: 'Taski (todo)', value: '4', trend: 'down', change: '-2 wczoraj', color: 'green' as const },
-  { label: 'Cashflow est.', value: '€2.7k', trend: 'up', change: '+1 lead', color: 'gold' as const },
-  { label: 'n8n flows', value: '3', trend: 'stable', change: 'aktywne', color: 'ivory' as const },
-  { label: 'AI koszt/mc', value: '~80zł', trend: 'stable', change: 'Claude', color: 'ivory' as const },
+type TrendKey = 'up' | 'down' | 'stable';
+type ColorKey = 'gold' | 'ivory' | 'green';
+
+const metrics: { label: string; value: string; trend: TrendKey; change: string; color: ColorKey }[] = [
+  { label: 'Leady (aktywne)', value: '3', trend: 'up', change: '+1 dziś', color: 'gold' },
+  { label: 'Projekty', value: '1', trend: 'stable', change: 'Phase 0 ✓', color: 'ivory' },
+  { label: 'Taski (todo)', value: '4', trend: 'down', change: '-2 wczoraj', color: 'green' },
+  { label: 'Cashflow est.', value: '€2.7k', trend: 'up', change: '+1 lead', color: 'gold' },
+  { label: 'n8n flows', value: '3', trend: 'stable', change: 'aktywne', color: 'ivory' },
+  { label: 'AI koszt/mc', value: '~80zł', trend: 'stable', change: 'Claude', color: 'ivory' },
 ];
 
-const trendIcon = {
+const trendIcon: Record<TrendKey, React.ElementType> = {
   up: TrendingUp,
   down: TrendingDown,
   stable: Minus,
 };
 
-const trendColor = {
+const trendColor: Record<TrendKey, string> = {
   up: 'text-green',
   down: 'text-red',
   stable: 'text-ivory/20',
 };
 
-const valueColor = {
+const valueColor: Record<ColorKey, string> = {
   gold: 'text-gold',
   ivory: 'text-ivory',
   green: 'text-green',
