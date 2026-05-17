@@ -15,14 +15,14 @@ export const Hero: React.FC = () => {
         </p>
 
         <h1 className="font-serif text-[clamp(2rem,8vw,5.5rem)] font-bold leading-[1.1] tracking-[-0.015em] text-ivory mb-6 md:mb-8">
-          Skalowalność bez chaosu.{' '}
+          Twój biznes działa.{' '}
           <span className="block italic bg-gradient-to-br from-[#C09020] via-[#E8CC5A] to-[#A07820] bg-clip-text text-transparent mt-2">
-            Budujemy systemy operacyjne dla nowoczesnego biznesu.
+            Ty decydujesz.
           </span>
         </h1>
 
         <p className="text-[0.88rem] md:text-[clamp(0.85rem,1.4vw,1.05rem)] font-light text-[rgba(245,244,240,0.55)] leading-[1.8] tracking-[0.02em] max-w-[600px] mx-auto mb-8 md:mb-8">
-          Eliminujemy wąskie gardła w przepływie danych. Projektujemy architekturę, która przejmuje logikę decyzyjną i optymalizuje marżę w czasie rzeczywistym.
+          Automatyzujemy powtarzalne procesy, podpinamy AI tam gdzie ma sens. Mniej narzędzi, więcej wyników.
         </p>
 
         <ul className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 md:gap-8 mb-10 md:mb-12 text-[0.6rem] md:text-[0.65rem] tracking-[0.15em] uppercase text-ivory font-light">
@@ -36,7 +36,7 @@ export const Hero: React.FC = () => {
             href="#kontakt"
             className="btn-pulse w-full sm:w-auto inline-flex items-center justify-center gap-[0.65rem] text-[0.65rem] md:text-[0.68rem] tracking-[0.2em] md:tracking-[0.22em] uppercase font-normal text-void bg-gold px-7 md:px-10 py-4 md:py-[1.1rem] rounded-lg relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_50px_rgba(212,175,55,0.55)] group"
           >
-            <span className="relative z-10">SPRAWDŹ, ILE TRACISZ →</span>
+            <span className="relative z-10">SPRAWDŹ JAK TO DZIAŁA →</span>
             <ArrowRight className="relative z-10 w-3.5 h-3.5 shrink-0" />
             <div className="absolute inset-0 bg-[rgba(255,255,255,0.16)] -translate-x-full transition-transform duration-400 group-hover:translate-x-0" />
           </a>

@@ -1,45 +1,85 @@
 # todo.md — Lista Zadań VANTIX001
 
 > Aktualizuj po każdej sesji. To jest żywy dokument — nie archiwum.
-> Ostatnia aktualizacja: 2026-05-17 (blueprint v3.0)
+> Ostatnia aktualizacja: 2026-05-18 (sesja 11 — nowe teksty Hero + FAQ)
+> Pełny plan: `plan_master.md`
 
 ---
 
-## 🔴 KRYTYCZNE (zrobić pierwsze)
+## Kolejność faz
 
-- [ ] Podmienić test webhook URL w `lib/n8nService.ts` na produkcyjny (po stworzeniu flow w n8n)
-- [ ] Cyborg Shell — `LeftThreeDimensionalDock` + `CentralBrainFocus` + layout grid
+```
+FAZA A — Landing (finish + convert)  ← AKTUALNIE
+FAZA B — System (n8n + Obsidian)
+FAZA C — Shell mockupy
+FAZA D — Phase 2 Backend
+```
+
+---
+
+## 🔴 FAZA A — Landing Page (priorytet #1)
+
+**Decyzje potrzebne od Kacpra:**
+- [x] Nowy headline Hero (co zastąpi "Skalowalność bez chaosu"?)
+- [ ] Wybór konceptu lead magnetu (audit PDF / kalkulator ROI / case study)
+- [ ] Linki social media do footera (LinkedIn, Twitter/X, inne?)
+
+**Do zrobienia:**
+- [x] JSON enrichment w `ContactForm.tsx` — zbierać: utm_source, referrer, device, time_on_page
+- [ ] Neon: `ALTER TABLE leads ADD COLUMN enrichment JSONB, ai_description TEXT, ai_score VARCHAR(10)`
+- [ ] n8n: New Lead Alert flow — Webhook → INSERT leads → Claude Haiku (AI opis) → UPDATE → Telegram
+- [ ] Formularz lead magnet (osobny, tylko email + imię)
+- [x] FAQ sekcja na landing
+- [x] Mobile pass przez wszystkie sekcje
+- [ ] Podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` w `.env.local` na HF Space
+
+---
+
+## 🟡 FAZA B — System (priorytet #2)
+
+- [ ] **Obsidian Git Plugin** — auto-push VANTIXRAG co 10 min *(Kacper ręcznie)*
+- [ ] **n8n: VANTIXRAG GitHub Sync** — push → filter `VANTIXRAG/*.md` → UPSERT `brain_sections`
+- [ ] **n8n: Daily Briefing** — cron 08:00 → taski + leady → Telegram
+
+---
+
+## 🟠 FAZA C — Shell Mockupy (priorytet #3)
+
+- [ ] Dashboard — podpiąć `CentralBrainFocus` do `app/(shell)/dashboard/page.tsx` *(5 min)*
+- [ ] CRM `/crm` — lista leadów + kanban lejek + modal z AI opisem leada
+- [ ] Cockpit `/cockpit` — przepisać na Vantix Design System (aktualnie stary white design)
+- [ ] DEV `/dev` — projekty, roadmapa, TODO, logi sesji
 
 ---
 
 ## 🟡 PHASE 1 — Dokończenie (mockupy + shell)
 
 **Struktura plików (refactor przed UI)**
-- [ ] Stworzyć `app/(shell)/layout.tsx` — Cyborg Shell layout
-- [ ] Stworzyć `app/(system)/layout.tsx` — System Panel layout
-- [ ] Przenieść obecne strony do grup: `dashboard/`, `crm/`, `cockpit/`, `dev/`
-- [ ] Stworzyć strukturę `app/(system)/system/` z podfolderami
+- [x] Stworzyć `app/(shell)/layout.tsx` — Cyborg Shell layout
+- [x] Stworzyć `app/(system)/layout.tsx` — System Panel layout
+- [x] Przenieść obecne strony do grup: `dashboard/`, `crm/`, `cockpit/`, `dev/`
+- [x] Stworzyć strukturę `app/(system)/system/` z podfolderami
 
 **Cyborg Shell — `(shell)/`**
-- [ ] `components/shell/LeftThreeDimensionalDock.tsx` — 3D CSS dock, ikony modułów, tooltip on hover
-- [ ] `components/shell/CentralBrainFocus.tsx` — powitanie + lista tasków (mock) + pulsujące logo
-- [ ] `components/shell/IsometricMetricLedger.tsx` — metryki placeholder (leady, projekty, taski, flows)
-- [ ] `components/shell/SystemStatusBar.tsx` — pasek statusu na dole
-- [ ] `app/(shell)/layout.tsx` — grid `[auto_1fr_auto]`, Dock + Focus + Metrics
-- [ ] `app/(shell)/dashboard/page.tsx` — główny ekran (przeniesiony z `/`)
+- [x] `components/shell/LeftThreeDimensionalDock.tsx` — 3D CSS dock, ikony modułów, tooltip on hover
+- [x] `components/shell/CentralBrainFocus.tsx` — powitanie + lista tasków (mock) + pulsujące logo
+- [x] `components/shell/IsometricMetricLedger.tsx` — metryki placeholder (leady, projekty, taski, flows)
+- [ ] `components/shell/SystemStatusBar.tsx` — pasek statusu na dole *(opcjonalne — status jest w IsometricMetricLedger)*
+- [x] `app/(shell)/layout.tsx` — grid `[auto_1fr_auto]`, Dock + Focus + Metrics
+- [x] `app/(shell)/dashboard/page.tsx` — stworzony (placeholder; CentralBrainFocus do podpięcia)
 
 **Mockupy modułów — `(shell)/`**
-- [ ] `app/(shell)/crm/` — lista leadów, lejek kanban, AddLeadModal
-- [ ] `app/(shell)/cockpit/` — TodayTasks, WeekCalendar, PriorityList (przenieść z `/cockpit`)
-- [ ] `app/(shell)/dev/` — projekty, roadmapa, TODO, logi sesji
+- [ ] `app/(shell)/crm/` — lista leadów, lejek kanban, AddLeadModal *(placeholder gotowy)*
+- [x] `app/(shell)/cockpit/` — przeniesiony z `/cockpit` *(design mismatch — do przepisania na Vantix DS)*
+- [ ] `app/(shell)/dev/` — projekty, roadmapa, TODO, logi sesji *(placeholder gotowy)*
 
 **System Panel — `(system)/`**
-- [ ] `app/(system)/layout.tsx` — terminal sidebar, ciemny grid, inny design niż shell
-- [ ] `app/(system)/system/brain/` — VANTIXRAG GUI (sekcje, search, ingest status)
-- [ ] `app/(system)/system/orchestration/` — Cognitive Mesh jobs, koszty, statusy, KWARANTANNA
-- [ ] `app/(system)/system/workflows/` — n8n flow list, status, trigger button
-- [ ] `app/(system)/system/analytics/` — telemetria: tokeny, koszt AI, execution times
-- [ ] `app/(system)/system/settings/` — API keys, model registry, integracje
+- [x] `app/(system)/layout.tsx` — ciemny layout (`bg-[#020202]`)
+- [x] `app/(system)/system/brain/` — placeholder gotowy
+- [x] `app/(system)/system/orchestration/` — placeholder gotowy
+- [x] `app/(system)/system/workflows/` — placeholder gotowy
+- [x] `app/(system)/system/analytics/` — placeholder gotowy
+- [x] `app/(system)/system/settings/` — placeholder gotowy
 
 ---
 
@@ -126,3 +166,9 @@
 - [x] Vercel config — routing domen (vantix.pl + app.vantix.pl)
 - [x] n8n na HF Spaces — `https://SolutionKacper-VantixN8N.hf.space/` (v2.20.9 live)
 - [x] Dockerfile n8n — UID 1000, /data permissions, bez CMD override
+- [x] Dual-Shell Architecture — `(shell)/` + `(system)/` route groups z osobnymi layoutami
+- [x] `LeftThreeDimensionalDock` — Cyborg 3D dock z Shell + System modułami
+- [x] `CentralBrainFocus` — komponent główny dashboardu (mock data)
+- [x] `IsometricMetricLedger` — panel metryk + system status
+- [x] **Nowe teksty Hero** — headline: "Twój biznes działa. Ty decydujesz.", subheadline: zwięzły opis automatyzacji, CTA: "Sprawdź jak to działa →"
+- [x] **FAQ sekcja na landing** — 4 pytania w accordion, bg-neutral-950, amber-500/30 hover

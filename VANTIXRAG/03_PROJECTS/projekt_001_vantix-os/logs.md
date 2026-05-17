@@ -395,7 +395,242 @@ Plik: `n8n/Dockerfile`
 
 ---
 
-## Format kolejnych wpisów
+## 2026-05-17 — Phase 1: Dual-Shell Architecture — Production Shell + System Panel (sesja 9)
+
+**Sesja:** Phase 1 — Wdrożenie architektury dwóch shelli (`(shell)/` + `(system)/`)
+**Agent:** DeepSeek (implementacja) + Claude Sonnet 4.6 (code review + logi)
+**Czas:** ~1 sesja
+
+### Co zostało zrobione
+
+#### Route groups — nowa struktura
+- Stworzono `app/(shell)/` — Production Shell z Cyborg designem
+- Stworzono `app/(system)/` — System Panel z terminal/dashboard designem
+- Usunięto stare `app/cockpit/` (przeniesione do `(shell)/cockpit/`)
+
+#### Shell Layout `(shell)/layout.tsx`
+- Grid `[68px 1fr 220px]` — Dock + Content + Metrics
+- Importuje `LeftThreeDimensionalDock` + `IsometricMetricLedger`
+- Grain overlay na warstwie contentu
+
+#### Komponenty shell (nowe)
+- `components/shell/LeftThreeDimensionalDock.tsx` — 68px lewy dock
+  - Logo VX z hover glow
+  - Ikony Shell modules (Dashboard, Cockpit, CRM, DEV) z ⌘ shortcutami i badge licznikami
+  - Separator + System modules (Brain, Workflows, Settings) — mniejsze, ciemniejsze
+  - Active indicator (2px gold stripe), tooltips on hover
+- `components/shell/CentralBrainFocus.tsx` — główny komponent dashboardu
+  - Dynamiczne powitanie godzinowe (Dzień dobry / Cześć / Dobry wieczór)
+  - Top bar: VANTIX OS v0.1.0 + data + status ONLINE
+  - Quick stats 4-kolumnowy grid (leady, projekty, taski, czas pracy)
+  - Lista dzisiejszych tasków z checkboxami i priority badges (HIGH/MED)
+  - Progress bar ukończenia tasków
+  - AI Focus strip (VX rekomendacja z Accept/Odrzuć)
+- `components/shell/IsometricMetricLedger.tsx` — 220px prawy panel metryk
+  - 6 metryk: Leady, Projekty, Taski, Cashflow, n8n flows, AI koszt
+  - Trend icons (up/down/stable) z kolorami
+  - System status mini panel (Neon DB, Claude API, n8n, Vercel)
+
+#### Moduły `(shell)/`
+- `dashboard/page.tsx` — placeholder "coming soon" (CentralBrainFocus gotowy, wymaga podpięcia)
+- `cockpit/page.tsx` + `cockpit/layout.tsx` — przeniesiony z `/cockpit`, stary design (wymaga przepisania na Vantix DS)
+- `crm/page.tsx` — placeholder
+- `dev/page.tsx` — placeholder
+
+#### System Panel `(system)/`
+- `layout.tsx` — minimal `bg-[#020202]`
+- `system/brain/page.tsx` — placeholder
+- `system/orchestration/page.tsx` — placeholder
+- `system/workflows/page.tsx` — placeholder
+- `system/analytics/page.tsx` — placeholder
+- `system/settings/page.tsx` — placeholder
+
+### Gdzie skończono
+
+Commit: `01cab56` — `[docs]: Dual-Shell Architecture — Production Shell + System Panel (DEC-016)`
+Struktura plików kompletna. Komponenty shell zaimplementowane. Pliki stron to placeholdery — gotowe do wypełnienia w Phase 2.
+
+**Known issue:** `app/(shell)/cockpit/page.tsx` używa starego designu (white/neutral `bg-neutral-*`), nie pasuje do Vantix Design System i Cyborg Shell. Do przepisania.
+**Known issue:** `app/(shell)/dashboard/page.tsx` nie renderuje `CentralBrainFocus` — komponent gotowy, ale nie podpięty.
+
+### Następny krok
+
+1. [ ] Podpiąć `CentralBrainFocus` do `dashboard/page.tsx`
+2. [ ] Przepisać `cockpit/page.tsx` na Vantix Design System (Void/Gold/Ivory paleta)
+3. [ ] Zbudować mock CRM (`/crm`) — lista leadów + kanban lejek
+4. [ ] Zbudować mock Vantix DEV (`/dev`) — projekty, roadmapa, logi
+5. [ ] `SystemStatusBar.tsx` — pasek statusu na dole (opcjonalnie)
+6. [ ] Phase 2 backend: Prisma schema, Auth, Cognitive Mesh
+
+### Blokery i otwarte pytania
+
+- `CentralBrainFocus` ma mock data — Phase 2 podpina `/api/tasks`
+- Cockpit design mismatch — czy przepisać w tej sesji, czy zostawić na Phase 2?
+- Webhook URL n8n — wciąż test URL w `lib/n8nService.ts`
+
+---
+
+## 2026-05-17 — Dokumentacja: AGENTS.md rework + Brain auto-load (sesja 10)
+
+**Sesja:** Porządkowanie kontekstu agenta + podpięcie brain do AGENTS.md
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~0.5 sesji
+
+### Co zostało zrobione
+
+- Przepisano `vantix-app/AGENTS.md` od zera — zamiast kopii CLAUDE.md root, teraz taktyczny brief dla DeepSeeka:
+  - Tabela stanu aktualnego plików (✅/⚠️ per plik)
+  - Kompletna ściągawka Design System (palety, gotowe klasy CSS, wzorzec strony, lista zakazanych klas)
+  - Mapa struktury plików z komentarzami
+  - Zasady kodowania i stack
+- Przepisano `vantix-app/CLAUDE.md` — czysty `@AGENTS.md` + sekcja Claude-specific (role, priorytety, gdzie logi)
+- Dodano **BRAIN auto-load** w AGENTS.md: `@../VANTIXRAG/03_PROJECTS/projekt_001_vantix-os/todo.md` + `@decisions.md` — wchodzą automatycznie w kontekst przy każdym starcie agenta
+
+### Stan po sesji
+
+- `app/(shell)/dashboard/page.tsx` — nadal placeholder "coming soon" (CentralBrainFocus gotowy ale nie podpięty)
+- n8n webhook URL w `lib/n8nService.ts` — stary n8n.cloud test URL, wymaga podmiany na `SolutionKacper-VantixN8N.hf.space`
+- Neon DB: tabele `leads` i `brain_sections` ✅ uruchomione
+
+### Następny krok (dzisiaj)
+
+1. Obsidian Git Plugin — auto-push VANTIXRAG do GitHub co 10 min
+2. n8n flow: New Lead Alert (landing form → Neon INSERT + powiadomienie)
+3. n8n flow: VANTIXRAG GitHub Sync (push → filter .md → UPSERT brain_sections)
+4. Podmiana webhook URL w .env.local + n8nService.ts
+
+---
+
+## 2026-05-18 — FAZA A: Nowe teksty Hero + sekcja FAQ (sesja 11)
+
+**Sesja:** FAZA A — Landing page content update: headline, subheadline, CTA + nowy komponent FAQ
+**Agent:** Claude Sonnet 4.6 (Orchestrator, Claude Code)
+**Czas:** ~15 min
+
+### Co zostało zrobione
+
+#### Hero (`components/landing/Hero.tsx`) — tylko teksty, layout nietknięty
+- **Headline** (h1): zmieniony z `"Skalowalność bez chaosu. Budujemy systemy operacyjne dla nowoczesnego biznesu."` na **"Twój biznes działa. Ty decydujesz."**
+- **Subheadline** (p): zmieniony z technicznego opisu o wąskich gardłach na **"Automatyzujemy powtarzalne procesy, podpinamy AI tam gdzie ma sens. Mniej narzędzi, więcej wyników."**
+- **CTA button**: zmieniony z `"SPRAWDŹ, ILE TRACISZ →"` na **"SPRAWDŹ JAK TO DZIAŁA →"** (nadal href="#kontakt")
+- Wszystkie pozostałe elementy (badge vendor, lista technologii, drugi link, scroll indicator) — bez zmian
+
+#### FAQ (`components/landing/FAQ.tsx`) — nowa sekcja
+- Stworzono nowy komponent `FAQ` z 4 pytaniami w układzie accordion + `motion/react` (AnimatePresence)
+- Styl: `bg-neutral-950`, `border-neutral-800`, hover/active `border-amber-500/30`, `font-mono` dla labelek, gold accent
+- Sekcja wstawiona po `<Kontakt />` w `app/page.tsx`
+- Na dole: link "MASZ INNE PYTANIE? → SKONTAKTUJ SIĘ →" (#kontakt)
+
+**Pytania:**
+1. Dla kogo jest Vantix? → Dla firm i freelancerów którzy tracą czas na ręczne zadania...
+2. Ile to kosztuje? → Wycena indywidualna. Typowy projekt startuje od 3 000 PLN...
+3. Jak długo trwa wdrożenie? → Najprostsze automatyzacje: 3-5 dni. Pełny system: 2-4 tygodnie.
+4. Czy muszę mieć wiedzę techniczną? → Zero. Dostajesz działający system z dokumentacją i wsparciem.
+
+#### app/page.tsx
+- Dodano import `{ FAQ }` z `@/components/landing/FAQ`
+- Wstawiono `<FAQ />` po `<Kontakt />` w main
+
+### Gdzie skończono
+
+Pliki zmienione:
+- `vantix-app/components/landing/Hero.tsx` — zmiana 3 tekstów
+- `vantix-app/components/landing/FAQ.tsx` — nowy plik (74 linie, accordion + 4 pytania)
+- `vantix-app/app/page.tsx` — import + wstawienie FAQ
+
+Kolejność sekcji na landing page:
+Hero → LossCalculator → Ekosystem → PodMaska → DlaczegoMy → Bezpieczenstwo → WhiteLabel → OMnie → Kontakt → **FAQ** → Footer
+
+### Następny krok
+
+FAZA A ciąg dalszy (z todo.md):
+1. JSON enrichment w `ContactForm.tsx` (utm_source, referrer, device, time_on_page)
+2. Neon: `ALTER TABLE leads ADD COLUMN enrichment JSONB, ai_description TEXT, ai_score VARCHAR(10)`
+3. n8n: New Lead Alert flow — webhook → INSERT leads → Claude Haiku → UPDATE → Telegram
+4. Formularz lead magnet (osobny, tylko email + imię)
+5. Podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` w `.env.local` na HF Space
+
+### Blokery i otwarte pytania
+
+- Brak (sesja wykonana i zamknięta)
+
+---
+
+## 2026-05-18 — RoiCalculator: lead magnet z kalkulatorem ROI na landing page (sesja 12)
+
+**Sesja:** FAZA A — Nowy komponent kalkulatora ROI z formularzem lead magnet
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~20 min
+
+### Co zostało zrobione
+
+#### `components/landing/RoiCalculator.tsx` — nowy plik (~290 linii)
+
+Kalkulator z dwoma sliderami, inputem i live obliczeniami (useMemo):
+
+**Inputy:**
+- **Slider #1**: "Ilu pracowników wykonuje powtarzalne zadania?" — zakres 1–50, default 5
+- **Slider #2**: "Ile godzin tygodniowo per osoba?" — zakres 1–40, default 10
+- **Input number**: "Średnia stawka godzinowa (PLN)" — default 80, z prefiksem `zł`
+
+**Live obliczenia:**
+| Wartość | Wzór |
+|---------|------|
+| Koszt tygodniowy | `employees × hours × rate` |
+| Koszt roczny | `weeklyCost × 52` |
+| Oszczędność roczna (70%) | `yearlyCost × 0.70` (zaokrąglone) |
+| Zwrot z inwestycji | `~X mies.` = `round(savings / (weeklyCost × 2))` |
+
+**Wyniki (3 karty):**
+- Koszt roczny / Oszczędność roczna / Zwrot — wszystkie `text-4xl font-black text-amber-500`
+- Animacje `framer-motion` przy każdej zmianie wartości (AnimatePresence)
+
+**Lead magnet formularz:**
+- Pojawia się dopiero po ruszeniu sliderem (`hasInteracted` state)
+- Input: imię (required), email (required)
+- Button: "Wyślij mi pełny raport →" z spinnerem podczas wysyłania
+- **POST** na `process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL`
+- Body: `{ type: "roi_calculator", name, email, data: { employees, hours, rate, weeklyCost, yearlyCost, savings } }`
+- **Sukces**: zielony banner "✓ Raport idzie na maila! Odezwę się też osobiście." (z `CheckCircle` ikoną)
+- **Błąd**: "Coś poszło nie tak — napisz na kacper@vantix.pl" z klikalnym mailem
+
+#### `app/globals.css` — zmodyfikowany
+- Dodano `.roi-slider` — custom range slider:
+  - Track: 6px, `rgba(217, 119, 6, 0.12)` background, `rounded-999px`
+  - Thumb: 20px amber-500 (`#f59e0b`), border 2px `#020202`, glow shadow
+  - Hover: `scale(1.12)` + wzmocniony glow
+  - Firefox: `-moz-range-thumb` i `-moz-range-track`
+
+#### `app/page.tsx` — zmodyfikowany
+- Dodano import: `import { RoiCalculator }`
+- Wstawiono `<RoiCalculator />` między `<Hero />` a `<LossCalculator />`
+
+### Gdzie skończono
+
+Pliki zmienione:
+- `vantix-app/components/landing/RoiCalculator.tsx` — nowy plik
+- `vantix-app/app/globals.css` — dodane style `.roi-slider`
+- `vantix-app/app/page.tsx` — import + wstawienie
+
+Kolejność sekcji na landing page (aktualna):
+```
+Hero → RoiCalculator → LossCalculator → Ekosystem → PodMaska → DlaczegoMy → Bezpieczenstwo → WhiteLabel → OMnie → Kontakt → FAQ → Footer
+```
+
+### Następny krok
+
+FAZA A ciąg dalszy (z todo.md):
+1. [ ] JSON enrichment w `ContactForm.tsx` — zbierać: utm_source, referrer, device, time_on_page
+2. [ ] Neon: `ALTER TABLE leads ADD COLUMN enrichment JSONB, ai_description TEXT, ai_score VARCHAR(10)`
+3. [ ] n8n: New Lead Alert flow — webhook → INSERT leads → Claude Haiku → UPDATE → Telegram
+4. [ ] Podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` w `.env.local` na HF Space
+
+### Blokery i otwarte pytania
+
+- n8n webhook URL w RoiCalculator ma fallback do test URL (taki sam pattern jak w `lib/n8nService.ts`)
+- Brak innych blockerów
+
+---
 
 ```
 ## YYYY-MM-DD — [Nazwa sesji]
