@@ -31,19 +31,21 @@ export default function CrmPage() {
       <div className="grid-bg" />
 
       {/* Top Bar */}
-      <div className="relative z-10 flex items-center justify-between px-8 py-4 border-b border-gold/10">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Users size={12} className="text-gold/60" />
-            <span className="font-mono text-xs text-ivory/40 uppercase tracking-widest">CRM</span>
+      <div className="relative z-10 flex items-center justify-between px-6 py-3 border-b border-gold/[0.07] bg-void/80 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <Users size={13} className="text-gold/50" />
+          <div>
+            <span className="font-mono text-[10px] text-ivory/50 uppercase tracking-widest">CRM — Leady</span>
+            <p className="font-mono text-[8px] text-ivory/20 mt-0.5">{dateStr}</p>
           </div>
-          <div className="w-px h-4 bg-gold/10" />
-          <p className="font-mono text-[10px] text-ivory/20">{dateStr}</p>
         </div>
+        <button className="btn btn-primary text-[8px]! px-3! py-1.5! flex items-center gap-1.5">
+          <Users size={9} /> Nowy lead
+        </button>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex-1 px-8 py-6 overflow-y-auto">
+      <div className="relative z-10 flex-1 px-6 py-5 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <span className="font-mono text-xs text-ivory/20">Ładowanie leadów...</span>

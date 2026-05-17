@@ -385,11 +385,11 @@ body {
 .delay-10 { animation-delay: 0.50s; }
 
 /* Table row interactive */
-.table-row {
+.vx-row {
   transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
 }
-.table-row:hover {
+.vx-row:hover {
   background: rgba(212,175,55,0.03);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(212,175,55,0.1);
