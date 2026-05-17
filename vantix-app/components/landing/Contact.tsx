@@ -1,6 +1,8 @@
 "use client";
 
 export default function About() {
+  // About/Why section — Problem, Solution, Why Vantix
+  return (
   return (
     <section id="about" className="py-20 px-4 bg-neutral-950">
       <div className="max-w-4xl mx-auto">
