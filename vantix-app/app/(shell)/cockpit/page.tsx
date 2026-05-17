@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 import TodayTasks from '@/components/cockpit/TodayTasks';
-
-import MonthCalendar from '@/components/cockpit/WeekCalendar'; // komponent teraz pokazuje widok miesięczny
+import MonthCalendar from '@/components/cockpit/WeekCalendar';
 import PriorityList from '@/components/cockpit/PriorityList';
 import AIRecommendations from '@/components/cockpit/AIRecommendations';
 import { Crosshair, ListChecks, CalendarDays, Zap, TrendingUp, Clock } from 'lucide-react';
 
 const quickStats = [
-  { label: 'Produktywność', value: '72%',  delta: '+5% vs wtorek', icon: TrendingUp, color: 'text-vgreen', border: 'border-l-vgreen/40' },
-  { label: 'Taski dziś',    value: '6',    delta: '2 ukończone',   icon: ListChecks, color: 'text-gold',   border: 'border-l-gold/50' },
-  { label: 'Eventy',        value: '3',    delta: '1 za 2h',       icon: CalendarDays, color: 'text-vblue', border: 'border-l-vblue/40' },
-  { label: 'Backlog',       value: '12',   delta: 'do zrobienia',  icon: Crosshair,  color: 'text-vorange', border: 'border-l-vorange/40' },
+  { label: 'Produktywność', value: '72%', delta: '+5% vs wtorek', icon: TrendingUp,   color: 'text-vgreen',  border: 'border-l-vgreen/40' },
+  { label: 'Taski dziś',    value: '6',   delta: '2 ukończone',   icon: ListChecks,   color: 'text-gold',    border: 'border-l-gold/50' },
+  { label: 'Eventy',        value: '3',   delta: '1 za 2h',       icon: CalendarDays, color: 'text-vblue',   border: 'border-l-vblue/40' },
+  { label: 'Backlog',       value: '12',  delta: 'do zrobienia',  icon: Crosshair,    color: 'text-vorange', border: 'border-l-vorange/40' },
 ];
 
 export default function CockpitPage() {
@@ -38,7 +37,7 @@ export default function CockpitPage() {
             <Clock size={9} className="text-ivory/20" />
             <span className="font-mono text-[8px] text-ivory/25">Focus Mode</span>
           </div>
-          <button className="btn btn-dim !text-[8px] !px-3 !py-1.5 flex items-center gap-1.5">
+          <button className="btn btn-dim text-[8px]! px-3! py-1.5! flex items-center gap-1.5">
             <Zap size={9} /> Quick Add
           </button>
         </div>
@@ -47,13 +46,13 @@ export default function CockpitPage() {
       <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5">
 
         {/* ── STATS ROW ── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+        <div className="grid grid-cols-4 gap-3 mb-5">
           {quickStats.map((s, i) => {
             const Icon = s.icon;
             return (
               <div
                 key={s.label}
-                className={`vx-card vx-3d !p-4 border-l-2 ${s.border} fade-up delay-${i + 1}`}
+                className={`vx-card vx-3d p-4! border-l-2 ${s.border} fade-up delay-${i + 1}`}
                 style={{ position: 'relative' }}
               >
                 <div className="stat-accent-line" />
@@ -69,17 +68,17 @@ export default function CockpitPage() {
         </div>
 
         {/* ── MAIN GRID ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-5 gap-4">
 
           {/* Left — Tasks (wider) */}
-          <div className="lg:col-span-3 fade-up delay-3">
+          <div className="col-span-3 fade-up delay-3">
             <div className="vx-card">
               <TodayTasks />
             </div>
           </div>
 
           {/* Right — Calendar + Priorities + AI */}
-          <div className="lg:col-span-2 space-y-4 fade-up delay-4">
+          <div className="col-span-2 space-y-4 fade-up delay-4">
             <div className="vx-card">
               <MonthCalendar />
             </div>

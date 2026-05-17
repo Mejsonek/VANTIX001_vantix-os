@@ -112,7 +112,7 @@ export default function LeadList({ initialLeads: _initialLeads = [] }: { initial
     <div className="space-y-4">
 
       {/* ── STATS ROW ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-3">
         {[
           { icon: Users,      label: 'Leady łącznie',   value: stats.total,              sub: `${stats.active} aktywnych`,          border: 'border-l-ivory/20', vcolor: 'text-ivory/70' },
           { icon: TrendingUp, label: 'Aktywny pipeline', value: stats.active,             sub: 'nowe + w trakcie',                   border: 'border-l-gold/50',  vcolor: 'text-gold' },
@@ -121,7 +121,7 @@ export default function LeadList({ initialLeads: _initialLeads = [] }: { initial
         ].map((s, i) => {
           const Icon = s.icon;
           return (
-            <div key={s.label} className={`vx-card vx-3d !p-4 border-l-2 ${s.border} fade-up delay-${i+1}`} style={{ position: 'relative' }}>
+            <div key={s.label} className={`vx-card vx-3d p-4! border-l-2 ${s.border} fade-up delay-${i+1}`} style={{ position: 'relative' }}>
               <div className="stat-accent-line" />
               <div className="flex items-center gap-2 mb-2.5">
                 <Icon size={10} className={`${s.vcolor} opacity-70`} />
@@ -164,7 +164,7 @@ export default function LeadList({ initialLeads: _initialLeads = [] }: { initial
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {stageLeads.map((lead, i) => (
                 <div
                   key={lead.id}
@@ -328,7 +328,7 @@ export default function LeadList({ initialLeads: _initialLeads = [] }: { initial
                 {/* Expanded */}
                 {isExp && (
                   <div className="mx-5 mb-1 border border-gold/10 bg-s2 animate-[fade-up_0.2s_ease_both]">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-gold/6">
+                    <div className="grid grid-cols-4 gap-0 divide-x divide-gold/6">
                       <div className="px-5 py-4">
                         <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Email</span>
                         <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-2 font-mono text-[11px] text-gold/70 hover:text-gold transition-colors">

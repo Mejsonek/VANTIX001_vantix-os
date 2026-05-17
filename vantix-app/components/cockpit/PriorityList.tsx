@@ -81,7 +81,7 @@ export default function PriorityList() {
             key={priority.id}
             className={`vx-card vx-3d p-4! ${
               idx === 0
-                ? 'border-l-2! border-l-gold/60 bg-gold/[0.02]'
+                ? 'border-l-2! border-l-gold/60 bg-gold/2'
                 : 'border-l-2! border-l-transparent'
             }`}
             style={{ position: 'relative' }}
@@ -89,7 +89,7 @@ export default function PriorityList() {
             <div className="flex items-start gap-3 mb-2.5">
               {/* Rank circle */}
               <div
-                className={`flex-shrink-0 w-9 h-9 rounded-full border flex items-center justify-center font-display font-bold text-[14px] ${getRankStyle(idx)}`}
+                className={`shrink-0 w-9 h-9 rounded-full border flex items-center justify-center font-display font-bold text-[14px] ${getRankStyle(idx)}`}
               >
                 {idx + 1}
               </div>

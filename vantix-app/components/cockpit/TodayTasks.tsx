@@ -51,21 +51,21 @@ function PriorityBadge({ priority }: { priority: string }) {
     case 'high':
       return (
         <span className="inline-flex items-center gap-1 text-vred font-mono text-[8px]! font-bold uppercase tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-vred flex-shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-vred shrink-0" />
           HIGH
         </span>
       );
     case 'medium':
       return (
         <span className="inline-flex items-center gap-1 text-gold font-mono text-[8px]! font-bold uppercase tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
           MED
         </span>
       );
     case 'low':
       return (
         <span className="inline-flex items-center gap-1 text-ivory/25 font-mono text-[8px]! font-bold uppercase tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-ivory/15 flex-shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-ivory/15 shrink-0" />
           LOW
         </span>
       );
@@ -116,12 +116,12 @@ export default function TodayTasks() {
         {tasks.map((task) => (
           <div
             key={task.id}
-            className={`flex items-center gap-3 px-4 py-3.5 border-l-2 ${getPriorityBorder(task.priority)} border border-l-2 border-r-0 border-t-0 border-b-0 border-transparent hover:bg-gold/[0.02] hover:border-gold/[0.08] transition-all group ${task.completed ? 'opacity-50' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3.5 border-l-2 ${getPriorityBorder(task.priority)} hover:bg-gold/2 transition-all group ${task.completed ? 'opacity-50' : ''}`}
           >
             {/* Checkbox */}
             <button
               onClick={() => toggleTask(task.id)}
-              className="flex-shrink-0 w-5 h-5 flex items-center justify-center border border-ivory/20 group-hover:border-gold/40 transition-colors cursor-pointer"
+              className="shrink-0 w-5 h-5 flex items-center justify-center border border-ivory/20 group-hover:border-gold/40 transition-colors cursor-pointer"
             >
               {task.completed && <Check size={11} className="text-gold" />}
             </button>
@@ -148,7 +148,7 @@ export default function TodayTasks() {
             </div>
 
             {/* Priority + Delete */}
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex items-center gap-3 shrink-0">
               <PriorityBadge priority={task.priority} />
               <button
                 onClick={() => deleteTask(task.id)}

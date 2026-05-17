@@ -128,7 +128,7 @@ export default function RoadmapTimeline() {
               </div>
 
               {/* Content */}
-              <div className={`p-4 border transition-colors ${isActive ? 'border-gold/30 bg-gold/[0.03]' : isDone ? 'border-gold/[0.06] opacity-60' : 'border-gold/[0.04] opacity-40'}`}>
+              <div className={`p-4 border transition-colors ${isActive ? 'border-gold/30 bg-gold/3' : isDone ? 'border-gold/6 opacity-60' : 'border-gold/4 opacity-40'}`}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`font-mono text-[8px] uppercase tracking-[0.2em] ${isActive ? 'text-gold' : 'text-ivory/25'}`}>
                     {m.phase}
@@ -147,9 +147,9 @@ export default function RoadmapTimeline() {
                   {m.tasks.map((t, i) => (
                     <div key={i} className="flex items-center gap-2">
                       {t.done ? (
-                        <CheckCircle2 size={9} className="text-vgreen/60 flex-shrink-0" />
+                        <CheckCircle2 size={9} className="text-vgreen/60 shrink-0" />
                       ) : (
-                        <Circle size={9} className="text-ivory/10 flex-shrink-0" />
+                        <Circle size={9} className="text-ivory/10 shrink-0" />
                       )}
                       <span className={`font-mono text-[9px] ${t.done ? 'text-ivory/20 line-through' : 'text-ivory/25'}`}>
                         {t.text}

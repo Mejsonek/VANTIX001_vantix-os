@@ -80,7 +80,7 @@ export default function DevPage() {
       <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5">
 
         {/* ── STATS ── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+        <div className="grid grid-cols-4 gap-3 mb-5">
           {devStats.map((s, i) => {
             const Icon = s.icon;
             return (
@@ -101,7 +101,7 @@ export default function DevPage() {
         </div>
 
         {/* ── MAIN LAYOUT ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-5">
+        <div className="grid grid-cols-[1.1fr_0.9fr] gap-5">
 
           {/* Left — Projects */}
           <div className="fade-up delay-3">
