@@ -1,70 +1,67 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import { Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export const Navbar: React.FC = () => {
+  const [isDense, setIsDense] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsDense(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="fixed top-0 w-full z-50 border-b border-neutral-800 bg-black/40 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="text-2xl font-bold font-display text-yellow-600">VANTIX</div>
-            <div className="text-xs text-neutral-500 hidden sm:block">OS</div>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-neutral-400 hover:text-neutral-200 transition">
-              Moduły
-            </a>
-            <a href="#about" className="text-sm text-neutral-400 hover:text-neutral-200 transition">
-              O systemie
-            </a>
-            <a href="#contact" className="text-sm text-neutral-400 hover:text-neutral-200 transition">
-              Kontakt
-            </a>
-            <Link
-              href="/cockpit"
-              className="px-4 py-2 bg-yellow-600 text-black text-sm font-semibold rounded hover:bg-yellow-500 transition"
-            >
-              Dashboard
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+    <nav
+      id="nav"
+      className={cn(
+        'fixed top-5 left-1/2 -translate-x-1/2 z-[500] w-[calc(100%-3rem)] max-w-[1280px]',
+        'flex items-center justify-between px-7 py-4',
+        'bg-[rgba(2,2,2,0.50)] backdrop-blur-[20px] border-[0.5px] border-[rgba(212,175,55,0.12)] rounded-2xl',
+        'transition-all duration-400',
+        isDense && 'bg-[rgba(2,2,2,0.85)] border-[rgba(212,175,55,0.08)] py-[0.7rem]'
+      )}
+      role="navigation"
+      aria-label="Główna nawigacja"
+    >
+      <a href="#" className="flex items-center gap-3" aria-label="VANTIX — powrót do góry">
+        <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+          <Zap size={16} fill="currentColor" />
         </div>
+        <span className="font-serif text-[1.3rem] font-normal tracking-[0.45em] text-ivory">
+          VANTI<span className="text-gold">X</span>
+        </span>
+      </a>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden mt-4 space-y-4 pb-4">
-            <a href="#features" className="block text-sm text-neutral-400 hover:text-neutral-200">
-              Moduły
-            </a>
-            <a href="#about" className="block text-sm text-neutral-400 hover:text-neutral-200">
-              O systemie
-            </a>
-            <a href="#contact" className="block text-sm text-neutral-400 hover:text-neutral-200">
-              Kontakt
-            </a>
-            <Link
-              href="/cockpit"
-              className="block px-4 py-2 bg-yellow-600 text-black text-sm font-semibold rounded text-center"
-            >
-              Dashboard
-            </Link>
-          </div>
-        )}
+      <div className="hidden md:flex items-center gap-8">
+        {[
+          { name: 'Silnik', href: '#ekosystem' },
+          { name: 'Tech-Stack', href: '#podmaska' },
+          { name: 'Bezpieczeństwo', href: '#bezpieczenstwo' },
+          { name: 'White-Label', href: '#white-label' },
+          { name: 'O mnie', href: '#omnie' },
+        ].map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            className="relative text-[0.63rem] tracking-[0.24em] uppercase font-light text-[rgba(245,244,240,0.35)] transition-colors duration-300 hover:text-gold after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:right-0 after:h-[0.5px] after:bg-gold after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+          >
+            {item.name}
+          </a>
+        ))}
       </div>
+
+      <a
+        href="#kontakt"
+        className="relative overflow-hidden px-5 py-[0.55rem] border-[0.5px] border-[rgba(212,175,55,0.4)] rounded-md text-[0.6rem] tracking-[0.2em] uppercase font-normal text-gold transition-colors hover:text-void group"
+      >
+        <span className="relative z-10">Audyt Efektywności</span>
+        <div className="absolute inset-0 bg-gold scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
+      </a>
     </nav>
   );
-}
+};
+
+export default Navbar;

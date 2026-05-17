@@ -1,74 +1,109 @@
-"use client";
+'use client';
 
-import { Mail, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { TrendingDown, AlertTriangle, ArrowRight, Calculator } from 'lucide-react';
 
-export default function ContactForm() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+export const LossCalculator: React.FC = () => {
+  const [monthlyInquiries, setMonthlyInquiries] = useState<number>(100);
+  const [leadValue, setLeadValue] = useState<number>(500);
+  const [responseSpeed, setResponseSpeed] = useState<number>(1);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+  const conversionAI = 0.15;
+  const conversionHuman = [0.12, 0.08, 0.04, 0.01][responseSpeed];
+  const speedLabels = ['< 5 MIN (IDEALNIE)', '< 1H (DOBRZE)', '< 4H (RYZYKOWNIE)', '> 24H (KRYTYCZNIE)'];
 
-    fetch("/api/crm/leads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        source: "landing_page",
-        status: "new",
-      }),
-    })
-      .then(() => {
-        setSubmitted(true);
-        setEmail("");
-        setTimeout(() => setSubmitted(false), 3000);
-      })
-      .catch((err) => console.error(err));
-  };
+  const monthlyLoss = useMemo(() => monthlyInquiries * leadValue * (conversionAI - conversionHuman), [monthlyInquiries, leadValue, conversionHuman]);
+  const yearlyLoss = useMemo(() => monthlyLoss * 12, [monthlyLoss]);
+
+  const formatCurrency = (val: number) =>
+    new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(val);
+
+  const scrollToContact = () => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section id="contact" className="py-20 px-4 bg-black">
-      <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold font-display mb-4">
-          Gotowy do systemu?
-        </h2>
-        <p className="text-neutral-400 text-lg mb-12">
-          Zaproszenie beta dostępne dla wybranych. Daj znać swoją opinię.
-        </p>
+    <section className="relative z-10 py-24 px-6 overflow-hidden">
+      <div className="max-w-[1000px] mx-auto">
+        <div className="text-center mb-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold">
+              <Calculator size={20} />
+            </div>
+            <span className="text-[0.6rem] tracking-[0.4em] uppercase text-gold font-light">Vantix ROI Predictor</span>
+          </motion.div>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-serif text-[clamp(2rem,5vw,4rem)] text-ivory leading-tight mb-4">
+            Koszt <em className="italic text-gold">Stygnących Leadów</em>
+          </motion.h2>
+          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-[0.9rem] font-light text-[rgba(245,244,240,0.45)] tracking-wide">
+            Nie licz zaoszczędzonych godzin. Licz utracone przychody.
+          </motion.p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1 relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Twój email"
-              className="w-full pl-12 pr-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-neutral-200 placeholder:text-neutral-600 focus:outline-none focus:border-yellow-600 transition"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="px-8 py-3 bg-yellow-600 text-black font-semibold rounded-lg hover:bg-yellow-500 transition flex items-center justify-center gap-2 whitespace-nowrap"
-          >
-            <Send className="w-4 h-4" />
-            Wyślij
-          </button>
-        </form>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* INPUTS */}
+          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="bg-[rgba(255,255,255,0.02)] backdrop-blur-xl border border-[rgba(212,175,55,0.1)] rounded-3xl p-8 md:p-10 flex flex-col justify-between">
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <label className="block text-[0.65rem] tracking-[0.2em] uppercase text-gold/60 font-light">ILE MASZ ZAPYTAŃ MIESIĘCZNIE?</label>
+                  <span className="text-xl font-serif text-gold">{monthlyInquiries}</span>
+                </div>
+                <input type="range" min="10" max="1000" step="10" value={monthlyInquiries} onChange={(e) => setMonthlyInquiries(Number(e.target.value))} className="w-full h-1 bg-gold/10 rounded-lg appearance-none cursor-pointer accent-gold" />
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <label className="block text-[0.65rem] tracking-[0.2em] uppercase text-gold/60 font-light">ŚREDNIA WARTOŚĆ LEADA (LTV)</label>
+                  <span className="text-xl font-serif text-gold">{formatCurrency(leadValue)}</span>
+                </div>
+                <input type="range" min="100" max="10000" step="100" value={leadValue} onChange={(e) => setLeadValue(Number(e.target.value))} className="w-full h-1 bg-gold/10 rounded-lg appearance-none cursor-pointer accent-gold" />
+              </div>
+              <div className="space-y-6">
+                <div className="flex justify-between items-end">
+                  <label className="block text-[0.65rem] tracking-[0.2em] uppercase text-gold/60 font-light">JAK SZYBKO TWÓJ ZESPÓŁ ODPOWIADA?</label>
+                  <span className="text-lg font-serif text-gold">{speedLabels[responseSpeed]}</span>
+                </div>
+                <input type="range" min="0" max="3" step="1" value={responseSpeed} onChange={(e) => setResponseSpeed(Number(e.target.value))} className="w-full h-1 bg-gold/10 rounded-lg appearance-none cursor-pointer accent-gold" />
+                <div className="flex justify-between text-[0.45rem] tracking-widest text-[rgba(245,244,240,0.2)] uppercase">
+                  <span>IDEALNIE</span><span>DOBRZE</span><span>RYZYKOWNIE</span><span>KRYTYCZNIE</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
-        {submitted && (
-          <div className="mt-4 p-3 bg-green-600/20 border border-green-600/50 rounded-lg text-green-400 text-sm">
-            ✓ Dzięki! Skontaktujemy się wkrótce.
-          </div>
-        )}
-
-        <p className="text-neutral-500 text-xs mt-6">
-          Nie spam, obiecujemy. Tylko informacje o Vantix OS.
-        </p>
+          {/* RESULTS */}
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative overflow-hidden rounded-3xl p-8 md:p-10 flex flex-col justify-between bg-gradient-to-br from-[rgba(180,20,20,0.12)] to-[rgba(2,2,2,0.8)] border border-red-500/20">
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <TrendingDown className="w-5 h-5 text-red-500" />
+                <span className="text-[0.6rem] tracking-[0.3em] uppercase text-red-500/60 font-bold">UTRACONA MARŻA</span>
+              </div>
+              <div className="space-y-2 mb-12">
+                <AnimatePresence mode="wait">
+                  <motion.div key={monthlyLoss} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-5xl md:text-6xl font-serif font-bold tracking-tight text-red-500">
+                    {formatCurrency(monthlyLoss)}
+                  </motion.div>
+                </AnimatePresence>
+                <div className="text-[0.7rem] tracking-[0.2em] uppercase text-ivory/30 font-light">MIESIĘCZNIE PRZEZ OPÓŹNIENIA W PROCESIE</div>
+              </div>
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6">
+                <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <p className="text-[0.7rem] leading-relaxed text-red-200/80 font-light tracking-wide">
+                  Vantix eliminuje tę stratę od 1. dnia wdrożenia — skracając czas reakcji do &lt;1s i usuwając błąd ludzki z procesu.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <p className="text-[0.65rem] tracking-[0.1em] text-ivory/30 font-light italic">Roczna strata: {formatCurrency(yearlyLoss)}</p>
+              <button onClick={scrollToContact} className="w-full btn-pulse flex items-center justify-center gap-3 text-[0.65rem] tracking-[0.25em] uppercase font-normal text-void bg-gold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] group">
+                <span>ODZYSKAJ MARŻĘ →</span>
+                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
-}
+};
+
+export default LossCalculator;
