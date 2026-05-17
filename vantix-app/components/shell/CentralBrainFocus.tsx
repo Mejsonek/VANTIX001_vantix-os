@@ -21,16 +21,16 @@ const todayTasks = [
 ];
 
 const stats = [
-  { label: 'Leady',          value: '2',    sub: '+1 dziś',  icon: Target,      color: 'text-gold',   border: 'border-gold/40' },
-  { label: 'Projekty',       value: '1',    sub: 'aktywne',  icon: Zap,         color: 'text-vblue',  border: 'border-vblue/30' },
-  { label: 'Taski',          value: '4',    sub: 'do zrobienia', icon: Check,   color: 'text-ivory/70', border: 'border-gold/10' },
-  { label: 'Czas pracy',     value: '4.2h', sub: 'dzisiaj',  icon: Clock,       color: 'text-vgreen', border: 'border-vgreen/30' },
+  { label: 'Leady',      value: '2',    sub: '+1 dziś',      icon: Target, color: 'text-gold',     border: 'border-gold/40' },
+  { label: 'Projekty',   value: '1',    sub: 'aktywne',      icon: Zap,    color: 'text-vblue',    border: 'border-vblue/30' },
+  { label: 'Taski',      value: '4',    sub: 'do zrobienia', icon: Check,  color: 'text-ivory/70', border: 'border-gold/10' },
+  { label: 'Czas pracy', value: '4.2h', sub: 'dzisiaj',      icon: Clock,  color: 'text-vgreen',   border: 'border-vgreen/30' },
 ];
 
-const priorityStyle: Record<string, { dot: string; badge: string; label: string }> = {
-  high:   { dot: 'bg-vred',    badge: 'border-vred/40 text-vred/90 bg-vred/5',     label: 'HIGH' },
-  medium: { dot: 'bg-gold',    badge: 'border-gold/40 text-gold/90 bg-gold/5',     label: 'MED'  },
-  low:    { dot: 'bg-ivory/20', badge: 'border-ivory/20 text-ivory/30 bg-ivory/5', label: 'LOW'  },
+const priorityStyle: Record<string, { border: string; dot: string; badge: string; label: string }> = {
+  high:   { border: 'border-l-vred',      dot: 'bg-vred',     badge: 'border-vred/40 text-vred/90 bg-vred/5',     label: 'HIGH' },
+  medium: { border: 'border-l-gold',      dot: 'bg-gold',     badge: 'border-gold/40 text-gold/90 bg-gold/5',     label: 'MED'  },
+  low:    { border: 'border-l-ivory/15',  dot: 'bg-ivory/20', badge: 'border-ivory/20 text-ivory/30 bg-ivory/5',  label: 'LOW'  },
 };
 
 export default function CentralBrainFocus() {
@@ -77,7 +77,7 @@ export default function CentralBrainFocus() {
           </div>
           <div>
             <div className="font-display text-[10px] font-bold text-gold/80" style={{ letterSpacing: '0.14em' }}>VANTIX OS</div>
-            <div className="font-mono text-[8px] text-ivory/20" style={{ letterSpacing: '0.08em' }}>v0.1.0 — Phase 1</div>
+            <div className="font-mono text-[8px] text-ivory/25" style={{ letterSpacing: '0.08em' }}>v0.1.0 — Phase 1</div>
           </div>
         </div>
 
@@ -85,16 +85,16 @@ export default function CentralBrainFocus() {
         <div className="flex items-center gap-6">
           {mounted && (
             <div className="text-right hidden sm:block">
-              <div className="font-mono text-[11px] text-ivory/40 leading-none">
+              <div className="font-mono text-[13px] text-ivory/55 leading-none tabular-nums">
                 {clock.time}
-                <span className="text-ivory/20 ml-0.5">:{clock.seconds}</span>
+                <span className="text-ivory/25 ml-0.5 text-[11px]">:{clock.seconds}</span>
               </div>
-              <div className="font-mono text-[8px] text-ivory/15 mt-0.5">{clock.date}</div>
+              <div className="font-mono text-[9px] text-ivory/25 mt-0.5">{clock.date}</div>
             </div>
           )}
           <div className="flex items-center gap-1.5 px-2.5 py-1 border border-vgreen/20 bg-vgreen/5">
             <span className="w-1.5 h-1.5 rounded-full bg-vgreen dot-live" />
-            <span className="font-mono text-[7px] text-vgreen/70 uppercase" style={{ letterSpacing: '0.12em' }}>ONLINE</span>
+            <span className="font-mono text-[8px] text-vgreen/70 uppercase" style={{ letterSpacing: '0.12em' }}>ONLINE</span>
           </div>
         </div>
       </div>
@@ -114,10 +114,10 @@ export default function CentralBrainFocus() {
                 {greeting},&nbsp;<span className="text-gold">Kacper</span>
               </h1>
               <div className="flex items-center gap-2 shrink-0">
-                <button className="btn btn-dim !text-[8px] !px-3 !py-1.5 flex items-center gap-1.5">
+                <button className="btn btn-dim text-[9px]! px-3! py-1.5! flex items-center gap-1.5">
                   <TrendingUp size={9} /> Nowy lead
                 </button>
-                <button className="btn btn-primary !text-[8px] !px-3 !py-1.5 flex items-center gap-1.5">
+                <button className="btn btn-primary text-[9px]! px-3! py-1.5! flex items-center gap-1.5">
                   <Check size={9} /> Nowy task
                 </button>
               </div>
@@ -131,16 +131,16 @@ export default function CentralBrainFocus() {
               return (
                 <div
                   key={s.label}
-                  className={`vx-card vx-3d !p-4 border-l-2 ${s.border} fade-up delay-${i + 1}`}
+                  className={`vx-card vx-3d p-4! border-l-2 ${s.border} fade-up delay-${i + 1}`}
                   style={{ position: 'relative' }}
                 >
                   <div className="stat-accent-line" />
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-[8px] text-ivory/30 uppercase" style={{ letterSpacing: '0.18em' }}>{s.label}</span>
+                    <span className="font-mono text-[9px] text-ivory/35 uppercase" style={{ letterSpacing: '0.18em' }}>{s.label}</span>
                     <Icon size={11} className={`${s.color} opacity-60`} />
                   </div>
                   <div className={`font-display text-2xl font-black ${s.color} num-animate delay-${i + 2}`}>{s.value}</div>
-                  <div className="font-mono text-[8px] text-ivory/20 mt-1">{s.sub}</div>
+                  <div className="font-mono text-[9px] text-ivory/30 mt-1">{s.sub}</div>
                 </div>
               );
             })}
@@ -151,22 +151,24 @@ export default function CentralBrainFocus() {
             <PriorityMatrix />
           </div>
 
-          {/* ── TASK LIST (compact, below matrix) ── */}
-          <div className="vx-card !p-0 overflow-hidden mb-5 fade-up delay-4">
+          {/* ── TASK LIST ── */}
+          <div className="vx-card p-0! overflow-hidden mb-5 fade-up delay-4">
             {/* Task header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-gold/[0.07] bg-s2">
               <div className="flex items-center gap-2">
                 <Check size={11} className="text-gold/50" />
-                <span className="font-mono text-[9px] text-ivory/40 uppercase" style={{ letterSpacing: '0.16em' }}>Wszystkie zadania</span>
+                <span className="font-mono text-[9px] text-ivory/45 uppercase" style={{ letterSpacing: '0.16em' }}>
+                  DZISIAJ — {doneCount}/{tasks.length} ZADAŃ
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-20 h-[2px] bg-gold/10 overflow-hidden">
+                  <div className="w-20 h-[4px] bg-gold/10 overflow-hidden">
                     <div className="h-full bg-gold bar-animate" style={{ width: `${progress}%` }} />
                   </div>
-                  <span className="font-mono text-[8px] text-gold/50">{doneCount}/{tasks.length}</span>
+                  <span className="font-mono text-[9px] text-gold/60 tabular-nums">{doneCount}/{tasks.length}</span>
                 </div>
-                <span className="font-mono text-[8px] text-ivory/15">{progress}%</span>
+                <span className="font-mono text-[9px] text-gold/50 font-bold">{progress}%</span>
               </div>
             </div>
 
@@ -178,24 +180,24 @@ export default function CentralBrainFocus() {
                   <button
                     key={task.id}
                     onClick={() => toggleTask(task.id)}
-                    className={`vx-row w-full flex items-center gap-4 px-5 py-3 text-left row-enter delay-${i + 4}`}
+                    className={`vx-row w-full flex items-center gap-4 px-5 py-3.5 border-l-2 ${ps.border} text-left row-enter delay-${i + 4} group`}
                   >
-                    <div className={`w-4 h-4 flex items-center justify-center border flex-shrink-0 transition-all duration-200 ${task.done ? 'border-gold/50 bg-gold/15' : 'border-ivory/15 hover:border-gold/30'}`}>
-                      {task.done && <Check size={8} className="text-gold" />}
+                    {/* Checkbox */}
+                    <div className={`w-5 h-5 flex items-center justify-center border shrink-0 transition-all duration-200 ${task.done ? 'border-gold/50 bg-gold/15' : 'border-ivory/15 group-hover:border-gold/30'}`}>
+                      {task.done && <Check size={10} className="text-gold" />}
                     </div>
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${ps.dot}`} />
 
                     {/* Title */}
-                    <span className={`font-mono text-[11px] flex-1 transition-all ${task.done ? 'text-ivory/20 line-through decoration-ivory/20' : 'text-ivory/55'}`}>
+                    <span className={`font-mono text-[13px] flex-1 transition-all leading-snug ${task.done ? 'text-ivory/20 line-through decoration-ivory/20' : 'text-ivory/75'}`}>
                       {task.title}
                     </span>
 
                     {/* Time */}
-                    <span className="font-mono text-[9px] text-ivory/15 shrink-0">{task.time}</span>
+                    <span className="font-mono text-[10px] text-ivory/25 shrink-0 tabular-nums">{task.time}</span>
 
                     {/* Priority badge */}
                     {!task.done && (
-                      <span className={`font-mono text-[7px] px-1.5 py-0.5 border uppercase tracking-widest shrink-0 ${ps.badge}`}>
+                      <span className={`font-mono text-[8px] px-2 py-0.5 border uppercase tracking-widest shrink-0 ${ps.badge}`}>
                         {ps.label}
                       </span>
                     )}
@@ -206,21 +208,21 @@ export default function CentralBrainFocus() {
           </div>
 
           {/* ── AI RECOMMENDATION ── */}
-          <div className="flex items-start gap-3 px-4 py-3 border border-gold/15 bg-gold/[0.03] fade-up delay-5" style={{ borderLeft: '2px solid rgba(212,175,55,0.5)' }}>
-            <div className="w-6 h-6 border border-gold/25 bg-gold/8 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className="flex items-start gap-3 px-4 py-3.5 border border-gold/15 bg-gold/3 fade-up delay-5" style={{ borderLeft: '2px solid rgba(212,175,55,0.5)' }}>
+            <div className="w-6 h-6 border border-gold/25 bg-gold/8 flex items-center justify-center shrink-0 mt-0.5">
               <Brain size={11} className="text-gold/70" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-mono text-[8px] text-gold/50 uppercase mb-1" style={{ letterSpacing: '0.18em' }}>AI Rekomendacja</div>
-              <span className="font-mono text-[11px] text-ivory/45 leading-relaxed">
+              <div className="font-mono text-[9px] text-gold/50 uppercase mb-1" style={{ letterSpacing: '0.18em' }}>AI Rekomendacja</div>
+              <span className="font-mono text-[12px] text-ivory/60 leading-relaxed">
                 Sajid nie odpowiedział na wiadomość od 2 dni — wyślij przypomnienie dziś wieczorem lub zarchiwizuj lead.
               </span>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
-              <button className="btn btn-dim !text-[8px] !px-2.5 !py-1.5 flex items-center gap-1">
+              <button className="btn btn-dim text-[9px]! px-2.5! py-1.5! flex items-center gap-1">
                 <ArrowRight size={8} /> Akceptuj
               </button>
-              <button className="btn btn-ghost !text-[8px] !px-2 !py-1.5 text-ivory/20 hover:text-ivory/40">✕</button>
+              <button className="btn btn-ghost text-[9px]! px-2! py-1.5! text-ivory/25 hover:text-ivory/50">✕</button>
             </div>
           </div>
 

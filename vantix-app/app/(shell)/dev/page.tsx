@@ -16,6 +16,7 @@ const mockProjects: Project[] = [
     commits: 25,
     updatedAt: '2026-05-18',
     repo: 'https://github.com/SolutionKacper/VANTIX001_vantix-os',
+    activityLast7Days: [3, 1, 7, 2, 5, 0, 4],
   },
   {
     id: 'P-002',
@@ -27,6 +28,7 @@ const mockProjects: Project[] = [
     commits: 3,
     updatedAt: '2026-05-17',
     repo: 'https://huggingface.co/spaces/SolutionKacper/VantixN8N',
+    activityLast7Days: [1, 0, 2, 0, 1, 0, 3],
   },
   {
     id: 'P-003',
@@ -38,6 +40,7 @@ const mockProjects: Project[] = [
     commits: 8,
     updatedAt: '2026-05-17',
     repo: 'https://github.com/SolutionKacper/VANTIX001_vantix-os',
+    activityLast7Days: [0, 0, 1, 4, 2, 1, 0],
   },
 ];
 
