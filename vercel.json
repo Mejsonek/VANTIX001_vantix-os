@@ -1,0 +1,33 @@
+{
+  "name": "vantix-os",
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "env": {
+    "NEXT_PUBLIC_APP_URL": "@next_public_app_url"
+  },
+  "domains": [
+    {
+      "domain": "vantix.pl",
+      "path": "/",
+      "target": "production"
+    },
+    {
+      "domain": "app.vantix.pl",
+      "path": "/",
+      "target": "production"
+    }
+  ],
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 60
+    }
+  },
+  "redirects": [
+    {
+      "source": "/crm",
+      "destination": "/cockpit",
+      "permanent": false
+    }
+  ]
+}

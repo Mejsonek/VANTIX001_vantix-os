@@ -1,0 +1,395 @@
+'use client';
+
+import { useState, useMemo } from 'react';
+import {
+  Search, Users, TrendingUp, DollarSign, Trophy,
+  Mail, Phone, Building2, ChevronDown, ChevronUp,
+  ExternalLink, MessageSquare,
+} from 'lucide-react';
+import PipelineFunnel from '@/components/crm/PipelineFunnel';
+
+export interface Lead {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  status: 'nowy' | 'w_trakcie' | 'wygra' | 'przegrana';
+  value: number;
+  source: string;
+  createdAt: string;
+  notes: string;
+}
+
+const mockLeads: Lead[] = [
+  { id: 'L-001', name: 'Anna Kowalska',         company: 'TechFlow Sp. z o.o.', email: 'anna@techflow.pl',            phone: '+48 601 234 567', status: 'nowy',      value: 15000, source: 'Landing Page', createdAt: '2026-05-17', notes: 'Zainteresowana pełną automatyzacją procesów sprzedażowych. Prosi o wycenę.' },
+  { id: 'L-002', name: 'Marcin Nowak',           company: 'DevHouse SA',          email: 'm.nowak@devhouse.pl',          phone: '+48 602 345 678', status: 'w_trakcie', value: 28000, source: 'Polecenie',    createdAt: '2026-05-15', notes: 'Wstępna rozmowa odbyta. Czeka na demo systemu Vantix OS.' },
+  { id: 'L-003', name: 'Katarzyna Wiśniewska',   company: 'EcoMarket',            email: 'k.wisniewska@ecomarket.pl',    phone: '+48 603 456 789', status: 'wygra',     value: 12000, source: 'LinkedIn',     createdAt: '2026-05-10', notes: 'Podpisana umowa. Start projektu: czerwiec 2026.' },
+  { id: 'L-004', name: 'Piotr Zieliński',        company: 'BuildCorp',            email: 'p.zielinski@buildcorp.pl',    phone: '+48 604 567 890', status: 'w_trakcie', value: 35000, source: 'Konferencja',  createdAt: '2026-05-14', notes: 'Duży projekt — CRM + automatyzacje. Negocjacje cenowe.' },
+  { id: 'L-005', name: 'Magdalena Lewandowska',  company: 'MediaGroup',           email: 'm.lewandowska@mediagroup.pl', phone: '+48 605 678 901', status: 'nowy',      value: 8000,  source: 'Landing Page', createdAt: '2026-05-18', notes: 'Formularz z kalkulatora ROI. Mała firma, budżet ograniczony.' },
+  { id: 'L-006', name: 'Tomasz Dąbrowski',       company: 'FinServe',             email: 't.dabrowski@finserve.pl',     phone: '+48 606 789 012', status: 'przegrana', value: 22000, source: 'Cold Email',   createdAt: '2026-04-28', notes: 'Wybrał konkurencję — niższa cena. Follow-up za 3 miesiące.' },
+  { id: 'L-007', name: 'Aleksandra Kamińska',    company: 'HealthPlus',           email: 'a.kaminska@healthplus.pl',    phone: '+48 607 890 123', status: 'w_trakcie', value: 18000, source: 'Polecenie',    createdAt: '2026-05-12', notes: 'System do dokumentacji medycznej. Czeka na blueprint.' },
+  { id: 'L-008', name: 'Rafał Mazur',            company: 'LogiTrans',            email: 'r.mazur@logitrans.pl',        phone: '+48 608 901 234', status: 'nowy',      value: 9500,  source: 'Google Ads',  createdAt: '2026-05-17', notes: 'Automatyzacja logistyki. Prosi o kontakt telefoniczny.' },
+  { id: 'L-009', name: 'Joanna Krawczyk',        company: 'StyleBox',             email: 'j.krawczyk@stylebox.pl',      phone: '+48 609 012 345', status: 'wygra',     value: 31000, source: 'Instagram',    createdAt: '2026-05-05', notes: 'E-commerce automation. Projekt w trakcie — faza blueprint.' },
+  { id: 'L-010', name: 'Michał Wójcik',          company: 'DataLab',              email: 'm.wojcik@datalab.pl',         phone: '+48 610 123 456', status: 'nowy',      value: 42000, source: 'Konferencja',  createdAt: '2026-05-16', notes: 'Enterprise — pełny Vantix OS. Prosi o spotkanie z zarządem.' },
+];
+
+const statusCfg: Record<string, { label: string; dot: string; text: string; bg: string; border: string }> = {
+  nowy:       { label: 'Nowy',      dot: 'bg-gold',   text: 'text-gold',   bg: 'bg-gold/5',   border: 'border-gold/30' },
+  w_trakcie:  { label: 'W trakcie', dot: 'bg-vblue',  text: 'text-vblue',  bg: 'bg-vblue/5',  border: 'border-vblue/30' },
+  wygra:      { label: 'Wygrana',   dot: 'bg-vgreen', text: 'text-vgreen', bg: 'bg-vgreen/5', border: 'border-vgreen/30' },
+  przegrana:  { label: 'Przegrana', dot: 'bg-vred',   text: 'text-vred',   bg: 'bg-vred/5',   border: 'border-vred/30' },
+};
+
+const sourceIcon: Record<string, string> = {
+  'Landing Page': '🌐', 'Polecenie': '🤝', 'LinkedIn': '💼',
+  'Konferencja': '🎤',  'Cold Email': '📧', 'Google Ads': '🔍', 'Instagram': '📱',
+};
+
+function fmt(val: number) {
+  return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', minimumFractionDigits: 0 }).format(val);
+}
+
+const FILTERS = ['all', 'nowy', 'w_trakcie', 'wygra', 'przegrana'] as const;
+const FILTER_LABELS: Record<string, string> = {
+  all: 'Wszystkie', nowy: 'Nowe', w_trakcie: 'W trakcie', wygra: 'Wygrane', przegrana: 'Przegrane',
+};
+
+type SortKey = 'name' | 'value' | 'createdAt' | 'status';
+
+export default function LeadList() {
+  const [search,      setSearch]      = useState('');
+  const [filter,      setFilter]      = useState<string>('all');
+  const [expandedId,  setExpandedId]  = useState<string | null>(null);
+  const [sortKey,     setSortKey]     = useState<SortKey>('createdAt');
+  const [sortDesc,    setSortDesc]    = useState(true);
+  const [funnelStage, setFunnelStage] = useState<string | null>(null);
+
+  const stats = useMemo(() => {
+    const totalValue = mockLeads.reduce((s, l) => s + l.value, 0);
+    const won        = mockLeads.filter(l => l.status === 'wygra');
+    const active     = mockLeads.filter(l => l.status === 'nowy' || l.status === 'w_trakcie');
+    const wonValue   = won.reduce((s, l) => s + l.value, 0);
+    return { total: mockLeads.length, totalValue, wonCount: won.length, wonValue, active: active.length };
+  }, []);
+
+  const filtered = useMemo(() => {
+    const arr = mockLeads
+      .filter(l => {
+        const s = search.toLowerCase();
+        const matchSearch = l.name.toLowerCase().includes(s)
+          || l.company.toLowerCase().includes(s)
+          || l.email.toLowerCase().includes(s)
+          || l.id.toLowerCase().includes(s);
+        const matchFilter = filter === 'all' || l.status === filter;
+        return matchSearch && matchFilter;
+      });
+
+    arr.sort((a, b) => {
+      let av: string | number, bv: string | number;
+      if (sortKey === 'value')     { av = a.value;     bv = b.value; }
+      else if (sortKey === 'createdAt') { av = a.createdAt; bv = b.createdAt; }
+      else if (sortKey === 'status')    { av = a.status;    bv = b.status; }
+      else                         { av = a.name;      bv = b.name; }
+      return sortDesc
+        ? (av < bv ? 1 : av > bv ? -1 : 0)
+        : (av < bv ? -1 : av > bv ? 1 : 0);
+    });
+    return arr;
+  }, [search, filter, sortKey, sortDesc]);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDesc(d => !d);
+    else { setSortKey(key); setSortDesc(true); }
+  };
+
+  const SortIcon = ({ col }: { col: SortKey }) =>
+    sortKey === col
+      ? (sortDesc ? <ChevronDown size={9} className="text-gold" /> : <ChevronUp size={9} className="text-gold" />)
+      : <ChevronDown size={9} className="text-ivory/15" />;
+
+  return (
+    <div className="space-y-4">
+
+      {/* ── STATS ROW ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { icon: Users,      label: 'Leady łącznie',   value: stats.total,              sub: `${stats.active} aktywnych`,          border: 'border-l-ivory/20', vcolor: 'text-ivory/70' },
+          { icon: TrendingUp, label: 'Aktywny pipeline', value: stats.active,             sub: 'nowe + w trakcie',                   border: 'border-l-gold/50',  vcolor: 'text-gold' },
+          { icon: DollarSign, label: 'Wartość pipeline', value: fmt(stats.totalValue),    sub: fmt(stats.wonValue) + ' wygrane',     border: 'border-l-vblue/40', vcolor: 'text-vblue' },
+          { icon: Trophy,     label: 'Wygrane',          value: stats.wonCount,           sub: `${Math.round(stats.wonCount/stats.total*100)}% win rate`, border: 'border-l-vgreen/40', vcolor: 'text-vgreen' },
+        ].map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <div key={s.label} className={`vx-card vx-3d !p-4 border-l-2 ${s.border} fade-up delay-${i+1}`} style={{ position: 'relative' }}>
+              <div className="stat-accent-line" />
+              <div className="flex items-center gap-2 mb-2.5">
+                <Icon size={10} className={`${s.vcolor} opacity-70`} />
+                <span className="font-mono text-[8px] text-ivory/25 uppercase tracking-wider">{s.label}</span>
+              </div>
+              <div className={`font-display text-xl font-black ${s.vcolor} num-animate delay-${i+2}`}>{s.value}</div>
+              <div className="font-mono text-[8px] text-ivory/20 mt-1">{s.sub}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── PIPELINE FUNNEL 3D ── */}
+      <div className="vx-card fade-up delay-3">
+        <PipelineFunnel
+          selectedStage={funnelStage}
+          onStageClick={key => setFunnelStage(prev => prev === key ? null : key)}
+        />
+      </div>
+
+      {/* ── FUNNEL LEAD CARDS ── */}
+      {funnelStage && (() => {
+        const stageCfg = statusCfg[funnelStage];
+        const stageLeads = mockLeads.filter(l => l.status === funnelStage);
+        return (
+          <div className="fade-up">
+            <div className="flex items-center justify-between mb-3 px-1">
+              <div className="flex items-center gap-2">
+                <div className="h-px w-5 bg-gold/40" />
+                <span className="font-mono text-[8px] text-gold/50 uppercase tracking-widest">
+                  {stageCfg.label}
+                </span>
+                <span className="font-mono text-[8px] text-ivory/20">— {stageLeads.length} leadów</span>
+              </div>
+              <button
+                onClick={() => setFunnelStage(null)}
+                className="font-mono text-[8px] text-ivory/20 hover:text-ivory/50 transition-colors"
+              >
+                ✕ zamknij
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {stageLeads.map((lead, i) => (
+                <div
+                  key={lead.id}
+                  className={`vx-card vx-3d p-4! row-enter delay-${Math.min(i + 1, 10)}`}
+                  style={{ position: 'relative', borderLeft: `2px solid ${stageCfg.dot.includes('gold') ? '#d4af37' : stageCfg.dot.includes('vblue') ? '#6B8FD4' : stageCfg.dot.includes('vgreen') ? '#4ade80' : '#ff5252'}33` }}
+                >
+                  <div className="stat-accent-line" />
+
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[12px] text-ivory/80 font-semibold truncate">{lead.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <Building2 size={8} className="text-ivory/20 shrink-0" />
+                        <p className="font-mono text-[9px] text-ivory/30 truncate">{lead.company}</p>
+                      </div>
+                    </div>
+                    <span className={`font-mono text-[15px] font-black shrink-0 ${stageCfg.text}`}>{fmt(lead.value)}</span>
+                  </div>
+
+                  {/* Notes */}
+                  <p className="font-mono text-[9px] text-ivory/30 leading-relaxed line-clamp-2 mb-3">{lead.notes}</p>
+
+                  {/* Meta */}
+                  <div className="flex items-center justify-between pt-2.5 border-t border-gold/6">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[8px] text-ivory/20">
+                        {sourceIcon[lead.source] ?? '📌'} {lead.source}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={`mailto:${lead.email}`}
+                        onClick={e => e.stopPropagation()}
+                        className="btn btn-ghost text-[8px]! px-2! py-1! flex items-center gap-1 text-ivory/25 hover:text-gold/60"
+                      >
+                        <Mail size={8} /> Email
+                      </a>
+                      <a
+                        href={`tel:${lead.phone}`}
+                        onClick={e => e.stopPropagation()}
+                        className="btn btn-ghost text-[8px]! px-2! py-1! flex items-center gap-1 text-ivory/25 hover:text-gold/60"
+                      >
+                        <Phone size={8} /> Tel
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── SEARCH + FILTERS ── */}
+      <div className="flex flex-col sm:flex-row gap-2.5 fade-up delay-4">
+        <div className="relative flex-1">
+          <Search size={12} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ivory/25" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Szukaj po nazwie, firmie, emailu..."
+            className="w-full bg-surface border border-gold/10 pl-10 pr-4 py-3 font-mono text-[12px] text-ivory/70 placeholder:text-ivory/20 focus:border-gold/30 focus:outline-none transition-colors"
+          />
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {FILTERS.map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3.5 py-2.5 font-mono text-[9px] uppercase tracking-wider border transition-colors ${
+                filter === f
+                  ? 'border-gold/50 bg-gold/10 text-gold'
+                  : 'border-gold/10 text-ivory/30 hover:border-gold/25 hover:text-ivory/55'
+              }`}
+            >
+              {FILTER_LABELS[f]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── TABLE ── */}
+      <div className="vx-card p-0! overflow-hidden fade-up delay-5">
+        {/* Header */}
+        <div className="grid grid-cols-[minmax(200px,2.2fr)_minmax(130px,1.4fr)_140px_130px_110px] px-5 py-3 border-b border-gold/10 bg-s2 select-none">
+          <button onClick={() => toggleSort('name')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 text-left transition-colors">
+            Lead <SortIcon col="name" />
+          </button>
+          <span className="font-mono text-[9px] text-ivory/35 uppercase tracking-widest">Firma</span>
+          <button onClick={() => toggleSort('status')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
+            Status <SortIcon col="status" />
+          </button>
+          <button onClick={() => toggleSort('value')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
+            Wartość <SortIcon col="value" />
+          </button>
+          <button onClick={() => toggleSort('createdAt')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
+            Data <SortIcon col="createdAt" />
+          </button>
+        </div>
+
+        {/* Rows */}
+        <div className="divide-y divide-gold/5">
+          {filtered.map((lead, idx) => {
+            const cfg = statusCfg[lead.status];
+            const isExp = expandedId === lead.id;
+            const initials = lead.name.split(' ').slice(0, 2).map(w => w[0]).join('');
+
+            return (
+              <div key={lead.id}>
+                <div
+                  onClick={() => setExpandedId(isExp ? null : lead.id)}
+                  className={`vx-row grid grid-cols-[minmax(200px,2.2fr)_minmax(130px,1.4fr)_140px_130px_110px] px-5 py-4 row-enter delay-${Math.min(idx + 1, 10)} cursor-pointer ${isExp ? 'bg-gold/3' : ''}`}
+                >
+                  {/* Lead — avatar + name + email */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="w-9 h-9 flex items-center justify-center shrink-0 font-display font-bold text-[12px]"
+                      style={{
+                        background: `${cfg.dot.includes('gold') ? 'rgba(212,175,55,0.12)' : cfg.dot.includes('vblue') ? 'rgba(107,143,212,0.12)' : cfg.dot.includes('vgreen') ? 'rgba(74,222,128,0.10)' : 'rgba(255,82,82,0.10)'}`,
+                        border: `1px solid ${cfg.dot.includes('gold') ? 'rgba(212,175,55,0.25)' : cfg.dot.includes('vblue') ? 'rgba(107,143,212,0.25)' : cfg.dot.includes('vgreen') ? 'rgba(74,222,128,0.20)' : 'rgba(255,82,82,0.20)'}`,
+                        color: cfg.dot.includes('gold') ? '#d4af37' : cfg.dot.includes('vblue') ? '#6B8FD4' : cfg.dot.includes('vgreen') ? '#4ade80' : '#ff5252',
+                      }}
+                    >
+                      {initials}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-mono text-[13px] text-ivory/85 font-semibold truncate leading-tight">{lead.name}</p>
+                      <p className="font-mono text-[10px] text-ivory/30 mt-0.5 truncate">{lead.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Firma */}
+                  <div className="flex items-center min-w-0">
+                    <span className="font-mono text-[12px] text-ivory/50 truncate">{lead.company}</span>
+                  </div>
+
+                  {/* Status */}
+                  <div className="flex items-center">
+                    <div className={`inline-flex items-center gap-2 px-2.5 py-1 border ${cfg.border} ${cfg.bg}`}>
+                      <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot} shrink-0`} />
+                      <span className={`font-mono text-[9px] uppercase tracking-wider ${cfg.text}`}>{cfg.label}</span>
+                    </div>
+                  </div>
+
+                  {/* Wartość */}
+                  <div className="flex items-center">
+                    <span className="font-display text-[15px] font-black text-gold/90">{fmt(lead.value)}</span>
+                  </div>
+
+                  {/* Data */}
+                  <div className="flex items-center">
+                    <div>
+                      <p className="font-mono text-[10px] text-ivory/40">{lead.createdAt}</p>
+                      <p className="font-mono text-[9px] text-ivory/20 mt-0.5">{sourceIcon[lead.source] ?? '📌'} {lead.source}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expanded */}
+                {isExp && (
+                  <div className="mx-5 mb-1 border border-gold/10 bg-s2 animate-[fade-up_0.2s_ease_both]">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-gold/6">
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Email</span>
+                        <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-2 font-mono text-[11px] text-gold/70 hover:text-gold transition-colors">
+                          <Mail size={10} /> {lead.email}
+                        </a>
+                      </div>
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Telefon</span>
+                        <a href={`tel:${lead.phone}`} className="inline-flex items-center gap-2 font-mono text-[11px] text-ivory/50 hover:text-gold/70 transition-colors">
+                          <Phone size={10} /> {lead.phone}
+                        </a>
+                      </div>
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Źródło</span>
+                        <span className="font-mono text-[11px] text-ivory/50">
+                          {sourceIcon[lead.source] ?? '📌'} {lead.source}
+                        </span>
+                      </div>
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Wartość</span>
+                        <span className="font-display text-[18px] font-black text-gold">{fmt(lead.value)}</span>
+                      </div>
+                    </div>
+                    <div className="px-5 py-4 border-t border-gold/6">
+                      <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest flex items-center gap-1.5 mb-2">
+                        <MessageSquare size={9} className="opacity-60" /> Notatki
+                      </span>
+                      <p className="font-mono text-[11px] text-ivory/55 leading-relaxed">{lead.notes}</p>
+                    </div>
+                    <div className="flex items-center gap-2 px-5 py-3 border-t border-gold/6 bg-black/20">
+                      <button className="btn btn-dim text-[9px]! px-3! py-2! flex items-center gap-1.5">
+                        <Mail size={9} /> Wyślij email
+                      </button>
+                      <button className="btn btn-ghost text-[9px]! px-3! py-2! flex items-center gap-1.5 text-ivory/30 hover:text-ivory/60">
+                        <ExternalLink size={9} /> Otwórz profil
+                      </button>
+                      <span className="font-mono text-[9px] text-ivory/15 ml-auto">{lead.id}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {filtered.length === 0 && (
+          <div className="py-20 text-center">
+            <Users size={28} className="text-ivory/10 mx-auto mb-3" />
+            <p className="font-mono text-[12px] text-ivory/25">Brak leadów spełniających kryteria</p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between font-mono text-[9px] text-ivory/20 fade-up delay-6">
+        <span>Pokazuje {filtered.length} z {mockLeads.length} leadów</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-gold/30" />
+          Mock data — Phase 2 podepnie Neon DB
+        </span>
+      </div>
+    </div>
+  );
+}
