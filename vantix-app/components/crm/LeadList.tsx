@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import {
   Search, Users, TrendingUp, DollarSign, Trophy,
-  Mail, Phone, Building2, Calendar, ChevronDown, ChevronUp,
+  Mail, Phone, Building2, ChevronDown, ChevronUp,
   ExternalLink, MessageSquare,
 } from 'lucide-react';
 import PipelineFunnel from '@/components/crm/PipelineFunnel';
@@ -63,6 +63,7 @@ export default function LeadList() {
   const [expandedId,  setExpandedId]  = useState<string | null>(null);
   const [sortKey,     setSortKey]     = useState<SortKey>('createdAt');
   const [sortDesc,    setSortDesc]    = useState(true);
+  const [funnelStage, setFunnelStage] = useState<string | null>(null);
 
   const stats = useMemo(() => {
     const totalValue = mockLeads.reduce((s, l) => s + l.value, 0);
@@ -135,30 +136,110 @@ export default function LeadList() {
 
       {/* ── PIPELINE FUNNEL 3D ── */}
       <div className="vx-card fade-up delay-3">
-        <PipelineFunnel />
+        <PipelineFunnel
+          selectedStage={funnelStage}
+          onStageClick={key => setFunnelStage(prev => prev === key ? null : key)}
+        />
       </div>
+
+      {/* ── FUNNEL LEAD CARDS ── */}
+      {funnelStage && (() => {
+        const stageCfg = statusCfg[funnelStage];
+        const stageLeads = mockLeads.filter(l => l.status === funnelStage);
+        return (
+          <div className="fade-up">
+            <div className="flex items-center justify-between mb-3 px-1">
+              <div className="flex items-center gap-2">
+                <div className="h-px w-5 bg-gold/40" />
+                <span className="font-mono text-[8px] text-gold/50 uppercase tracking-widest">
+                  {stageCfg.label}
+                </span>
+                <span className="font-mono text-[8px] text-ivory/20">— {stageLeads.length} leadów</span>
+              </div>
+              <button
+                onClick={() => setFunnelStage(null)}
+                className="font-mono text-[8px] text-ivory/20 hover:text-ivory/50 transition-colors"
+              >
+                ✕ zamknij
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {stageLeads.map((lead, i) => (
+                <div
+                  key={lead.id}
+                  className={`vx-card vx-3d p-4! row-enter delay-${Math.min(i + 1, 10)}`}
+                  style={{ position: 'relative', borderLeft: `2px solid ${stageCfg.dot.includes('gold') ? '#d4af37' : stageCfg.dot.includes('vblue') ? '#6B8FD4' : stageCfg.dot.includes('vgreen') ? '#4ade80' : '#ff5252'}33` }}
+                >
+                  <div className="stat-accent-line" />
+
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[12px] text-ivory/80 font-semibold truncate">{lead.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <Building2 size={8} className="text-ivory/20 shrink-0" />
+                        <p className="font-mono text-[9px] text-ivory/30 truncate">{lead.company}</p>
+                      </div>
+                    </div>
+                    <span className={`font-mono text-[15px] font-black shrink-0 ${stageCfg.text}`}>{fmt(lead.value)}</span>
+                  </div>
+
+                  {/* Notes */}
+                  <p className="font-mono text-[9px] text-ivory/30 leading-relaxed line-clamp-2 mb-3">{lead.notes}</p>
+
+                  {/* Meta */}
+                  <div className="flex items-center justify-between pt-2.5 border-t border-gold/6">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[8px] text-ivory/20">
+                        {sourceIcon[lead.source] ?? '📌'} {lead.source}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={`mailto:${lead.email}`}
+                        onClick={e => e.stopPropagation()}
+                        className="btn btn-ghost text-[8px]! px-2! py-1! flex items-center gap-1 text-ivory/25 hover:text-gold/60"
+                      >
+                        <Mail size={8} /> Email
+                      </a>
+                      <a
+                        href={`tel:${lead.phone}`}
+                        onClick={e => e.stopPropagation()}
+                        className="btn btn-ghost text-[8px]! px-2! py-1! flex items-center gap-1 text-ivory/25 hover:text-gold/60"
+                      >
+                        <Phone size={8} /> Tel
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── SEARCH + FILTERS ── */}
       <div className="flex flex-col sm:flex-row gap-2.5 fade-up delay-4">
         <div className="relative flex-1">
-          <Search size={11} className="absolute left-3 top-1/2 -translate-y-1/2 text-ivory/20" />
+          <Search size={12} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ivory/25" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Szukaj po nazwie, firmie, emailu..."
-            className="w-full bg-surface border border-gold/10 pl-9 pr-4 py-2.5 font-mono text-[11px] text-ivory/60 placeholder:text-ivory/15 focus:border-gold/30 focus:outline-none transition-colors"
+            className="w-full bg-surface border border-gold/10 pl-10 pr-4 py-3 font-mono text-[12px] text-ivory/70 placeholder:text-ivory/20 focus:border-gold/30 focus:outline-none transition-colors"
           />
         </div>
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex gap-1.5 flex-wrap">
           {FILTERS.map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-3 py-2 font-mono text-[8px] uppercase tracking-wider border transition-colors ${
+              className={`px-3.5 py-2.5 font-mono text-[9px] uppercase tracking-wider border transition-colors ${
                 filter === f
-                  ? 'border-gold/40 bg-gold/10 text-gold'
-                  : 'border-gold/10 text-ivory/25 hover:border-gold/20 hover:text-ivory/40'
+                  ? 'border-gold/50 bg-gold/10 text-gold'
+                  : 'border-gold/10 text-ivory/30 hover:border-gold/25 hover:text-ivory/55'
               }`}
             >
               {FILTER_LABELS[f]}
@@ -168,124 +249,123 @@ export default function LeadList() {
       </div>
 
       {/* ── TABLE ── */}
-      <div className="vx-card !p-0 overflow-hidden fade-up delay-5">
+      <div className="vx-card p-0! overflow-hidden fade-up delay-5">
         {/* Header */}
-        <div className="grid grid-cols-[2rem_1fr_1.4fr_0.9fr_0.9fr_1fr] px-4 py-2.5 border-b border-gold/10 bg-s2 select-none">
-          <span className="font-mono text-[7px] text-ivory/15 uppercase tracking-widest">#</span>
-          <button
-            onClick={() => toggleSort('name')}
-            className="flex items-center gap-1 font-mono text-[7px] text-ivory/25 uppercase tracking-widest hover:text-ivory/50 text-left"
-          >
+        <div className="grid grid-cols-[minmax(200px,2.2fr)_minmax(130px,1.4fr)_140px_130px_110px] px-5 py-3 border-b border-gold/10 bg-s2 select-none">
+          <button onClick={() => toggleSort('name')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 text-left transition-colors">
             Lead <SortIcon col="name" />
           </button>
-          <span className="font-mono text-[7px] text-ivory/25 uppercase tracking-widest">Firma</span>
-          <button
-            onClick={() => toggleSort('status')}
-            className="flex items-center gap-1 font-mono text-[7px] text-ivory/25 uppercase tracking-widest hover:text-ivory/50"
-          >
+          <span className="font-mono text-[9px] text-ivory/35 uppercase tracking-widest">Firma</span>
+          <button onClick={() => toggleSort('status')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
             Status <SortIcon col="status" />
           </button>
-          <button
-            onClick={() => toggleSort('value')}
-            className="flex items-center gap-1 font-mono text-[7px] text-ivory/25 uppercase tracking-widest hover:text-ivory/50"
-          >
+          <button onClick={() => toggleSort('value')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
             Wartość <SortIcon col="value" />
           </button>
-          <button
-            onClick={() => toggleSort('createdAt')}
-            className="flex items-center gap-1 font-mono text-[7px] text-ivory/25 uppercase tracking-widest hover:text-ivory/50"
-          >
+          <button onClick={() => toggleSort('createdAt')} className="flex items-center gap-1.5 font-mono text-[9px] text-ivory/35 uppercase tracking-widest hover:text-ivory/60 transition-colors">
             Data <SortIcon col="createdAt" />
           </button>
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-gold/[0.04]">
+        <div className="divide-y divide-gold/5">
           {filtered.map((lead, idx) => {
             const cfg = statusCfg[lead.status];
             const isExp = expandedId === lead.id;
+            const initials = lead.name.split(' ').slice(0, 2).map(w => w[0]).join('');
 
             return (
               <div key={lead.id}>
                 <div
                   onClick={() => setExpandedId(isExp ? null : lead.id)}
-                  className={`vx-row grid grid-cols-[2rem_1fr_1.4fr_0.9fr_0.9fr_1fr] px-4 py-3 row-enter delay-${Math.min(idx + 1, 10)} ${isExp ? 'bg-gold/[0.04]' : ''}`}
+                  className={`vx-row grid grid-cols-[minmax(200px,2.2fr)_minmax(130px,1.4fr)_140px_130px_110px] px-5 py-4 row-enter delay-${Math.min(idx + 1, 10)} cursor-pointer ${isExp ? 'bg-gold/3' : ''}`}
                 >
-                  {/* # */}
-                  <span className="font-mono text-[9px] text-ivory/15 flex items-center">{idx + 1}</span>
-
-                  {/* Lead */}
-                  <div className="flex flex-col justify-center min-w-0">
-                    <p className="font-mono text-[11px] text-ivory/70 font-semibold truncate">{lead.name}</p>
-                    <p className="font-mono text-[8px] text-ivory/20 mt-0.5">{lead.id}</p>
+                  {/* Lead — avatar + name + email */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="w-9 h-9 flex items-center justify-center shrink-0 font-display font-bold text-[12px]"
+                      style={{
+                        background: `${cfg.dot.includes('gold') ? 'rgba(212,175,55,0.12)' : cfg.dot.includes('vblue') ? 'rgba(107,143,212,0.12)' : cfg.dot.includes('vgreen') ? 'rgba(74,222,128,0.10)' : 'rgba(255,82,82,0.10)'}`,
+                        border: `1px solid ${cfg.dot.includes('gold') ? 'rgba(212,175,55,0.25)' : cfg.dot.includes('vblue') ? 'rgba(107,143,212,0.25)' : cfg.dot.includes('vgreen') ? 'rgba(74,222,128,0.20)' : 'rgba(255,82,82,0.20)'}`,
+                        color: cfg.dot.includes('gold') ? '#d4af37' : cfg.dot.includes('vblue') ? '#6B8FD4' : cfg.dot.includes('vgreen') ? '#4ade80' : '#ff5252',
+                      }}
+                    >
+                      {initials}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-mono text-[13px] text-ivory/85 font-semibold truncate leading-tight">{lead.name}</p>
+                      <p className="font-mono text-[10px] text-ivory/30 mt-0.5 truncate">{lead.email}</p>
+                    </div>
                   </div>
 
                   {/* Firma */}
-                  <div className="flex items-center gap-2 min-w-0">
-                    <Building2 size={9} className="text-ivory/15 flex-shrink-0" />
-                    <span className="font-mono text-[10px] text-ivory/35 truncate">{lead.company}</span>
+                  <div className="flex items-center min-w-0">
+                    <span className="font-mono text-[12px] text-ivory/50 truncate">{lead.company}</span>
                   </div>
 
                   {/* Status */}
                   <div className="flex items-center">
-                    <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 border ${cfg.border} ${cfg.bg}`}>
-                      <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot} flex-shrink-0`} />
-                      <span className={`font-mono text-[7px] uppercase tracking-wider ${cfg.text}`}>{cfg.label}</span>
+                    <div className={`inline-flex items-center gap-2 px-2.5 py-1 border ${cfg.border} ${cfg.bg}`}>
+                      <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot} shrink-0`} />
+                      <span className={`font-mono text-[9px] uppercase tracking-wider ${cfg.text}`}>{cfg.label}</span>
                     </div>
                   </div>
 
                   {/* Wartość */}
                   <div className="flex items-center">
-                    <span className="font-mono text-[11px] text-gold/80 font-bold">{fmt(lead.value)}</span>
+                    <span className="font-display text-[15px] font-black text-gold/90">{fmt(lead.value)}</span>
                   </div>
 
                   {/* Data */}
-                  <div className="flex items-center gap-1.5">
-                    <Calendar size={9} className="text-ivory/15 flex-shrink-0" />
-                    <span className="font-mono text-[9px] text-ivory/25">{lead.createdAt}</span>
+                  <div className="flex items-center">
+                    <div>
+                      <p className="font-mono text-[10px] text-ivory/40">{lead.createdAt}</p>
+                      <p className="font-mono text-[9px] text-ivory/20 mt-0.5">{sourceIcon[lead.source] ?? '📌'} {lead.source}</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Expanded */}
                 {isExp && (
-                  <div className="px-5 py-4 bg-s2 border-t border-gold/10 animate-[fade-up_0.2s_ease_both]">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                      <div>
-                        <span className="font-mono text-[7px] text-ivory/20 uppercase tracking-widest block mb-1.5">Email</span>
-                        <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-1.5 font-mono text-[10px] text-gold/60 hover:text-gold transition-colors">
-                          <Mail size={9} /> {lead.email}
+                  <div className="mx-5 mb-1 border border-gold/10 bg-s2 animate-[fade-up_0.2s_ease_both]">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-gold/6">
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Email</span>
+                        <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-2 font-mono text-[11px] text-gold/70 hover:text-gold transition-colors">
+                          <Mail size={10} /> {lead.email}
                         </a>
                       </div>
-                      <div>
-                        <span className="font-mono text-[7px] text-ivory/20 uppercase tracking-widest block mb-1.5">Telefon</span>
-                        <a href={`tel:${lead.phone}`} className="inline-flex items-center gap-1.5 font-mono text-[10px] text-ivory/40 hover:text-gold/60 transition-colors">
-                          <Phone size={9} /> {lead.phone}
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Telefon</span>
+                        <a href={`tel:${lead.phone}`} className="inline-flex items-center gap-2 font-mono text-[11px] text-ivory/50 hover:text-gold/70 transition-colors">
+                          <Phone size={10} /> {lead.phone}
                         </a>
                       </div>
-                      <div>
-                        <span className="font-mono text-[7px] text-ivory/20 uppercase tracking-widest block mb-1.5">Źródło</span>
-                        <span className="font-mono text-[10px] text-ivory/40">
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Źródło</span>
+                        <span className="font-mono text-[11px] text-ivory/50">
                           {sourceIcon[lead.source] ?? '📌'} {lead.source}
                         </span>
                       </div>
-                      <div>
-                        <span className="font-mono text-[7px] text-ivory/20 uppercase tracking-widest block mb-1.5">Wartość</span>
-                        <span className="font-mono text-[14px] font-black text-gold">{fmt(lead.value)}</span>
+                      <div className="px-5 py-4">
+                        <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest block mb-2">Wartość</span>
+                        <span className="font-display text-[18px] font-black text-gold">{fmt(lead.value)}</span>
                       </div>
                     </div>
-                    <div className="pt-3 border-t border-gold/[0.06]">
-                      <span className="font-mono text-[7px] text-ivory/20 uppercase tracking-widest block mb-1.5">
-                        <MessageSquare size={8} className="inline mr-1 opacity-60" />Notatki
+                    <div className="px-5 py-4 border-t border-gold/6">
+                      <span className="font-mono text-[9px] text-ivory/25 uppercase tracking-widest flex items-center gap-1.5 mb-2">
+                        <MessageSquare size={9} className="opacity-60" /> Notatki
                       </span>
-                      <p className="font-mono text-[10px] text-ivory/40 leading-relaxed">{lead.notes}</p>
+                      <p className="font-mono text-[11px] text-ivory/55 leading-relaxed">{lead.notes}</p>
                     </div>
-                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gold/[0.06]">
-                      <button className="btn btn-dim !text-[8px] !px-3 !py-1.5 flex items-center gap-1.5">
-                        <Mail size={8} /> Wyślij email
+                    <div className="flex items-center gap-2 px-5 py-3 border-t border-gold/6 bg-black/20">
+                      <button className="btn btn-dim text-[9px]! px-3! py-2! flex items-center gap-1.5">
+                        <Mail size={9} /> Wyślij email
                       </button>
-                      <button className="btn btn-ghost !text-[8px] !px-3 !py-1.5 flex items-center gap-1.5">
-                        <ExternalLink size={8} /> Otwórz profil
+                      <button className="btn btn-ghost text-[9px]! px-3! py-2! flex items-center gap-1.5 text-ivory/30 hover:text-ivory/60">
+                        <ExternalLink size={9} /> Otwórz profil
                       </button>
+                      <span className="font-mono text-[9px] text-ivory/15 ml-auto">{lead.id}</span>
                     </div>
                   </div>
                 )}
@@ -295,15 +375,15 @@ export default function LeadList() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="py-16 text-center">
-            <Users size={24} className="text-ivory/10 mx-auto mb-3" />
-            <p className="font-mono text-[11px] text-ivory/20">Brak leadów spełniających kryteria</p>
+          <div className="py-20 text-center">
+            <Users size={28} className="text-ivory/10 mx-auto mb-3" />
+            <p className="font-mono text-[12px] text-ivory/25">Brak leadów spełniających kryteria</p>
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between font-mono text-[8px] text-ivory/15 fade-up delay-6">
+      <div className="flex items-center justify-between font-mono text-[9px] text-ivory/20 fade-up delay-6">
         <span>Pokazuje {filtered.length} z {mockLeads.length} leadów</span>
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-gold/30" />

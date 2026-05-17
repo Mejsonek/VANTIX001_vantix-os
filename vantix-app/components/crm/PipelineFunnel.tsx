@@ -26,7 +26,12 @@ function fmt(v: number) {
   return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', minimumFractionDigits: 0 }).format(v);
 }
 
-export default function PipelineFunnel() {
+interface PipelineFunnelProps {
+  selectedStage?: string | null;
+  onStageClick?: (key: string) => void;
+}
+
+export default function PipelineFunnel({ selectedStage, onStageClick }: PipelineFunnelProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const winRate = Math.round((stages.find(s => s.key === 'wygra')!.count / stages[0].count) * 100);
@@ -75,6 +80,7 @@ export default function PipelineFunnel() {
 
         {stages.map((stage, i) => {
           const isHov = hovered === stage.key;
+          const isSel = selectedStage === stage.key;
           const valuePct = Math.round((stage.value / totalValue) * 100);
 
           return (
@@ -83,18 +89,28 @@ export default function PipelineFunnel() {
               className={`funnel-enter delay-${i + 1}`}
               onMouseEnter={() => setHovered(stage.key)}
               onMouseLeave={() => setHovered(null)}
+              onClick={() => onStageClick?.(stage.key)}
               style={{
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 width: `${stage.widthPct}%`,
+                cursor: 'pointer',
                 transition: 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease, width 0.3s ease',
-                transform: isHov
+                transform: isSel
+                  ? 'perspective(600px) rotateX(0deg) translateZ(18px) translateY(-2px)'
+                  : isHov
                   ? 'perspective(600px) rotateX(0deg) translateZ(12px) translateY(-1px)'
                   : 'perspective(600px) rotateX(3deg)',
-                boxShadow: isHov
+                boxShadow: isSel
+                  ? `0 10px 40px rgba(0,0,0,0.6), 0 0 32px ${stage.color}35, inset 0 0 0 1px ${stage.color}`
+                  : isHov
                   ? `0 8px 32px rgba(0,0,0,0.5), 0 0 24px ${stage.color}20, inset 0 0 0 1px ${stage.color}`
                   : `0 4px 16px rgba(0,0,0,0.3), inset 0 0 0 1px ${stage.borderColor}`,
-                background: isHov ? stage.bgColor.replace('0.05', '0.08') : stage.bgColor,
+                background: isSel
+                  ? stage.bgColor.replace(/[\d.]+\)$/, '0.12)')
+                  : isHov
+                  ? stage.bgColor.replace(/[\d.]+\)$/, '0.08)')
+                  : stage.bgColor,
                 animationDelay: `${i * 0.09}s`,
               }}
             >
