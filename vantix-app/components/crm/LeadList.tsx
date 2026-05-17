@@ -57,7 +57,7 @@ const FILTER_LABELS: Record<string, string> = {
 
 type SortKey = 'name' | 'value' | 'createdAt' | 'status';
 
-export default function LeadList() {
+export default function LeadList({ initialLeads: _initialLeads = [] }: { initialLeads?: Lead[] }) {
   const [search,      setSearch]      = useState('');
   const [filter,      setFilter]      = useState<string>('all');
   const [expandedId,  setExpandedId]  = useState<string | null>(null);

@@ -632,6 +632,53 @@ body {
   font-weight: 300;
 }
 
+/* ── SHELL BUTTON BASE ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding: 7px 14px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── SHELL BUTTON DIM ── */
+.btn-dim {
+  color: rgba(245,244,240,0.50);
+  background: rgba(245,244,240,0.03);
+  border-color: rgba(245,244,240,0.10);
+}
+.btn-dim:hover:not(:disabled) {
+  color: rgba(245,244,240,0.80);
+  background: rgba(245,244,240,0.06);
+  border-color: rgba(245,244,240,0.20);
+}
+
+/* ── SHELL BUTTON GHOST ── */
+.btn-ghost {
+  color: rgba(245,244,240,0.30);
+  background: transparent;
+  border-color: transparent;
+}
+.btn-ghost:hover:not(:disabled) {
+  color: rgba(212,175,55,0.70);
+  background: rgba(212,175,55,0.04);
+  border-color: rgba(212,175,55,0.15);
+}
+
 /* ── GLOBAL BUTTON PRIMARY ── */
 .btn-primary {
   display: inline-flex;

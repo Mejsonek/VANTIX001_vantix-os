@@ -117,7 +117,7 @@ export default function CentralBrainFocus() {
               <span className="font-mono text-[9px] text-ivory/30 group-hover:text-ivory/65 uppercase tracking-wider transition-colors">
                 {label}
               </span>
-              {'badge' in { badge } && badge && (
+              {badge && (
                 <span className="w-3.5 h-3.5 flex items-center justify-center bg-gold text-void text-[7px] font-bold font-mono">
                   {badge}
                 </span>
@@ -195,13 +195,13 @@ export default function CentralBrainFocus() {
           </div>
 
           {/* ── TWO-COLUMN LAYOUT ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-5">
+          <div className="grid grid-cols-[1fr_340px] gap-5">
 
             {/* ════ LEFT: Stats + Tasks ════ */}
             <div className="space-y-5">
 
               {/* Mini 3D Stat Tablets */}
-              <div className="grid grid-cols-2 gap-3" style={{ perspective: '800px' }}>
+              <div className="grid grid-cols-2 gap-3">
                 {statsData.map((s, i) => {
                   const Icon = s.icon;
                   return (
@@ -211,7 +211,6 @@ export default function CentralBrainFocus() {
                       style={{
                         transform: `perspective(800px) rotateX(5deg) rotateY(${i % 2 === 0 ? -1.5 : 1.5}deg)`,
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                        transformStyle: 'preserve-3d',
                       }}
                       onMouseEnter={e => {
                         const el = e.currentTarget as HTMLDivElement;
@@ -283,7 +282,7 @@ export default function CentralBrainFocus() {
                 </div>
 
                 {/* Rows */}
-                <div className="divide-y divide-gold/4">
+                <div className="flex flex-col divide-y divide-gold/4">
                   {tasks.map((task, i) => {
                     const bc = taskBorderColor[task.priority];
                     return (
@@ -326,7 +325,7 @@ export default function CentralBrainFocus() {
                   <span className="font-mono text-[8px] text-gold/50 uppercase tracking-widest">Top Priorytety</span>
                 </div>
 
-                <div className="space-y-2" style={{ perspective: '900px' }}>
+                <div className="space-y-2">
                   {priorities.map((p, i) => {
                     const deadlineColor = p.deadline === 'Dziś' ? '#ff5252' : p.deadline === 'Jutro' ? '#d4af37' : 'rgba(245,244,240,0.25)';
                     const deadlineBg    = p.deadline === 'Dziś' ? 'rgba(255,82,82,0.07)' : p.deadline === 'Jutro' ? 'rgba(212,175,55,0.07)' : 'transparent';
