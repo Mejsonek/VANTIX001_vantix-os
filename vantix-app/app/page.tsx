@@ -58,19 +58,19 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative min-h-screen cursor-none"
+      className="relative min-h-screen md:cursor-none"
       style={{ fontFamily: 'var(--font-sans)', fontWeight: 300, background: '#020202', color: '#f5f4f0' }}
     >
       <div className="grain" aria-hidden="true" />
 
-      {/* Custom cursor */}
+      {/* Custom cursor — desktop only */}
       <div
-        className="fixed top-0 left-0 z-[9999] w-[5px] h-[5px] bg-gold rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform"
+        className="hidden md:block fixed top-0 left-0 z-[9999] w-[5px] h-[5px] bg-gold rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform"
         style={{ transform: `translate(calc(${mousePos.x}px - 50%), calc(${mousePos.y}px - 50%))` }}
         aria-hidden="true"
       />
       <div
-        className="fixed top-0 left-0 z-[9998] w-[34px] h-[34px] border border-[rgba(212,175,55,0.4)] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform transition-[width,height,border-color,background] duration-300"
+        className="hidden md:block fixed top-0 left-0 z-[9998] w-[34px] h-[34px] border border-[rgba(212,175,55,0.4)] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform transition-[width,height,border-color] duration-300"
         style={{ transform: `translate(calc(${ringPos.x}px - 50%), calc(${ringPos.y}px - 50%))` }}
         aria-hidden="true"
       />

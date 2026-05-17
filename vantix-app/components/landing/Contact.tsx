@@ -53,16 +53,16 @@ export const Kontakt: React.FC = () => {
   const labelClass = "absolute left-0 top-5 text-[0.55rem] tracking-[0.2em] uppercase text-gold/30 font-mono pointer-events-none transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-[0.55rem] peer-placeholder-shown:text-gold/30 peer-focus:top-0 peer-focus:text-[0.45rem] peer-focus:text-gold peer-[&:not(:placeholder-shown)]:top-0 peer-[&:not(:placeholder-shown)]:text-[0.45rem] peer-[&:not(:placeholder-shown)]:text-gold/60";
 
   return (
-    <section id="kontakt" className="relative z-10 py-32 bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="kontakt-heading">
-      <div className="max-w-[1280px] mx-auto px-10">
+    <section id="kontakt" className="relative z-10 py-16 md:py-32 bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="kontakt-heading">
+      <div className="max-w-[1280px] mx-auto px-5 md:px-10">
         <p className="flex items-center gap-3.5 text-[0.58rem] tracking-[0.42em] uppercase font-light text-gold mb-5 before:content-[''] before:w-[26px] before:h-[0.5px] before:bg-gold">
           TERMINAL OPERACYJNY
         </p>
-        <h2 id="kontakt-heading" className="font-serif font-normal text-[clamp(2.2rem,4vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em]">
+        <h2 id="kontakt-heading" className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em]">
           Uruchom procedurę<br /><em className="italic text-gold">odzyskiwania zysków.</em>
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start mt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-24 items-start mt-10 md:mt-16">
           <div className="relative">
             <div className="absolute -inset-4 bg-gold/5 blur-2xl rounded-full pointer-events-none" />
             <div className="relative bg-[#050505] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl">
@@ -130,9 +130,9 @@ export const Kontakt: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:pt-10 space-y-12">
+          <div className="lg:pt-10 space-y-8 md:space-y-12">
             <div>
-              <p className="text-[0.75rem] leading-[1.9] text-ivory/40 font-light mb-8 tracking-[0.025em] max-w-[360px]">
+              <p className="text-[0.75rem] leading-[1.9] text-ivory/40 font-light mb-6 md:mb-8 tracking-[0.025em] max-w-full md:max-w-[360px]">
                 Każda sekunda zwłoki to realna strata. Nasz system analizuje Twoje zgłoszenie w czasie rzeczywistym, aby przygotować dedykowany plan odzyskiwania leadów.
               </p>
               <div className="space-y-6">
