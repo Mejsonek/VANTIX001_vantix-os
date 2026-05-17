@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Code2, GitBranch, Layers, Clock, TrendingUp, ExternalLink } from 'lucide-react';
 import ProjectCard, { type Project } from '@/components/dev/ProjectCard';
-import RoadmapTimeline from '@/components/dev/RoadmapTimeline';
+import PhasePlatforms from '@/components/dev/PhasePlatforms';
 
 const mockProjects: Project[] = [
   {
@@ -183,7 +183,7 @@ export default function DevPage() {
               <span className="font-mono text-[8px] text-gold/50 uppercase tracking-widest">Roadmapa</span>
             </div>
             <div className="vx-card">
-              <RoadmapTimeline />
+              <PhasePlatforms />
             </div>
           </div>
 

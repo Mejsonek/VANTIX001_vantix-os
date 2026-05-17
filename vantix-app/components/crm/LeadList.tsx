@@ -6,6 +6,7 @@ import {
   Mail, Phone, Building2, Calendar, ChevronDown, ChevronUp,
   ExternalLink, MessageSquare,
 } from 'lucide-react';
+import PipelineFunnel from '@/components/crm/PipelineFunnel';
 
 export interface Lead {
   id: string;
@@ -132,37 +133,9 @@ export default function LeadList() {
         })}
       </div>
 
-      {/* ── PIPELINE VALUE BAR ── */}
-      <div className="vx-card !p-3 fade-up delay-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-[8px] text-ivory/25 uppercase tracking-wider">Pipeline — podział wartości</span>
-          <span className="font-mono text-[8px] text-ivory/20">{fmt(stats.totalValue)} łącznie</span>
-        </div>
-        <div className="flex h-2 gap-px overflow-hidden rounded-sm">
-          {Object.entries(statusCfg).map(([key, cfg]) => {
-            const groupLeads = mockLeads.filter(l => l.status === key);
-            const groupValue = groupLeads.reduce((s, l) => s + l.value, 0);
-            const pct = stats.totalValue > 0 ? (groupValue / stats.totalValue) * 100 : 0;
-            if (pct === 0) return null;
-            const colors: Record<string, string> = { nowy: '#d4af37', w_trakcie: '#6B8FD4', wygra: '#4ade80', przegrana: '#ff5252' };
-            return (
-              <div
-                key={key}
-                title={`${cfg.label}: ${fmt(groupValue)} (${Math.round(pct)}%)`}
-                style={{ width: `${pct}%`, background: colors[key], opacity: 0.7 }}
-                className="bar-animate"
-              />
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-4 mt-2">
-          {Object.entries(statusCfg).map(([key, cfg]) => (
-            <div key={key} className="flex items-center gap-1.5">
-              <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-              <span className="font-mono text-[8px] text-ivory/25">{cfg.label}</span>
-            </div>
-          ))}
-        </div>
+      {/* ── PIPELINE FUNNEL 3D ── */}
+      <div className="vx-card fade-up delay-3">
+        <PipelineFunnel />
       </div>
 
       {/* ── SEARCH + FILTERS ── */}

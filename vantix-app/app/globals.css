@@ -418,6 +418,43 @@ body {
   background: linear-gradient(to right, var(--gold-60), var(--gold));
 }
 
+/* ── 3D MATRIX CARD ENTER ── */
+@keyframes matrix-card-enter {
+  from { opacity: 0; transform: perspective(900px) rotateX(-18deg) translateY(24px) scale(0.94); }
+  to   { opacity: 1; transform: perspective(900px) rotateX(6deg)   translateY(0)    scale(1); }
+}
+.matrix-card-enter { animation: matrix-card-enter 0.55s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+
+/* ── FUNNEL STAGE ENTER ── */
+@keyframes funnel-enter {
+  from { opacity: 0; transform: scaleX(0.4) translateX(-30px); }
+  to   { opacity: 1; transform: scaleX(1)   translateX(0); }
+}
+.funnel-enter { animation: funnel-enter 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both; transform-origin: left center; }
+
+/* ── PHASE PLATFORM ENTER ── */
+@keyframes platform-rise {
+  from { opacity: 0; transform: translateY(30px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.platform-enter { animation: platform-rise 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+
+/* ── WEEK COLUMN RISE ── */
+@keyframes col-rise {
+  from { opacity: 0; transform: translateY(16px) scaleY(0.8); }
+  to   { opacity: 1; transform: translateY(0)    scaleY(1); }
+}
+.col-rise { animation: col-rise 0.4s cubic-bezier(0.25,0.46,0.45,0.94) both; transform-origin: bottom center; }
+
+/* ── GOLD FLOW PARTICLE ── */
+@keyframes flow-down {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  15%  { opacity: 0.9; }
+  85%  { opacity: 0.9; }
+  100% { transform: translateY(60px); opacity: 0; }
+}
+.flow-particle { animation: flow-down 2.2s ease-in-out infinite; }
+
 /* TERMINAL SCANLINES ── */
 .terminal-scan {
   background-image: repeating-linear-gradient(

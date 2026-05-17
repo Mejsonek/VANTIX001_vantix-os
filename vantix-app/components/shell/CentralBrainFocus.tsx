@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Check, Target, ArrowRight, Clock, Zap, TrendingUp, Brain } from 'lucide-react';
+import PriorityMatrix from '@/components/shell/PriorityMatrix';
 
 function getGreeting(): string {
   const h = new Date().getHours();
@@ -145,21 +146,23 @@ export default function CentralBrainFocus() {
             })}
           </div>
 
-          {/* ── TASK LIST ── */}
-          <div className="vx-card !p-0 overflow-hidden mb-5 fade-up delay-3">
+          {/* ── PRIORITY MATRIX ── */}
+          <div className="mb-5 fade-up delay-3">
+            <PriorityMatrix />
+          </div>
+
+          {/* ── TASK LIST (compact, below matrix) ── */}
+          <div className="vx-card !p-0 overflow-hidden mb-5 fade-up delay-4">
             {/* Task header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-gold/[0.07] bg-s2">
               <div className="flex items-center gap-2">
                 <Check size={11} className="text-gold/50" />
-                <span className="font-mono text-[9px] text-ivory/40 uppercase" style={{ letterSpacing: '0.16em' }}>Zadania na dziś</span>
+                <span className="font-mono text-[9px] text-ivory/40 uppercase" style={{ letterSpacing: '0.16em' }}>Wszystkie zadania</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
                   <div className="w-20 h-[2px] bg-gold/10 overflow-hidden">
-                    <div
-                      className="h-full bg-gold bar-animate"
-                      style={{ width: `${progress}%` }}
-                    />
+                    <div className="h-full bg-gold bar-animate" style={{ width: `${progress}%` }} />
                   </div>
                   <span className="font-mono text-[8px] text-gold/50">{doneCount}/{tasks.length}</span>
                 </div>
@@ -175,14 +178,11 @@ export default function CentralBrainFocus() {
                   <button
                     key={task.id}
                     onClick={() => toggleTask(task.id)}
-                    className={`vx-row w-full flex items-center gap-4 px-5 py-3.5 text-left row-enter delay-${i + 4}`}
+                    className={`vx-row w-full flex items-center gap-4 px-5 py-3 text-left row-enter delay-${i + 4}`}
                   >
-                    {/* Checkbox */}
                     <div className={`w-4 h-4 flex items-center justify-center border flex-shrink-0 transition-all duration-200 ${task.done ? 'border-gold/50 bg-gold/15' : 'border-ivory/15 hover:border-gold/30'}`}>
                       {task.done && <Check size={8} className="text-gold" />}
                     </div>
-
-                    {/* Priority dot */}
                     <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${ps.dot}`} />
 
                     {/* Title */}
