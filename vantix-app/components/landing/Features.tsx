@@ -31,7 +31,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ id, tag, icon, title, description
     <h3 className="font-serif font-normal text-[clamp(1.2rem,2vw,2.1rem)] text-ivory leading-[1.15] mb-3">
       {title}
     </h3>
-    <p className="text-[0.78rem] leading-[1.85] text-[rgba(245,244,240,0.35)] font-light tracking-[0.025em]">
+    <p className="body-paragraph">
       {description}
     </p>
     {children}
@@ -42,16 +42,16 @@ const BentoCard: React.FC<BentoCardProps> = ({ id, tag, icon, title, description
 );
 
 export const Ekosystem: React.FC = () => (
-  <section id="ekosystem" className="relative z-10 py-16 md:py-32 bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px]" aria-labelledby="eko-heading">
-    <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-      <p className="flex items-center gap-3 text-[0.55rem] md:text-[0.58rem] tracking-[0.38em] md:tracking-[0.42em] uppercase font-light text-gold mb-4 md:mb-5 before:content-[''] before:w-5 md:before:w-[26px] before:h-[0.5px] before:bg-gold">
+  <section id="ekosystem" className="section bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px]" aria-labelledby="eko-heading">
+    <div className="section-container">
+      <p className="section-pre">
         02 — THE VANTIX ENGINE
       </p>
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 md:gap-4">
-        <h2 id="eko-heading" className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em]">
+        <h2 id="eko-heading" className="h2-section">
           Trzy moduły.<br /><em className="italic text-gold">Jeden silnik operacyjny.</em>
         </h2>
-        <p className="hidden md:block text-[0.65rem] tracking-[0.22em] uppercase text-[rgba(245,244,240,0.18)] font-light pb-1.5">
+        <p className="hidden md:block meta-label pb-1.5">
           INDUSTRIAL-GRADE AI INFRASTRUCTURE
         </p>
       </div>
@@ -69,7 +69,7 @@ export const Ekosystem: React.FC = () => (
         >
           <ul className="list-none mt-5 md:mt-6">
             {['Przetwarzanie języka naturalnego (LLM)', 'Autonomiczne rozwiązywanie problemów', 'Logika warunkowa API-first'].map((item, i) => (
-              <li key={i} className="flex items-center gap-2.5 py-2 text-[0.72rem] font-light tracking-[0.06em] text-[rgba(245,244,240,0.35)] border-b-[0.5px] border-[rgba(212,175,55,0.07)] last:border-none before:content-[''] before:w-3.5 before:h-[0.5px] before:bg-[rgba(212,175,55,0.45)] before:shrink-0">
+              <li key={i} className="flex items-center gap-2.5 py-2 body-paragraph border-b-[0.5px] border-[rgba(212,175,55,0.07)] last:border-none before:content-[''] before:w-3.5 before:h-[0.5px] before:bg-[rgba(212,175,55,0.45)] before:shrink-0">
                 {item}
               </li>
             ))}

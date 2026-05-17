@@ -95,10 +95,10 @@ export const RoiCalculator: React.FC = () => {
   return (
     <section
       id="roi-calculator"
-      className="relative z-10 py-16 md:py-28 px-5 md:px-6"
+      className="section"
       aria-labelledby="roi-heading"
     >
-      <div className="max-w-[1000px] mx-auto">
+      <div className="section-container max-w-[1000px]">
         {/* Section header */}
         <div className="text-center mb-10 md:mb-16">
           <motion.div
@@ -110,7 +110,7 @@ export const RoiCalculator: React.FC = () => {
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
               <Calculator size={18} />
             </div>
-            <span className="text-[0.58rem] tracking-[0.35em] uppercase text-amber-500 font-light">
+            <span className="meta-label text-amber-500">
               Vantix ROI Predictor
             </span>
           </motion.div>
@@ -121,7 +121,7 @@ export const RoiCalculator: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-serif text-[clamp(1.8rem,5vw,4rem)] text-ivory leading-tight mb-4"
+            className="h2-section"
           >
             Kalkulator{' '}
             <em className="italic text-amber-500">Rzeczywistego ROI</em>
@@ -132,21 +132,21 @@ export const RoiCalculator: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-sm md:text-base font-light text-zinc-400 max-w-2xl mx-auto"
+            className="section-desc mx-auto"
           >
-            Sprawdź, ile kosztuje Cię ręczna robota — i jak szybko automatyzacja zwraca inwestycję.
+            Sprawdź, ile kosztuje Cię ręczna robota i jak szybko automatyzacja zwraca inwestycję.
           </motion.p>
         </div>
 
         {/* Card */}
         <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6 md:p-8 lg:p-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 md:gap-10">
             {/* ---- LEFT: Inputs ---- */}
             <div className="space-y-7 md:space-y-8">
               {/* Slider 1 */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 text-[0.6rem] md:text-[0.65rem] tracking-[0.18em] uppercase text-neutral-400 font-light">
+                  <label className="meta-label flex items-center gap-2">
                     <Users size={14} className="text-amber-500/60 shrink-0" />
                     Ile osób w Twojej firmie wykonuje powtarzalne zadania?
                   </label>
@@ -163,7 +163,7 @@ export const RoiCalculator: React.FC = () => {
                   onChange={handleSliderChange(setEmployees)}
                   className="roi-slider"
                 />
-                <div className="flex justify-between text-[0.4rem] tracking-widest text-neutral-600 uppercase">
+                <div className="flex justify-between meta-xs text-neutral-600">
                   <span>1</span>
                   <span>10</span>
                   <span>20</span>
@@ -176,7 +176,7 @@ export const RoiCalculator: React.FC = () => {
               {/* Slider 2 */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 text-[0.6rem] md:text-[0.65rem] tracking-[0.18em] uppercase text-neutral-400 font-light">
+                  <label className="meta-label flex items-center gap-2">
                     <Clock size={14} className="text-amber-500/60 shrink-0" />
                     Ile godzin tygodniowo poświęca na nie każda z nich?
                   </label>
@@ -193,7 +193,7 @@ export const RoiCalculator: React.FC = () => {
                   onChange={handleSliderChange(setHours)}
                   className="roi-slider"
                 />
-                <div className="flex justify-between text-[0.4rem] tracking-widest text-neutral-600 uppercase">
+                <div className="flex justify-between meta-xs text-neutral-600">
                   <span>1h</span>
                   <span>10h</span>
                   <span>20h</span>
@@ -204,7 +204,7 @@ export const RoiCalculator: React.FC = () => {
 
               {/* Input */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[0.6rem] md:text-[0.65rem] tracking-[0.18em] uppercase text-neutral-400 font-light">
+                <div className="meta-label flex items-center gap-2">
                   <Coins size={14} className="text-amber-500/60 shrink-0" />
                   Średnia stawka godzinowa (zł)
                 </div>
@@ -233,12 +233,12 @@ export const RoiCalculator: React.FC = () => {
             <div className="space-y-6 md:space-y-8">
               <div className="flex items-center gap-3">
                 <TrendingUp className="w-5 h-5 text-amber-500" />
-                <span className="text-[0.58rem] tracking-[0.25em] uppercase text-amber-500/60 font-bold">
+                <span className="meta-xs text-amber-500/60 font-bold">
                   PROGNOZA ROCZNA
                 </span>
               </div>
 
-              {/* 3 result cards in a grid — md:grid-cols-3 on desktop, stacked on mobile */}
+              {/* 3 result cards — stacked */}
               <div className="grid grid-cols-1 gap-4">
                 {/* Koszt roczny */}
                 <AnimatePresence mode="wait">
@@ -246,9 +246,9 @@ export const RoiCalculator: React.FC = () => {
                     key={`yearly-${yearlyCost}`}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 md:p-5"
+                    className="result-card"
                   >
-                    <p className="text-[0.55rem] tracking-[0.2em] uppercase text-neutral-500 font-light mb-1">
+                    <p className="meta-xs text-neutral-500 mb-1">
                       Koszt ręcznej pracy / rok
                     </p>
                     <p className="text-3xl sm:text-4xl font-black text-amber-500 tabular-nums">
@@ -263,9 +263,9 @@ export const RoiCalculator: React.FC = () => {
                     key={`savings-${savings}`}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 md:p-5"
+                    className="result-card"
                   >
-                    <p className="text-[0.55rem] tracking-[0.2em] uppercase text-neutral-500 font-light mb-1">
+                    <p className="meta-xs text-neutral-500 mb-1">
                       Oszczędność z automatyzacją (~70%)
                     </p>
                     <p className="text-3xl sm:text-4xl font-black text-emerald-400 tabular-nums">
@@ -280,9 +280,9 @@ export const RoiCalculator: React.FC = () => {
                     key={`roi-${roiMonths}`}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 md:p-5"
+                    className="result-card"
                   >
-                    <p className="text-[0.55rem] tracking-[0.2em] uppercase text-neutral-500 font-light mb-1">
+                    <p className="meta-xs text-neutral-500 mb-1">
                       Zwrot z inwestycji
                     </p>
                     <p className="text-3xl sm:text-4xl font-black text-amber-500 tabular-nums">
@@ -317,11 +317,11 @@ export const RoiCalculator: React.FC = () => {
                         onSubmit={handleSubmit}
                         className="space-y-3.5 bg-neutral-900/30 border border-neutral-800 rounded-xl p-4 md:p-5"
                       >
-                        <p className="text-[0.6rem] tracking-[0.18em] uppercase text-amber-500/50 font-light mb-1">
-                          Chcesz pełną wycenę swojej firmy?
+                        <p className="meta-label text-amber-500/50 mb-1">
+                          Pełna wycena Twojej firmy?
                         </p>
                         <p className="text-xs text-neutral-500 font-light mb-3">
-                          Zostaw kontakt — przygotuję Ci raport z konkretną kwotą do odzyskania. Bez zobowiązań.
+                          Przygotuję raport z konkretną kwotą do odzyskania. Bez zobowiązań.
                         </p>
 
                         <input
@@ -347,7 +347,7 @@ export const RoiCalculator: React.FC = () => {
                         <button
                           type="submit"
                           disabled={status === 'submitting'}
-                          className="w-full flex items-center justify-center gap-2.5 text-[0.6rem] tracking-[0.22em] uppercase font-normal text-neutral-950 bg-amber-500 px-6 py-3.5 rounded-xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(245,158,11,0.35)] hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed group"
+                          className="btn-primary w-full"
                         >
                           {status === 'submitting' ? (
                             <span className="flex items-center gap-2">

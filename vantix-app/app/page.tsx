@@ -5,14 +5,13 @@ import Lenis from 'lenis';
 import { CosmosBackground } from '@/components/landing/CosmosBackground';
 import { Navbar } from '@/components/landing/Navbar';
 import { Hero } from '@/components/landing/Hero';
-import { RoiCalculator } from '@/components/landing/RoiCalculator';
 import { Ekosystem } from '@/components/landing/Features';
 import { PodMaska } from '@/components/landing/PodMaska';
 import { DlaczegoMy } from '@/components/landing/DlaczegoMy';
 import { Bezpieczenstwo } from '@/components/landing/Bezpieczenstwo';
 import { WhiteLabel } from '@/components/landing/WhiteLabel';
 import { OMnie } from '@/components/landing/OMnie';
-import { Kontakt } from '@/components/landing/Contact';
+import { VantixRoiTerminal } from '@/components/landing/VantixRoiTerminal';
 import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
 
@@ -83,8 +82,8 @@ export default function LandingPage() {
         {/* 1. Hero */}
         <Hero />
 
-        {/* 2. VANTIX ROI PREDICTOR — jedyny kalkulator ROI na stronie */}
-        <RoiCalculator />
+        {/* 2. VANTIX ROI TERMINAL — unified kalkulator + formularz */}
+        <VantixRoiTerminal />
 
         {/* 3. 02 — THE VANTIX ENGINE */}
         <Ekosystem />
@@ -104,10 +103,7 @@ export default function LandingPage() {
         {/* 8. O MNIE */}
         <OMnie />
 
-        {/* 9. TERMINAL OPERACYJNY */}
-        <Kontakt />
-
-        {/* 10. FAQ */}
+        {/* 9. FAQ */}
         <FAQ />
       </main>
 

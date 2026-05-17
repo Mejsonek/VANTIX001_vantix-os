@@ -2,7 +2,7 @@
 
 export const Footer: React.FC = () => (
   <footer className="relative z-10 border-t-[0.5px] border-[rgba(212,175,55,0.09)] px-5 md:px-10 py-6 md:py-8 bg-[rgba(2,2,2,0.7)] backdrop-blur-[10px]" role="contentinfo">
-    <div className="max-w-[1280px] mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 md:gap-4 text-center sm:text-left">
+    <div className="section-container flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 md:gap-4 text-center sm:text-left">
       <p className="font-serif text-[1.1rem] font-normal tracking-[0.45em] text-[rgba(245,244,240,0.22)]">
         VANTI<span className="text-[rgba(212,175,55,0.38)]">X</span>
       </p>

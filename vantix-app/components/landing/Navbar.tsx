@@ -66,7 +66,7 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-3">
           {/* CTA — hidden on very small, shown on sm+ */}
           <a
-            href="#kontakt"
+            href="#roi-terminal"
             className="hidden sm:block relative overflow-hidden px-4 md:px-5 py-[0.5rem] border-[0.5px] border-[rgba(212,175,55,0.4)] rounded-md text-[0.58rem] md:text-[0.6rem] tracking-[0.18em] uppercase font-normal text-gold transition-colors hover:text-void group"
           >
             <span className="relative z-10">Audyt Efektywności</span>
@@ -99,7 +99,7 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           <a
-            href="#kontakt"
+            href="#roi-terminal"
             onClick={handleLinkClick}
             className="mt-1 self-start px-5 py-2.5 border-[0.5px] border-[rgba(212,175,55,0.4)] rounded-md text-[0.6rem] tracking-[0.2em] uppercase font-normal text-gold"
           >

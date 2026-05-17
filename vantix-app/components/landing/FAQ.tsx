@@ -33,16 +33,16 @@ export const FAQ: React.FC = () => {
   return (
     <section
       id="faq"
-      className="relative z-10 py-16 md:py-28 bg-neutral-950 border-t-[0.5px] border-neutral-800"
+      className="section bg-neutral-950 border-t-[0.5px] border-neutral-800"
       aria-labelledby="faq-heading"
     >
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-        <p className="flex items-center gap-3.5 text-[0.58rem] tracking-[0.42em] uppercase font-light text-gold mb-5 before:content-[''] before:w-[26px] before:h-[0.5px] before:bg-gold">
+      <div className="section-container">
+        <p className="section-pre tracking-[0.42em] text-[0.58rem]">
           BAZA WIEDZY
         </p>
         <h2
           id="faq-heading"
-          className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em] mb-10 md:mb-16"
+          className="h2-section mb-10 md:mb-16"
         >
           Najczęstsze pytania
         </h2>
@@ -67,7 +67,7 @@ export const FAQ: React.FC = () => {
                     <span className="hidden md:flex w-8 h-8 rounded-lg border border-neutral-800 items-center justify-center text-gold/30 group-hover:text-gold group-hover:border-gold/30 transition-all duration-300 shrink-0">
                       <HelpCircle size={14} />
                     </span>
-                    <span className="text-[0.8rem] md:text-[0.9rem] font-light text-ivory/80 group-hover:text-ivory transition-colors leading-snug">
+                    <span className="text-sm md:text-base font-light text-ivory/80 group-hover:text-ivory transition-colors leading-snug">
                       {faq.q}
                     </span>
                   </span>
@@ -92,7 +92,7 @@ export const FAQ: React.FC = () => {
                       <div className="pb-5 md:pb-6 pl-0 md:pl-12">
                         <div className="flex items-start gap-3">
                           <div className="hidden md:block w-0.5 h-full min-h-[20px] bg-gradient-to-b from-gold/20 to-transparent shrink-0 mt-1" />
-                          <p className="text-[0.82rem] md:text-[0.92rem] font-light text-[rgba(245,244,240,0.5)] leading-[1.8]">
+                          <p className="body-paragraph">
                             {faq.a}
                           </p>
                         </div>
@@ -110,7 +110,7 @@ export const FAQ: React.FC = () => {
             <Terminal size={12} /> MASZ INNE PYTANIE?
           </p>
           <a
-            href="#kontakt"
+            href="#roi-terminal"
             className="inline-flex items-center gap-2 text-[0.65rem] md:text-[0.68rem] tracking-[0.2em] uppercase font-light text-gold border-b border-gold/20 pb-0.5 transition-all duration-300 hover:border-gold hover:text-gold"
           >
             SKONTAKTUJ SIĘ →

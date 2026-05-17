@@ -53,12 +53,12 @@ export const Kontakt: React.FC = () => {
   const labelClass = "absolute left-0 top-5 text-[0.55rem] tracking-[0.2em] uppercase text-gold/30 font-mono pointer-events-none transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-[0.55rem] peer-placeholder-shown:text-gold/30 peer-focus:top-0 peer-focus:text-[0.45rem] peer-focus:text-gold peer-[&:not(:placeholder-shown)]:top-0 peer-[&:not(:placeholder-shown)]:text-[0.45rem] peer-[&:not(:placeholder-shown)]:text-gold/60";
 
   return (
-    <section id="kontakt" className="relative z-10 py-16 md:py-32 bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="kontakt-heading">
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-        <p className="flex items-center gap-3.5 text-[0.58rem] tracking-[0.42em] uppercase font-light text-gold mb-5 before:content-[''] before:w-[26px] before:h-[0.5px] before:bg-gold">
+    <section id="kontakt" className="section bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="kontakt-heading">
+      <div className="section-container">
+        <p className="section-pre tracking-[0.42em] text-[0.58rem]">
           TERMINAL OPERACYJNY
         </p>
-        <h2 id="kontakt-heading" className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em]">
+        <h2 id="kontakt-heading" className="h2-section">
           Uruchom procedurę<br /><em className="italic text-gold">odzyskiwania zysków.</em>
         </h2>
 
@@ -107,7 +107,7 @@ export const Kontakt: React.FC = () => {
                         </div>
                       )}
 
-                      <button type="submit" disabled={isSubmitting} className="w-full relative overflow-hidden bg-gold text-void py-4 rounded-lg font-mono text-[0.65rem] tracking-[0.3em] uppercase transition-all duration-500 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] disabled:opacity-70 group">
+                      <button type="submit" disabled={isSubmitting} className="btn-primary w-full relative overflow-hidden py-4 bg-gold text-void font-mono hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] group">
                         <span className="relative z-10 flex items-center justify-center gap-3">
                           {isSubmitting ? (<><Loader2 className="w-3.5 h-3.5 animate-spin" />ANALYZING_DATA...</>) : 'URUCHOM PROCEDURĘ ⚙'}
                         </span>
@@ -132,8 +132,8 @@ export const Kontakt: React.FC = () => {
 
           <div className="lg:pt-10 space-y-8 md:space-y-12">
             <div>
-              <p className="text-[0.75rem] leading-[1.9] text-ivory/40 font-light mb-6 md:mb-8 tracking-[0.025em] max-w-full md:max-w-[360px]">
-                Każda sekunda zwłoki to realna strata. Nasz system analizuje Twoje zgłoszenie w czasie rzeczywistym, aby przygotować dedykowany plan odzyskiwania leadów.
+              <p className="body-paragraph mb-6 md:mb-8 max-w-full md:max-w-[360px]">
+                Każda sekunda zwłoki to realna strata. System analizuje zgłoszenie w czasie rzeczywistym — przygotowuje plan odzyskiwania leadów.
               </p>
               <div className="space-y-6">
                 {[

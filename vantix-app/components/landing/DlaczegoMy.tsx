@@ -12,12 +12,12 @@ const items = [
 ];
 
 export const DlaczegoMy: React.FC = () => (
-  <section id="dlaczego" className="relative z-10 py-16 md:py-32 bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="why-heading">
-    <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-      <p className="flex items-center gap-3 text-[0.55rem] tracking-[0.38em] uppercase font-light text-gold mb-4 before:content-[''] before:w-5 before:h-[0.5px] before:bg-gold">
+  <section id="dlaczego" className="section bg-[rgba(2,2,2,0.55)] backdrop-blur-[4px] border-t-[0.5px] border-[rgba(212,175,55,0.07)]" aria-labelledby="why-heading">
+    <div className="section-container">
+      <p className="section-pre">
         03 — Dlaczego VANTIX
       </p>
-      <h2 id="why-heading" className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em] mb-8 md:mb-0">
+      <h2 id="why-heading" className="h2-section mb-8 md:mb-0">
         Jedyny logiczny wybór<br /><em className="italic text-gold">dla agencji High-Ticket.</em>
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-[rgba(212,175,55,0.1)] border-[0.5px] border-[rgba(212,175,55,0.1)] rounded-2xl md:rounded-3xl overflow-hidden mt-8 md:mt-14" role="list">
@@ -26,8 +26,8 @@ export const DlaczegoMy: React.FC = () => (
             <div className="w-9 h-9 rounded-lg border-[0.5px] border-[rgba(212,175,55,0.2)] flex items-center justify-center text-gold mb-5 transition-all duration-300 group-hover:bg-[rgba(212,175,55,0.07)] group-hover:border-gold">
               {item.icon}
             </div>
-            <h3 className="font-serif font-normal text-[1.05rem] md:text-[1.15rem] text-ivory leading-[1.25] mb-2 md:mb-3">{item.title}</h3>
-            <p className="text-[0.73rem] md:text-[0.75rem] leading-[1.8] text-[rgba(245,244,240,0.35)] font-light">{item.desc}</p>
+            <h3 className="h3-section mb-2 md:mb-3">{item.title}</h3>
+            <p className="body-paragraph">{item.desc}</p>
           </div>
         ))}
       </div>

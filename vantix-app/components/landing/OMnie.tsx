@@ -3,8 +3,8 @@
 import { motion } from 'motion/react';
 
 export const OMnie: React.FC = () => (
-  <section id="omnie" className="relative z-10 py-16 md:py-32 bg-void overflow-hidden border-t-[0.5px] border-[rgba(212,175,55,0.07)]">
-    <div className="max-w-[1280px] mx-auto px-5 md:px-10">
+  <section id="omnie" className="section bg-void overflow-hidden border-t-[0.5px] border-[rgba(212,175,55,0.07)]">
+    <div className="section-container">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* Visual */}
@@ -31,13 +31,13 @@ export const OMnie: React.FC = () => (
 
         {/* Content */}
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <p className="flex items-center gap-3 text-[0.55rem] tracking-[0.38em] uppercase font-light text-gold mb-4 before:content-[''] before:w-5 before:h-[0.5px] before:bg-gold">
+          <p className="section-pre">
             O Mnie
           </p>
-          <h2 className="font-serif font-normal text-[clamp(1.8rem,5vw,3.5rem)] leading-[1.1] text-ivory tracking-[0.005em] mb-6 md:mb-8">
+          <h2 className="h2-section mb-6 md:mb-8">
             Nie jestem marketerem.<br /><em className="italic text-gold">Jestem inżynierem procesów.</em>
           </h2>
-          <div className="space-y-5 md:space-y-6 text-[0.85rem] md:text-[0.9rem] leading-[1.8] text-[rgba(245,244,240,0.5)] font-light tracking-wide">
+          <div className="space-y-5 md:space-y-6 section-desc">
             <p>
               Przez lata obserwowałem, jak firmy przepalają potężne budżety na marketing, tylko po to, by tracić wygenerowane leady przez chaos operacyjny, brak czasu i opóźnione odpowiedzi.
             </p>

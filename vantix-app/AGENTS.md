@@ -1,6 +1,6 @@
 # AGENTS.md — Vantix OS / Worker Brief
 > Ten plik czyta DeepSeek (i każdy inny agent implementujący). Aktualizuj po każdej sesji.
-> Ostatnia aktualizacja: 2026-05-17 (sesja 9)
+> Ostatnia aktualizacja: 2026-05-18 (sesja 17 — Dashboard + Cockpit Vantix DS)
 
 ---
 
@@ -39,8 +39,8 @@ Vantix OS = centrum sterowania dla Kacpra. Dwa oddzielne shelle w jednej Next.js
 | Plik | Status |
 |------|--------|
 | `app/(shell)/layout.tsx` | ✅ gotowy — Dock + Content + Metrics grid |
-| `app/(shell)/dashboard/page.tsx` | ⚠️ placeholder — `CentralBrainFocus` nie podpięty |
-| `app/(shell)/cockpit/page.tsx` | ⚠️ stary design (white/neutral) — wymaga przepisania na Vantix DS |
+| `app/(shell)/dashboard/page.tsx` | ✅ CentralBrainFocus podpięty (mock data) |
+| `app/(shell)/cockpit/page.tsx` | ✅ przepisany na Vantix DS (Cyborg design) |
 | `app/(shell)/crm/page.tsx` | ⚠️ placeholder "coming soon" |
 | `app/(shell)/dev/page.tsx` | ⚠️ placeholder "coming soon" |
 | `app/(system)/layout.tsx` | ✅ gotowy |

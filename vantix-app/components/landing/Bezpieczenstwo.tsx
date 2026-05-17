@@ -11,16 +11,16 @@ const securityCards = [
 ];
 
 export const Bezpieczenstwo: React.FC = () => (
-  <section id="bezpieczenstwo" className="relative z-10 py-16 md:py-32 bg-void border-t-[0.5px] border-[rgba(212,175,55,0.07)]">
-    <div className="max-w-[1280px] mx-auto px-5 md:px-10">
+  <section id="bezpieczenstwo" className="section bg-void border-t-[0.5px] border-[rgba(212,175,55,0.07)]">
+    <div className="section-container">
       <div className="text-center mb-10 md:mb-20">
-        <p className="flex items-center justify-center gap-3 text-[0.55rem] tracking-[0.38em] uppercase font-light text-gold mb-4 before:content-[''] before:w-5 before:h-[0.5px] before:bg-gold after:content-[''] after:w-5 after:h-[0.5px] after:bg-gold">
+        <p className="section-pre justify-center before:content-[''] after:content-[''] after:w-5 after:h-[0.5px] after:bg-gold">
           05 — PROTOKÓŁ BEZPIECZEŃSTWA
         </p>
-        <h2 className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em]">
+        <h2 className="h2-section">
           Twoje dane.<br /><em className="italic text-gold">Twoje zasady.</em>
         </h2>
-        <p className="text-[0.85rem] md:text-[0.95rem] leading-[1.8] text-[rgba(245,244,240,0.45)] font-light tracking-wide mt-5 md:mt-6 max-w-[600px] mx-auto">
+        <p className="section-desc mx-auto mt-5 md:mt-6">
           Budujemy systemy, którym możesz zaufać. Bezpieczeństwo nie jest dodatkiem — to fundament architektury.
         </p>
       </div>
@@ -33,8 +33,8 @@ export const Bezpieczenstwo: React.FC = () => (
               </div>
               <span className="text-[0.45rem] md:text-[0.5rem] tracking-[0.15em] uppercase text-gold/40 border border-gold/10 px-2.5 py-1 rounded-full text-right leading-tight">{card.tag}</span>
             </div>
-            <h3 className="font-serif text-xl md:text-2xl text-ivory mb-3 md:mb-4">{card.title}</h3>
-            <p className="text-[0.82rem] md:text-[0.88rem] leading-relaxed text-[rgba(245,244,240,0.4)] font-light">{card.desc}</p>
+            <h3 className="h3-section mb-3 md:mb-4">{card.title}</h3>
+            <p className="body-paragraph">{card.desc}</p>
           </motion.div>
         ))}
       </div>

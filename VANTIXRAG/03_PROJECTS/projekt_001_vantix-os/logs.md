@@ -634,4 +634,274 @@ FAZA A ciąg dalszy (z todo.md):
 
 ## 2026-05-18 — FAZA A: Unified landing page — cleanup kalkulatorów + nowa kolejność sekcji + poprawki UI/UX (sesja 13)
 
-**S
+**Sesja:** FAZA A — Integracja RoiCalculator z page.tsx, usunięcie LossCalculator, zmiana kolejności sekcji
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~15 min
+
+### Co zostało zrobione
+
+#### Usunięcie LossCalculator
+- Usunięto import i wstawienie `<LossCalculator />` z `app/page.tsx`
+- LossCalculator (`ContactForm.tsx`) nie jest już używany na landing page — zastąpiony przez RoiCalculator
+
+#### Kolejność sekcji na landing page (finalna)
+```
+Hero → RoiCalculator → Ekosystem → PodMaska → DlaczegoMy → Bezpieczenstwo → WhiteLabel → OMnie → Kontakt → FAQ → Footer
+```
+
+#### Poprawki UI/UX
+Wprowadzono drobne poprawki wizualne i tekstowe w kilku komponentach dla lepszej spójności.
+
+### Gdzie skończono
+
+Landing page z nową kolejnością sekcji — gotowy do deployu.
+
+### Następny krok
+
+1. [ ] Build + deploy na Vercel
+2. [ ] FAZA B: Unified Typography System (sesja 14)
+3. [ ] FAZA B: Personal Cockpit redesign
+
+### Blokery i otwarte pytania
+
+- Brak
+
+---
+
+## 2026-05-18 — FAZA A: Unified Typography System dla landing page (sesja 14)
+
+**Sesja:** FAZA A — Wdrożenie jednolitego systemu typografii i spacingu we wszystkich 11 komponentach landing page
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~30 min
+
+### Co zostało zrobione
+
+Stworzono **Unified Typography System** — zestaw klas CSS w `globals.css` zastępujących inline style istniejące w każdym komponencie landing page. System eliminuje dryf typograficzny (różne rozmiary H2, różne marginesy, różne paddings w sekcjach).
+
+#### Nowe klasy CSS (dodane do `app/globals.css`)
+
+| Klasa | Zastosowanie | Responsywność |
+|-------|-------------|---------------|
+| `.section-container` | max-w-[1280px] mx-auto px-5 md:px-10 | ✅ |
+| `.section` | relative z-10 py-16 md:py-32 | ✅ |
+| `.section-hero` | pt-28 md:pt-36 pb-16 md:pb-20 (specjalny dla Hero) | ✅ |
+| `.h1-hero` | font-serif text-[clamp(2rem,8vw,5.5rem)] | ✅ |
+| `.h2-section` | font-serif text-[clamp(2rem,6vw,4.5rem)] | ✅ |
+| `.h3-section` | font-serif text-[clamp(1.05rem,1.8vw,1.15rem)] | ✅ |
+| `.section-pre` | flex text-[0.55rem] uppercase tracking-[0.38em] text-gold gap-3 | ✅ |
+| `.section-desc` | text-[0.85rem]/[1.8] md:text-[0.95rem] text-zinc-400/45 | ✅ |
+| `.body-paragraph` | text-[0.82rem]/[1.8] md:text-[0.88rem] text-zinc-400/40 | ✅ |
+| `.meta-label` | text-[0.55rem] md:text-[0.6rem] uppercase tracking-[0.18em] | ✅ |
+| `.meta-xs` | text-[0.45rem] uppercase tracking-[0.2em] | ✅ |
+| `.text-link` | Link do sekcji ("ZOBACZ SYSTEM ↓") | ✅ |
+
+#### Zmodyfikowane komponenty (11 plików)
+
+Wszystkie 11 komponentów landing page przepisano na nowy system:
+
+1. **`Hero.tsx`** — `.section-hero` + `.section-container`, h1 → `.h1-hero`, description → `.section-desc`, tech list → `.meta-label`, link → `.text-link`
+2. **`RoiCalculator.tsx`** — `.section` + `.section-container max-w-[1000px]`, h2 → `.h2-section`, desc → `.section-desc`, labelki → `.meta-label` / `.meta-xs`, karty → `.result-card`, layout → `lg:grid-cols-[1.2fr_1fr]` (węższe wyniki), submit → `.btn-primary`
+3. **`Features.tsx`** (Ekosystem) — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, opis kart → `.body-paragraph`, meta → `.meta-label`
+4. **`PodMaska.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, desc → `.section-desc`, karty: h3 → `.h3-section`, opis → `.body-paragraph`
+5. **`DlaczegoMy.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, karty: h3 → `.h3-section`, opis → `.body-paragraph`
+6. **`Bezpieczenstwo.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, desc → `.section-desc`, karty: h3 → `.h3-section`, opis → `.body-paragraph`
+7. **`WhiteLabel.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, desc → `.section-desc`, opis kart → `.body-paragraph`, button → `.btn-outline`
+8. **`OMnie.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, treść → `.section-desc`
+9. **`Contact.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, opis → `.body-paragraph`, submit → `.btn-primary w-full`
+10. **`FAQ.tsx`** — `.section`, `.section-container`, pre-label → `.section-pre`, h2 → `.h2-section`, pytania → `text-sm md:text-base`, odpowiedzi → `.body-paragraph`
+11. **`Footer.tsx`** — kontener → `.section-container`
+
+#### Minimalne poprawki copy (5 zmian)
+
+| Komponent | Stare | Nowe |
+|-----------|-------|------|
+| **RoiCalculator** desc | `Sprawdź, ile kosztuje Cię ręczna robota — i jak szybko automatyzacja zwraca inwestycję.` | bez pauzy |
+| **RoiCalculator** form | `Chcesz pełną wycenę swojej firmy?` → `Pełna wycena Twojej firmy?` | krócej |
+| **RoiCalculator** form | `Zostaw kontakt — przygotuję Ci raport...` → `Przygotuję raport z konkretną kwotą...` | bez "Zostaw kontakt" |
+| **Contact** opis | system analizuje Twoje zgłoszenie → system analizuje zgłoszenie | bez "Twoje" |
+| **Contact** opis | dedykowany plan → plan | bez "dedykowany" |
+
+#### Przyciski zunifikowane
+- **Hero CTA**: `btn-primary btn-pulse`
+- **RoiCalculator submit**: `btn-primary w-full`
+- **Kontakt submit**: `btn-primary w-full`
+- **WhiteLabel CTA**: `btn-outline mx-auto`
+
+### Gdzie skończono
+
+Wszystkie 11 komponentów landing page zunifikowane. Kod gotowy do builda.
+Plik: `vantix-app/app/globals.css` — dodano ~120 linii klas systemu typografii.
+
+### Następny krok
+
+1. [ ] Build + deploy na Vercel — sprawdzić czy wszystko renderuje się poprawnie
+2. [ ] FAZA B: Personal Cockpit — przepisać na Vantix Design System
+3. [ ] FAZA B: Dashboard — podpiąć CentralBrainFocus
+4. [ ] FAZA B: CRM mockup — lista leadów + lejek
+
+### Blokery i otwarte pytania
+
+- Node/npm niedostępne w shellu — build trzeba uruchomić lokalnie przez Kacpra
+- Brak innych blockerów
+
+---
+
+## 2026-05-18 — VANTIX ROI TERMINAL: Unified kalkulator + formularz w jednym terminalowym panelu (sesja 15)
+
+**Sesja:** FAZA A — Połączenie RoiCalculator (kalkulator ROI) + Kontakt (formularz terminalowy) w jeden komponent `VantixRoiTerminal`
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~30 min
+
+### Co zostało zrobione
+
+#### Nowy komponent: `components/landing/VantixRoiTerminal.tsx`
+Stworzono jeden, spójny komponent łączący kalkulator ROI z formularzem kontaktowym w wydaniu terminalowego panelu 3D.
+
+**Architektura:**
+- Wspólny stan `roiSummary` (employees, hours, rate, weeklyCost, yearlyCost, savings, roiMonths) — live computed z `useMemo`
+- Stan kalkulatora i formularza żyje w jednym komponencie (`VantixRoiTerminal`)
+- Wartości z kalkulatora przekazywane do formularza przez wspólny parent component state (jeden poziom, bez props drilling)
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────┐
+│ VANTIX_ROI_TERMINAL v1.0         ● UPTIME ● SECURE │
+├──────────────────────────┬──────────────────────────┤
+│  PARAMETRY_SYMULACJI     │  PARAMETRY_ZGŁOSZENIA    │
+│                          │                          │
+│  [Slider: osoby]         │  ┌──────────────────┐   │
+│  [Slider: godziny]       │  │ ROI_SYNC ✓ badge │   │
+│  [Input: stawka]         │  │ IDENTYFIKATOR    │   │
+│                          │  │ ADRES_EMAIL      │   │
+│  ┌──────────────────┐    │  │ PROTOKÓŁ_ŁĄCZ.   │   │
+│  │ Koszt roczny      │    │ │ RAPORT_STRAT     │   │
+│  │ Oszczędność ~70%  │    │ │ [URUCHOM PROC.]  │   │
+│  │ Zwrot w miesiącach│    │ └──────────────────┘   │
+│  └──────────────────┘    │                          │
+│                          │ [SECURE_MAIL] [DIRECT]   │
+└──────────────────────────┴──────────────────────────┘
+```
+
+**UI/UX:**
+- Wrapper: `rounded-3xl border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950` z `shadow-[0_0_80px_rgba(251,191,36,0.15)]` — efekt 3D glow
+- Dekoracyjne owale blur (absolutne, pointer-events-none) — wzmacniają głębię
+- Terminal top-bar z nazwą + diodami statusowymi (UPTIME z `animate-pulse`, SECURE_LINK)
+- ROI_SYNC badge — pojawia się po interakcji z sliderem, pokazuje że dane kalkulatora są przekazane do zgłoszenia
+- Formularz terminalowy (styl `Kontakt` — inputy z `peer` floating labels, terminal chrome)
+- Po sukcesie: widok TRANSMISJA_UDANA + podsumowanie ROI na dole
+- Quick contact info (Mail, Phone) jako mały footer pod formularzem
+
+**Payload do webhooka (n8n):**
+```json
+{
+  "source": "Vantix_Website",
+  "timestamp": "ISO string",
+  "lead": {
+    "name": "...",
+    "email": "...",
+    "phone": "...",
+    "message": "...",
+    "service_type": "Landing Page"
+  },
+  "roiCalculator": {
+    "employees": 5,
+    "hours": 10,
+    "rate": 80,
+    "weeklyCost": 4000,
+    "yearlyCost": 208000,
+    "savings": 145600,
+    "roiMonths": 18
+  }
+}
+```
+
+**Logika wysyłki:**
+- Używa istniejącej `sendToN8N()` z `lib/n8nService.ts` — brak zmian w endpointach
+- Walidacja formularza przez `validateForm()` — ta sama co w Kontakt
+- ROI summary dodawany jako extra field `roiCalculator` w payloadzie (rozszerza bazowy N8NPayload)
+
+#### Zmodyfikowane pliki
+
+| Plik | Zmiana |
+|------|--------|
+| `components/landing/VantixRoiTerminal.tsx` | **NOWY** — ~350 linii, unified kalkulator + formularz |
+| `app/page.tsx` | Zastąpiono `RoiCalculator` + `Kontakt` → `VantixRoiTerminal` |
+| `VANTIXRAG/03_PROJECTS/projekt_001_vantix-os/logs.md` | + ten wpis |
+
+#### Usunięte z page.tsx
+- `import { RoiCalculator }` — nieużywany
+- `import { Kontakt }` — nieużywany
+- `<RoiCalculator />` — zastąpiony
+- `<Kontakt />` — zastąpiony (sekcja FAQ teraz idzie bezpośrednio po VantixRoiTerminal)
+
+**Stan:** Komponent gotowy — wymaga builda i deployu na Vercel.
+
+### Kolejność sekcji na landing page (po zmianie)
+```
+Hero → VantixRoiTerminal → Ekosystem → PodMaska → DlaczegoMy → Bezpieczenstwo → WhiteLabel → OMnie → FAQ → Footer
+```
+
+### Następny krok
+
+1. [ ] Build + deploy na Vercel
+2. [ ] FAZA B: Personal Cockpit — przepisać na Vantix Design System
+3. [ ] FAZA B: Dashboard — podpiąć CentralBrainFocus
+4. [ ] FAZA B: CRM mockup — lista leadów + lejek
+
+### Blokery i otwarte pytania
+
+- `RoiCalculator.tsx` i `Contact.tsx` (Kontakt) istnieją nadal na dysku — nie są już używane w page.tsx. Do ewentualnego usunięcia przy refactorze.
+- n8n webhook URL wciąż fallback testowy — do podmiany na produkcyjny HF Space
+
+---
+
+## 2026-05-18 — Fix duplikatu sesji 15 + review landing page (sesja 16)
+
+**Sesja:** FAZA A — Naprawa
+
+---
+
+## 2026-05-18 — FAZA C: Dashboard — podpięcie CentralBrainFocus + Cockpit Vantix DS final (sesja 17)
+
+**Sesja:** FAZA C — Shell Mockupy: Dashboard + Cockpit redesign
+**Agent:** DeepSeek (implementacja)
+**Czas:** ~15 min
+
+### Co zostało zrobione
+
+#### Dashboard — podpięcie CentralBrainFocus
+- `app/(shell)/dashboard/page.tsx` — zastąpiono placeholder "coming soon" importem i wyrenderowaniem `CentralBrainFocus`
+- Komponent był już gotowy — wystarczyło go zaimportować
+
+#### Cockpit — przepisanie na Vantix Design System
+- `app/(shell)/cockpit/page.tsx` — przepisany od zera:
+  - Usunięto wszystkie `bg-white`, `bg-neutral-*`, `dark:bg-*`, `rounded-lg`, `border-neutral-*`
+  - Zastosowano wzorzec z AGENTS.md: `flex flex-col min-h-screen`, `grid-bg`, TopBar z `border-gold/10`
+  - Komponenty wewnątrz `vx-card` zamiast starych `bg-white rounded-lg`
+  - Bottom stats używa `vx-card !p-4` z ikonami i `text-gold` dla wyróżnień
+- `components/cockpit/TodayTasks.tsx` — przepisany na Vantix DS:
+  - Checkbox styl: border-ivory/15 → border-gold/20 z Check ikoną
+  - Task style: hover border-gold/10 + bg-gold/[0.02]
+  - Priority badges: `vx-badge vx-badge-red` (HIGH), `vx-badge vx-badge-gold` (MED), `vx-badge vx-badge-dim` (LOW)
+  - Progress bar: bg-gold/10 z gold fill
+**Uwaga:** WeekCalendar, PriorityList, AIRecommendations były już przepisane na Vantix DS w poprzednich sesjach.
+
+### Pliki zmienione
+
+| Plik | Zmiana |
+|------|--------|
+| `app/(shell)/dashboard/page.tsx` | ✅ Podpięto CentralBrainFocus (import + render) |
+| `app/(shell)/cockpit/page.tsx` | ✅ Przepisany na Vantix DS (layout, kolory, vx-card) |
+| `components/cockpit/TodayTasks.tsx` | ✅ Przepisany na Vantix DS (checkboxy, badge, progress) |
+
+### Gdzie skończono
+
+- **Dashboard** — działa z CentralBrainFocus (mock data)
+- **Cockpit** — wszystkie 4 komponenty + page w Vantix DS
+- AGENTS.md wymaga aktualizacji tabeli stanu
+
+### Następny krok
+
+1. **FAZA C**: CRM mockup (`/crm`) — lista leadów + kanban lejek + modal z AI opisem
+2. **FAZA C**: DEV mockup (`/dev`) — projekty, roadmapa, TODO, logi sesji
+3. Build + deploy na Vercel

@@ -10,22 +10,22 @@ const features = [
 ];
 
 export const WhiteLabel: React.FC = () => (
-  <section id="white-label" className="relative z-10 py-16 md:py-32 bg-void overflow-hidden">
+  <section id="white-label" className="section bg-void overflow-hidden">
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-full pointer-events-none hidden md:block">
       <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[120px]" />
     </div>
 
-    <div className="max-w-[1280px] mx-auto px-5 md:px-10">
+    <div className="section-container">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <p className="flex items-center gap-3 text-[0.55rem] tracking-[0.38em] uppercase font-light text-gold mb-4 before:content-[''] before:w-5 before:h-[0.5px] before:bg-gold">
+          <p className="section-pre">
             04 — White-Label Partner
           </p>
-          <h2 className="font-serif font-normal text-[clamp(2rem,6vw,4.5rem)] leading-[1.08] text-ivory tracking-[0.005em] mb-6 md:mb-8">
+          <h2 className="h2-section mb-6 md:mb-8">
             Ty sprzedajesz.<br /><em className="italic text-gold">My dostarczamy silnik.</em>
           </h2>
-          <p className="text-[0.88rem] md:text-[0.95rem] leading-[1.8] text-[rgba(245,244,240,0.45)] font-light tracking-wide mb-8 md:mb-10 max-w-[500px]">
+          <p className="section-desc mb-8 md:mb-10 max-w-[500px]">
             Jesteśmy technologicznym zapleczem dla agencji, które chcą oferować automatyzację AI najwyższej klasy — bez budowania własnego działu R&D.
           </p>
           <div className="space-y-6 md:space-y-8">
@@ -34,7 +34,7 @@ export const WhiteLabel: React.FC = () => (
                 <div className="mt-1 w-9 h-9 md:w-10 md:h-10 shrink-0 rounded-xl bg-gold/5 border border-gold/10 flex items-center justify-center">{f.icon}</div>
                 <div>
                   <h3 className="text-ivory font-serif text-base md:text-lg mb-1.5 md:mb-2">{f.title}</h3>
-                  <p className="text-[0.78rem] md:text-[0.8rem] leading-relaxed text-[rgba(245,244,240,0.35)] font-light">{f.desc}</p>
+                  <p className="body-paragraph">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -53,7 +53,7 @@ export const WhiteLabel: React.FC = () => (
               </p>
               <button
                 onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-3 mx-auto text-[0.58rem] md:text-[0.6rem] tracking-[0.25em] uppercase font-normal text-gold border border-gold/30 px-6 md:px-8 py-3.5 md:py-4 rounded-xl transition-all duration-300 hover:bg-gold hover:text-void hover:border-gold group"
+                className="btn-outline mx-auto group"
               >
                 <span>ZOSTAŃ PARTNEREM →</span>
                 <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
