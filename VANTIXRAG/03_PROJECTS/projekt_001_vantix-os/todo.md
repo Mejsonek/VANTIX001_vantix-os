@@ -1,7 +1,7 @@
 # todo.md — Lista Zadań VANTIX001
 
 > Aktualizuj po każdej sesji. To jest żywy dokument — nie archiwum.
-> Ostatnia aktualizacja: 2026-05-17 (sesja 6)
+> Ostatnia aktualizacja: 2026-05-17 (sesja 7)
 
 ---
 
@@ -40,7 +40,7 @@
 
 - [x] Nowe repo `vantix-app` — Next.js 16 + Tailwind + lucide-react ✅ 2026-05-16
 - [x] Mockup Shell / Launcher (`app.vantix.pl` — punkt wejścia) ✅ 2026-05-16
-- [x] Landing page `vantix.pl` — publiczna strona marki (formularz kontaktowy, prezentacja) ✅ 2026-05-17
+- [x] Landing page `vantix.pl` — migracja z Vite + 11 sekcji + mobile-first ✅ 2026-05-17 (sesja 7)
 - [x] Mockup Personal Cockpit (taski, kalendarz, priorytety, rekomendacje AI) ✅ 2026-05-17
 - [ ] Mockup CRM (lejek, leady, follow-up, routing)
 - [ ] Mockup Vantix DEV (projekty, roadmapa, TODO, logi, pamięć projektu)
@@ -112,5 +112,6 @@
 - [x] Refactor `components/devtool/` (ProjectCard, LaunchModal, 10 tabs)
 - [x] Shell redesign wg Vantix Design System (Cosmic Minimalism) ✅ 2026-05-16
 - [x] Personal Cockpit mockup — TodayTasks, WeekCalendar, PriorityList, AIRecommendations ✅ 2026-05-17
-- [x] Landing page vantix.pl — Navbar, Hero, Features, Contact, ContactForm, Footer ✅ 2026-05-17
+- [x] Landing page vantix.pl — migracja z Vite, 11 sekcji (CosmosBackground, Navbar, Hero, LossCalculator, Ekosystem, PodMaska, DlaczegoMy, Bezpieczenstwo, WhiteLabel, OMnie, Kontakt) ✅ 2026-05-17
+- [x] Mobile-first responsive layout — wszystkie 11 komponentów landing ✅ 2026-05-17
 - [x] Vercel config — routing domen (vantix.pl + app.vantix.pl) ✅ 2026-05-17

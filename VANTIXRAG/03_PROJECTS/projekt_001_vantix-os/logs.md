@@ -297,6 +297,62 @@ Phase 1 ciąg dalszy:
 
 ---
 
+## 2026-05-17 — Phase 1: Migracja landing page + mobile-first (sesja 7)
+
+**Sesja:** Zastąpienie landing page nowym designem z projektu Vite + responsive fixes
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+#### Migracja landing page
+- Wczytano nowy landing z `~/Desktop/vantix_main-main/` (projekt Vite, 11 sekcji)
+- Zmigurowano kompletny design system: `bg-void`, `text-gold`, `text-ivory`, zmienne CSS, typografia
+- Dodano Playfair Display + Inter przez `next/font/google` do `app/layout.tsx`
+- Przepisano `app/globals.css` — scalono design system landing + app shell (brak konfliktów)
+- Stworzono `lib/utils.ts` (cn helper) i `lib/n8nService.ts` (walidacja + wysyłka do n8n webhook)
+- Zmigrowano wszystkie 11 komponentów:
+  - `CosmosBackground.tsx` — Three.js WebGL starfield z 3 warstwami gwiazd + mgławica, parallax
+  - `Navbar.tsx` — hamburger mobile menu, scroll density effect
+  - `Hero.tsx` — headline z efektem serif italic gold
+  - `ContactForm.tsx` (export: `LossCalculator`) — kalkulator ROI z suwakami
+  - `Features.tsx` (export: `Ekosystem`) — bento grid, 5 kart
+  - `PodMaska.tsx` — tech stack (n8n, Claude, PostgreSQL, API-First)
+  - `DlaczegoMy.tsx` — 6-feature grid (3 kolumny desktop)
+  - `Bezpieczenstwo.tsx` — 4 karty bezpieczeństwa
+  - `WhiteLabel.tsx` — sekcja partnerska
+  - `OMnie.tsx` — sekcja "O Mnie" z wizualizacją KZ
+  - `Contact.tsx` (export: `Kontakt`) — terminal form z n8n webhook
+- Przepisano `app/page.tsx` — custom cursor, Lenis smooth scroll, wszystkie 11 sekcji
+
+#### Mobile-first responsive fixes (wszystkie 11 komponentów)
+- Systematyczny pass przez każdy komponent: `py-32` → `py-16 md:py-32`, `px-10` → `px-5 md:px-10`
+- `gap-*` i `space-y-*` — responsive od mobile
+- Rozmiary nagłówków: `clamp(2rem,6vw,4.5rem)` na wszystkich sekcjach
+- Karty: `p-6 md:p-10`, `rounded-2xl md:rounded-3xl`
+- Dekoracje desktopowe: `hidden md:block`
+- Footer: `flex-col sm:flex-row` dla małych ekranów
+
+### Gdzie skończono
+
+Build czysty: `Compiled successfully in 1543ms`
+Commity: `b392b35` (migracja landing) + `b5f6229` (mobile-first fixes)
+Wszystkie 11 komponentów gotowe i zresponsywizowane.
+
+### Następny krok
+
+1. [ ] Mockup CRM (`/crm`) — nowy od zera w vantix-app
+2. [ ] Mockup Vantix DEV (`/dev`)
+3. [ ] Ewentualnie: poprawki landing po ocenie na urządzeniach mobilnych
+4. [ ] Phase 2 — backend: logowanie, API routes, Neon DB
+
+### Blokery i otwarte pytania
+
+- n8n webhook URL — w `lib/n8nService.ts` jest hardcoded test URL; do zamiany na produkcyjny
+- Weryfikacja na prawdziwych urządzeniach mobilnych (iPhone, Android)
+- Social links w Footer — wciąż placeholder "#"
+
+---
+
 ## Format kolejnych wpisów
 
 ```
