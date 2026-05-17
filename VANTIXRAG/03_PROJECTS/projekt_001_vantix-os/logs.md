@@ -1091,15 +1091,6 @@ Kacper przegląda moduły lokalnie → decyzja: Chat 1 (Backend) czy Chat 2 (Fro
 - `.env.local` wciąż nie istnieje — do stworzenia przy Phase 2 (auth + n8n URL)
 - Ocena wizualna modułów przez Kacpra — feedback oczekiwany
 
-## 2025-07-15 — PriorityList redesign
-
-**Pliki zmienione:**
-- `components/cockpit/PriorityList.tsx` — pełny redesign: karty vx-card vx-3d, koła rangi (gold/vblue/ivory), deadline badge (vred/gold/ivory), gradient progress bary bar-animate, czyste funkcje pomocnicze getRankStyle / getDeadlineBadge / getProgressFill / getProgressTextColor
-
-**Problemy:** brak — redesign przebiegł bez błędów
-
-**Następny krok:** Kacper przegląda efekt wizualny → decyzja co dalej (TodayTasks / AIRecommendations redesign)
-
 ## 2025-07-15 — PriorityList redesign + TodayTasks fix
 
 **Pliki zmienione:**
@@ -1111,3 +1102,91 @@ Kacper przegląda moduły lokalnie → decyzja: Chat 1 (Backend) czy Chat 2 (Fro
 - PriorityList po edycji nie był widoczny w przeglądarce — dodano badge "v2" aby potwierdzić przeładowanie. v2 widoczne w HTML.
 
 **Następny krok:** Kacper ocenia wizualnie redesign PriorityList → decyzja co dalej (WeekCalendar / TodayTasks / AIRecommendations)
+
+---
+
+## 2026-05-18 — FAZA C: Dashboard layout fix + migracja Tailwind v4 (sesja 21)
+
+**Sesja:** FAZA C — Naprawa layoutu dashboardu + audit i migracja składni Tailwind v4 we wszystkich komponentach shell
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~30 min
+
+### Co zostało zrobione
+
+#### 1. Naprawa layoutu CentralBrainFocus (dashboard)
+
+Trzy osobne bugi powodowały złamany widok dashboardu:
+
+| Bug | Przyczyna | Fix |
+|-----|-----------|-----|
+| Stats grid 2×2 nie działał | `perspective: '800px'` na kontenerze grid + `transformStyle: 'preserve-3d'` na dzieciach tworzyły konflikt 3D rendering context z grid layout | Usunięto `perspective` z kontenera, usunięto `transformStyle: 'preserve-3d'` z wrapperów kart |
+| Lista tasków w poziomie | Brak `flex-col` na kontenerze `divide-y` | Dodano `flex flex-col` do `div.divide-y.divide-gold/4` |
+| Dwie kolumny nie wyświetlały się | `lg:grid-cols-[1fr_340px]` — breakpoint `lg:` wymagał viewport ≥1024px (nie był spełniany po odjęciu docka i panelu metryk) | Zmieniono na zawsze-aktywne `grid-cols-[1fr_340px]` |
+
+Dodatkowe fixy:
+- Usunięto `perspective` z kontenera priority stack (taki sam problem jak stats grid)
+- Naprawiono bug w sprawdzaniu badge: `{'badge' in { badge } && badge &&` → `{badge &&`
+
+#### 2. Brakujące klasy CSS — `.btn`, `.btn-dim`, `.btn-ghost`
+
+Klasy były używane w dziesiątkach komponentów ale nie były zdefiniowane w `globals.css` — przyciski fallbackowały do domyślnego stylu przeglądarki.
+
+Dodano do `globals.css`:
+- `.btn` — bazowy przycisk shell: `inline-flex`, `font-mono`, `font-size: 9px`, `letter-spacing: 0.12em`, `text-transform: uppercase`, `border`, `transition: all 0.15s`
+- `.btn-dim` — ściemniony: `rgba(245,244,240,0.50)` tekst, `rgba(245,244,240,0.03)` tło, hover na `0.80`/`0.06`
+- `.btn-ghost` — ghost: transparent bg/border, hover: gold/70 tekst + gold/4 bg
+
+#### 3. Migracja składni Tailwind v4 — wszystkie komponenty shell
+
+Systematyczny sweep 6 plików:
+
+| Zmiana | Stare (v3) | Nowe (v4) |
+|--------|-----------|----------|
+| Important postfix | `!p-4`, `!text-[8px]`, `!px-3` | `p-4!`, `text-[8px]!`, `px-3!` |
+| Klasy kanoniczne | `flex-shrink-0` | `shrink-0` |
+| Klasy kanoniczne | `bg-gold/[0.02]`, `bg-gold/[0.03]` | `bg-gold/2`, `bg-gold/3` |
+| Breakpointy (desktop-only tool) | `lg:grid-cols-4`, `lg:col-span-3`, `sm:grid-cols-2` | `grid-cols-4`, `col-span-3`, `grid-cols-2` |
+
+Pliki zmienione:
+- `app/(shell)/cockpit/page.tsx` — pełna migracja + zawsze-aktywne `grid-cols-4` i `grid-cols-5`
+- `app/(shell)/dev/page.tsx` — `lg:` breakpointy usunięte
+- `components/cockpit/PriorityList.tsx` — `bg-gold/[0.02]` → `bg-gold/2`, `flex-shrink-0` → `shrink-0`
+- `components/cockpit/TodayTasks.tsx` — border class cleanup, `flex-shrink-0` → `shrink-0`, `bg-gold/[0.02]` → `bg-gold/2`
+- `components/crm/LeadList.tsx` — `!p-4` → `p-4!`, `lg:grid-cols-*` → `grid-cols-*`
+- `components/dev/RoadmapTimeline.tsx` — `flex-shrink-0` → `shrink-0`, `bg-gold/[0.0x]` → `bg-gold/x`
+
+#### 4. Fix TypeScript — LeadList props
+
+`crm/page.tsx` przekazywało `initialLeads={leads}` do `LeadList`, który nie przyjmował żadnych propsów → błąd TypeScript. Dodano opcjonalny prop `initialLeads?: Lead[]` (ignorowany do Phase 2 gdy DB będzie podpięte).
+
+### Commity
+
+| Hash | Treść |
+|------|-------|
+| `f960519` | auto-sync (CentralBrainFocus.tsx + globals.css — `.btn`/`.btn-dim`/`.btn-ghost`) |
+| `d2bbfbc` | `fix: migracja składni Tailwind v4 w komponentach shell` |
+
+### Stan po sesji
+
+| Plik | Status |
+|------|--------|
+| `components/shell/CentralBrainFocus.tsx` | ✅ Layout naprawiony — stats 2×2, dwie kolumny, taski pionowo |
+| `app/globals.css` | ✅ Dodano `.btn`, `.btn-dim`, `.btn-ghost` |
+| `app/(shell)/cockpit/page.tsx` | ✅ Tailwind v4 — zawsze-aktywne layouty |
+| `app/(shell)/dev/page.tsx` | ✅ Tailwind v4 — breakpointy usunięte |
+| `components/cockpit/TodayTasks.tsx` | ✅ Border fix + canonical classes |
+| `components/cockpit/PriorityList.tsx` | ✅ Canonical classes |
+| `components/crm/LeadList.tsx` | ✅ Tailwind v4 + TypeScript prop fix |
+| `components/dev/RoadmapTimeline.tsx` | ✅ Canonical classes |
+
+### Następny krok
+
+1. Kacper sprawdza dashboard lokalnie — czy layout 2×2 stat tablets + dwie kolumny renderuje poprawnie
+2. Kolejny komponent do redesignu — do wyboru: `WeekCalendar`, `PhasePlatforms`, lub start Phase 2 (Prisma + NextAuth)
+3. FAZA A pending: podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` na HF Space (Kacper ręcznie)
+
+### Blokery i otwarte pytania
+
+- Dashboard layout — wymaga weryfikacji wizualnej przez Kacpra (możliwe że `lg:` breakpoint był OK i problem był w czymś innym)
+- `WeekCalendar.tsx` — nie sprawdzany pod kątem Tailwind v4, może wymagać podobnego sweepu
+- n8n webhook URL — wciąż testowy w `.env.local`
