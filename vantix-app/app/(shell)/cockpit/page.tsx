@@ -81,7 +81,7 @@ export default function CockpitPage() {
           {/* Right — Calendar + Priorities + AI */}
           <div className="lg:col-span-2 space-y-4 fade-up delay-4">
             <div className="vx-card">
-              <WeekCalendar />
+              <MonthCalendar />
             </div>
             <div className="vx-card">
               <PriorityList />
