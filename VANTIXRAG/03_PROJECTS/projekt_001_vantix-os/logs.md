@@ -377,14 +377,21 @@ Plik: `n8n/Dockerfile`
 
 ### Następny krok
 
-- Wgrać `n8n/Dockerfile` jako `Dockerfile` do roota repozytorium HF Space `SolutionKacper/VantixN8N`
-- Zweryfikować deploy na `https://SolutionKacper-VantixN8N.hf.space/`
 - Podpiąć webhooks n8n do landing page (`lib/n8nService.ts` — zmienić URL z test na produkcyjny)
+- Zbudować pierwsze n8n flows: New Lead Alert, Daily Briefing, VANTIXRAG GitHub Sync
+- Wdrożyć blueprint v3.0 (nowe fazy, Cognitive Mesh, Prisma schema)
+
+### Wynik
+
+- **n8n v2.20.9 działa** na `https://SolutionKacper-VantixN8N.hf.space/`
+- SQLite DB persystowana w buckecie `SolutionKacper/vantix-n8n-data`
+- Wszystkie migracje n8n wykonane (100+ tabel)
+- Fix: usunięto `CMD ["n8n", "start"]` — kolidował z entrypointem bazowego obrazu
 
 ### Blokery i otwarte pytania
 
-- HF Space wymaga osobnego repo — `n8n/Dockerfile` jest w repo Vantix OS, trzeba go skopiować do Space repo
-- Po deploymencie: ustawić zmienne środowiskowe przez HF Spaces secrets (np. credentials n8n)
+- Python task runner niedostępny (brak Python 3 w obrazie) — nie krytyczne
+- n8n może zasnąć po ~48h braku ruchu (HF Spaces free tier)
 
 ---
 
