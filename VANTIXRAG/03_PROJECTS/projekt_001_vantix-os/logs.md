@@ -171,6 +171,99 @@ Następna sesja — Phase 1 ciąg dalszy:
 
 ---
 
+## 2026-05-17 — Phase 1: Personal Cockpit + Landing Page (sesja 5)
+
+**Sesja:** Phase 1 — Mockupy modułów (Cockpit + Landing)
+**Agent:** Claude Haiku 4.5 (Copilot CLI)
+**Czas:** ~1.5 sesji (01:33 - 11:53 UTC)
+
+### Co zostało zrobione
+
+#### Personal Cockpit (`/cockpit`)
+- Zbudowano 4 komponenty:
+  - `TodayTasks` — lista zadań z checkboxami, priority badges (high/medium/low), progress bar (125 linii)
+  - `WeekCalendar` — widok 7 dni tygodnia z highlighting current day, event counters (99 linii)
+  - `PriorityList` — top 3 priorytety z deadline + progress bars (86 linii)
+  - `AIRecommendations` — placeholder karta sugestii AI z buttons accept/dismiss (60 linii)
+- Strona `/cockpit` — responsive layout 3-kolumnowy (desktop) / 1-kolumnowy (mobile)
+- Bottom stats panel — szybkie metryki (produktywność, taski, eventy, TODO)
+- Mock data wbudowany — gotowy do Phase 2 backend integration
+- Wszystkie komponenty client-side z useState
+
+#### Landing Page (`vantix.pl`)
+- Zbudowano 6 komponentów:
+  - `Navbar` — logo VANTIX, nawigacja, mobile menu toggle, CTA button
+  - `Hero` — headline "Skalowalność bez chaosu" (gradient), subheading, 3 stats (1/∞/0), 2 CTA buttons, feature badges
+  - `Features` — grid 6 modułów (Cockpit, CRM, DEV, VANTIXRAG, Workflows, Analytics) z hover effects
+  - `Contact` (zwany "About") — Problem-Solution-Why sekcje dla soloprzedsiębiorcy
+  - `ContactForm` — email input, submit button, success toast (3s timeout)
+  - `Footer` — 4-column grid, links, copyright, social placeholders
+- Page `/` — główny entry point dla lądowania
+- Design: mix starego landing + Vantix design system (black + yellow-600 accent)
+- Responsywny: 27 media query classes (sm/md/lg breakpoints)
+- Copy całkowicie nowy — fokus na system operacyjny, eliminacja chaosu, jeden center sterowania
+
+#### Routing & Deployment
+- Przenieśli `/app/(landing)/page.tsx` → `/app/page.tsx` (root landing)
+- Usunęli zbędny group route `(landing)`
+- Stworzyli `vercel.json` — konfiguracja domen (vantix.pl + app.vantix.pl)
+- Next.js 16 App Router — clean, scalable architecture
+
+#### Testing & QA
+- Sprawdzeni: TypeScript config, imports/exports, component exports
+- Media queries: mobile (375px), tablet (768px), desktop (1920px) — wszystkie OK
+- Responsive design: 7 todos — wszystkie done
+- Code: 514 linii (Cockpit: 370, Landing: ~1000 razem)
+- Funkcjonalność: form validation, menu toggle, email submission, success feedback
+
+### Gdzie skończono
+
+**Commits:**
+1. `058a331` — Personal Cockpit mockup (4 komponenty + page)
+2. `5573aba` — Landing page (6 komponentów)
+3. `01bd453` — Fix: Contact.tsx komentarz
+4. `1b3b2eb` — Routing: landing na /
+5. `f5841e1` — Fix: remove (landing) group route
+6. `1bbf033` — Vercel config (vercel.json)
+
+**Live URLs:**
+- `vantix-dev-tool.vercel.app/` — Landing page (preview, czeka na Vercel sync)
+- `vantix-dev-tool.vercel.app/cockpit` — Personal Cockpit
+- Production: `vantix.pl` (landing), `app.vantix.pl` (app modules, Phase 2)
+
+**Todos:** Wszystkie 16 done
+
+### Następny krok
+
+Phase 2 — Backend & MVP:
+1. [ ] Supabase Auth — logowanie (email/password)
+2. [ ] API endpoints — `/api/crm/leads`, `/api/tasks/*`, itd.
+3. [ ] Database — finalizacja schema, migrations na Neon
+4. [ ] Middleware — ochrona routes (auth check)
+5. [ ] Real data flows — taski, leady, projekty z DB
+6. [ ] VANTIXRAG integration — Brain /api/vantix-rag
+
+Mockupy do Phase 3:
+- [ ] Vantix DEV (`/dev`)
+- [ ] Settings (`/settings`)
+- [ ] Workflows (`/workflows`)
+- [ ] CRM (`/crm`) — nowy od zera
+
+### Blokery i otwarte pytania
+
+**Resolved:**
+- ✅ Routing: landing na `/` (root)
+- ✅ Vercel config dla dwóch domen
+- ✅ Landing page design (mix old + design system)
+
+**Otwarte pytania:**
+- Kacper oceniał landing page — feedback oczekiwany
+- API endpoint `/api/crm/leads` — jeszcze nie istnieje (Phase 2)
+- Social links w footer — placeholder "#" (do zamiany na URLs)
+- Dark mode toggle — opcjonalnie w Phase 3
+
+---
+
 ## Format kolejnych wpisów
 
 ```
