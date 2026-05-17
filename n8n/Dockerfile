@@ -1,4 +1,10 @@
+# https://huggingface.co/docs/hub/spaces-sdks-docker
 FROM n8nio/n8n:latest
+
+# n8n base image runs as 'node' (UID 1000) — matches HF Spaces requirement
+USER root
+RUN mkdir -p /data && chown -R node:node /data
+USER node
 
 ENV N8N_PORT=7860
 ENV N8N_HOST=0.0.0.0
