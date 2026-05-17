@@ -291,7 +291,134 @@ body {
   border: 0.5px solid rgba(212, 175, 55, 0.12);
 }
 
-/* ── TERMINAL SCANLINES ── */
+/* ══════════════════════════════════════
+   SHELL UI — 3D ANIMATIONS & UTILITIES
+   ══════════════════════════════════════ */
+
+/* 3D card lift on hover */
+.vx-3d {
+  transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.28s ease,
+              border-color 0.2s ease;
+}
+.vx-3d:hover {
+  transform: translateY(-4px) perspective(900px) rotateX(1.8deg);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(212,175,55,0.22),
+    0 0 50px rgba(212,175,55,0.06);
+  border-color: rgba(212,175,55,0.28) !important;
+}
+.vx-3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,175,55,0.04) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.28s;
+  pointer-events: none;
+}
+.vx-3d:hover::after { opacity: 1; }
+
+/* Row entrance */
+@keyframes row-enter {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.row-enter { animation: row-enter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+
+/* Stat number pop-in */
+@keyframes num-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.num-animate { animation: num-pop 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+
+/* Progress bar fill from left */
+@keyframes bar-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.bar-animate {
+  transform-origin: left center;
+  animation: bar-fill 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
+}
+
+/* Live dot glow pulse */
+@keyframes dot-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(74,222,128,0.5); opacity: 1; }
+  50%       { box-shadow: 0 0 12px rgba(74,222,128,0.8); opacity: 0.7; }
+}
+.dot-live { animation: dot-glow 2s ease infinite; }
+
+/* Gold shimmer scan */
+@keyframes shimmer-scan {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-line {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,0.12) 50%,
+    transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer-scan 2.5s linear infinite;
+}
+
+/* Fade up entrance */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+
+/* Staggered delay helpers */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.10s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.20s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.30s; }
+.delay-7 { animation-delay: 0.35s; }
+.delay-8 { animation-delay: 0.40s; }
+.delay-9 { animation-delay: 0.45s; }
+.delay-10 { animation-delay: 0.50s; }
+
+/* Table row interactive */
+.table-row {
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+.table-row:hover {
+  background: rgba(212,175,55,0.03);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(212,175,55,0.1);
+}
+
+/* Stat card accent line */
+.stat-accent-line {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.vx-3d:hover .stat-accent-line { transform: scaleX(1); }
+
+/* Metric progress track */
+.metric-track {
+  height: 2px;
+  background: rgba(212,175,55,0.08);
+  overflow: hidden;
+}
+.metric-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold-60), var(--gold));
+}
+
+/* TERMINAL SCANLINES ── */
 .terminal-scan {
   background-image: repeating-linear-gradient(
     0deg,
