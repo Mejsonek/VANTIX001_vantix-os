@@ -353,6 +353,41 @@ Wszystkie 11 komponentów gotowe i zresponsywizowane.
 
 ---
 
+## 2026-05-17 — Infrastruktura: n8n na Hugging Face Spaces (sesja 8)
+
+**Sesja:** Dockerfile dla n8n — HF Space `SolutionKacper/VantixN8N`
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+
+### Co zostało zrobione
+
+- Stworzono `n8n/Dockerfile` oparty o `n8nio/n8n:latest`
+- Konfiguracja zgodna z HF Spaces Docker (docs: huggingface.co/docs/hub/spaces-sdks-docker):
+  - Port `7860` (wymagany przez HF)
+  - `USER root` → `mkdir /data && chown node:node /data` → `USER node` (UID 1000)
+  - SQLite DB w `/data/database.sqlite` (zamontowany storage bucket)
+  - `N8N_USER_FOLDER=/data` — wszystkie dane n8n w buckecie
+  - `WEBHOOK_URL` i `N8N_EDITOR_BASE_URL` ustawione na `https://SolutionKacper-VantixN8N.hf.space/`
+  - `N8N_SECURE_COOKIE=false` — SSL terminuje HF proxy, wewnątrz HTTP
+  - `GENERIC_TIMEZONE=Europe/Warsaw`
+
+### Gdzie skończono
+
+Commity: `96d72fb` (Dockerfile v1) + `ac9d899` (fix UID + /data permissions)
+Plik: `n8n/Dockerfile`
+
+### Następny krok
+
+- Wgrać `n8n/Dockerfile` jako `Dockerfile` do roota repozytorium HF Space `SolutionKacper/VantixN8N`
+- Zweryfikować deploy na `https://SolutionKacper-VantixN8N.hf.space/`
+- Podpiąć webhooks n8n do landing page (`lib/n8nService.ts` — zmienić URL z test na produkcyjny)
+
+### Blokery i otwarte pytania
+
+- HF Space wymaga osobnego repo — `n8n/Dockerfile` jest w repo Vantix OS, trzeba go skopiować do Space repo
+- Po deploymencie: ustawić zmienne środowiskowe przez HF Spaces secrets (np. credentials n8n)
+
+---
+
 ## Format kolejnych wpisów
 
 ```
