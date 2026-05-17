@@ -1099,3 +1099,15 @@ Kacper przegląda moduły lokalnie → decyzja: Chat 1 (Backend) czy Chat 2 (Fro
 **Problemy:** brak — redesign przebiegł bez błędów
 
 **Następny krok:** Kacper przegląda efekt wizualny → decyzja co dalej (TodayTasks / AIRecommendations redesign)
+
+## 2025-07-15 — PriorityList redesign + TodayTasks fix
+
+**Pliki zmienione:**
+- `components/cockpit/PriorityList.tsx` — full redesign: karty vx-card vx-3d, koła rangi gold/vblue/ivory, deadline badge z kolorami vred/gold/ivory, gradient progress bary bar-animate, helper functions
+- `components/cockpit/TodayTasks.tsx` — usunięto zabłąkany cudzysłów na końcu i na początku pliku (błąd parsowania 500)
+
+**Problemy:**
+- TodayTasks.tsx miał stray `"` na końcu pliku i na początku linii 1 — powodowało błąd 500 na /cockpit. Naprawione przez single_find_and_replace.
+- PriorityList po edycji nie był widoczny w przeglądarce — dodano badge "v2" aby potwierdzić przeładowanie. v2 widoczne w HTML.
+
+**Następny krok:** Kacper ocenia wizualnie redesign PriorityList → decyzja co dalej (WeekCalendar / TodayTasks / AIRecommendations)

@@ -72,6 +72,7 @@ export default function PriorityList() {
       <div className="flex items-center gap-2 mb-3">
         <Zap size={11} className="text-gold/60" />
         <span className="font-mono text-[9px] text-ivory/50 uppercase tracking-widest">Top Priorytety</span>
+        <span className="font-mono text-[7px] text-gold/60 border border-gold/15 px-1.5 py-px ml-1 animate-pulse">v2</span>
       </div>
 
       <div className="space-y-2.5">
