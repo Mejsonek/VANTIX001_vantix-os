@@ -20,6 +20,15 @@ export default function LandingPage() {
   const [ringPos, setRingPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    // Fix: loading with hash anchor (e.g. /#white-label) causes framer-motion
+    // whileInView to never fire for elements above the viewport — they stay opacity:0.
+    // Solution: scroll to top first so IntersectionObserver sees all elements,
+    // then smooth-scroll back to the original anchor.
+    const initialHash = window.location.hash;
+    if (initialHash && window.scrollY > 50) {
+      window.scrollTo(0, 0);
+    }
+
     const lenis = new Lenis({
       duration: 1.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -34,11 +43,21 @@ export default function LandingPage() {
     }
     requestAnimationFrame(raf);
 
+    // After framer-motion processes newly-visible elements at top, scroll to target
+    let hashTimeout: ReturnType<typeof setTimeout> | undefined;
+    if (initialHash) {
+      hashTimeout = setTimeout(() => {
+        const target = document.querySelector(initialHash);
+        if (target) lenis.scrollTo(target as HTMLElement, { duration: 1.2 });
+      }, 350);
+    }
+
     const handleMouseMove = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (hashTimeout) clearTimeout(hashTimeout);
       lenis.destroy();
     };
   }, []);
