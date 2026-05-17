@@ -1,0 +1,106 @@
+{
+  "name": "VANTIXRAG GitHub Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "github-push",
+        "responseMode": "onReceived",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "a2111111-1111-1111-1111-111111111111",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "b2333333-3333-3333-3333-333333333333"
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $json.body || $json;\nconst commits = payload.commits || [];\nconst repo = payload.repository?.full_name || '';\nconst ref = (payload.ref || 'refs/heads/main').replace('refs/heads/', '');\n\nconst files = [];\ncommits.forEach(commit => {\n  [...(commit.added || []), ...(commit.modified || [])].forEach(path => {\n    if (path.startsWith('VANTIXRAG/') && path.endsWith('.md')) {\n      files.push({ path, repo, ref });\n    }\n  });\n});\n\nif (files.length === 0) return [];\nreturn files.map(f => ({ json: f }));"
+      },
+      "id": "c2333333-3333-3333-3333-333333333333",
+      "name": "Extract MD Files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://raw.githubusercontent.com/{{ $json.repo }}/{{ $json.ref }}/{{ $json.path }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "d2444444-4444-4444-4444-444444444444",
+      "name": "Fetch Raw Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const path = $('Extract MD Files').item.json.path;\nconst content = $json.data || '';\n\nreturn [{\n  json: {\n    section_key: path,\n    title: path.split('/').pop().replace('.md', '').replace(/_/g, ' '),\n    content: content,\n    category: 'knowledge',\n    status: 'active'\n  }\n}];"
+      },
+      "id": "e2555555-5555-5555-5555-555555555555",
+      "name": "Prepare Section Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO brain_sections (section_key, title, content, category, status, last_synced_at)\nVALUES ($1, $2, $3, $4, $5, NOW())\nON CONFLICT (section_key) DO UPDATE SET\n  content = EXCLUDED.content,\n  title = EXCLUDED.title,\n  status = 'active',\n  last_synced_at = NOW(),\n  updated_at = NOW();",
+        "options": {
+          "queryReplacement": "={{ $json.section_key }},={{ $json.title }},={{ $json.content }},={{ $json.category }},={{ $json.status }}"
+        }
+      },
+      "id": "f2666666-6666-6666-6666-666666666666",
+      "name": "UPSERT Brain Section",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1120, 300],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Neon"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [{ "node": "Extract MD Files", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract MD Files": {
+      "main": [
+        [{ "node": "Fetch Raw Content", "type": "main", "index": 0 }]
+      ]
+    },
+    "Fetch Raw Content": {
+      "main": [
+        [{ "node": "Prepare Section Data", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Section Data": {
+      "main": [
+        [{ "node": "UPSERT Brain Section", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "a2777777-7777-7777-7777-777777777777",
+  "meta": { "templateCredsSetupCompleted": true },
+  "id": "b2888888-8888-8888-8888-888888888888",
+  "tags": []
+}
