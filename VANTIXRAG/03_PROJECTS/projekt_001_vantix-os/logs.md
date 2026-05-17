@@ -632,22 +632,6 @@ FAZA A ciąg dalszy (z todo.md):
 
 ---
 
-```
-## YYYY-MM-DD — [Nazwa sesji]
+## 2026-05-18 — FAZA A: Unified landing page — cleanup kalkulatorów + nowa kolejność sekcji + poprawki UI/UX (sesja 13)
 
-**Sesja:** [Opis]
-**Agent:** [Model]
-**Czas:** [Szacowany]
-
-### Co zostało zrobione
-[Lista konkretnych działań]
-
-### Gdzie skończono
-[Plik, endpoint, moduł — punkt gdzie przerwano]
-
-### Następny krok
-[Co jest pierwsze w kolejnej sesji]
-
-### Blokery i otwarte pytania
-[Co blokuje, co wymaga decyzji Kacpra]
-```
+**S
