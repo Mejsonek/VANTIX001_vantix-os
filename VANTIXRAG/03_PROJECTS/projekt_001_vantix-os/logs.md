@@ -984,3 +984,62 @@ DeepSeek zaimplementował mockupy modułów CRM i DEV zgodnie z task speciem:
 1. **FAZA C**: CRM mockup (`/crm`) — lista leadów + kanban lejek + modal z AI opisem
 2. **FAZA C**: DEV mockup (`/dev`) — projekty, roadmapa, TODO, logi sesji
 3. Build + deploy na Vercel
+
+---
+
+## 2026-05-18 — FAZA A/C: Przegląd stanu projektu + dekompozycja na 2 równoległe chaty (sesja 19)
+
+**Sesja:** FAZA A/C — Przegląd architektury, planowanie podziału pracy
+**Agent:** Claude Code (Orchestrator)
+**Czas:** ~15 min
+
+### Co zostało zrobione
+
+#### Przegląd stanu projektu
+- Wczytano `CLAUDE.md` — potwierdzono architekturę dual-shell, zasady Cognitive Mesh, design system
+- Przejrzano `todo.md` — zaktualizowana lista zadań FAZA A–D
+- Przejrzano `plan_master.md` — potwierdzono priorytety: FAZA A (Landing) → FAZA B (System) → FAZA C (Shell) → FAZA D (Backend)
+- Sprawdzono aktualny stan plików źródłowych:
+  - `app/(shell)/dashboard/page.tsx` — ✅ CentralBrainFocus podpięty
+  - `app/(shell)/crm/page.tsx` — ✅ LeadList z mock danymi, ale bug: `initialLeads` prop nieużywany przez LeadList
+  - `app/(shell)/cockpit/` — ⚠️ przepisany na Vantix DS (TodayTasks), pozostałe komponenty OK
+  - `app/(shell)/dev/` — ✅ ProjectCard + RoadmapTimeline gotowe
+  - `components/crm/LeadList.tsx` — ⚠️ ma własne `mockLeads`, nie przyjmuje `initialLeads` od CRM page
+
+#### Dekompozycja na 2 oddzielne chaty
+
+Rozpisano podział pracy na 2 niezależne ścieżki do równoległej implementacji:
+
+**Chat 1: Backend & Infrastruktura (Neon + n8n + Formularze)**
+| Lp. | Task |
+|-----|------|
+| 1 | Neon: ALTER TABLE leads ADD COLUMN enrichment JSONB, ai_description TEXT, ai_score VARCHAR(10) |
+| 2 | n8n: New Lead Alert flow (Webhook → INSERT → Claude Haiku → UPDATE → Telegram) |
+| 3 | n8n: VANTIXRAG GitHub Sync (push → filter .md → UPSERT brain_sections) |
+| 4 | n8n: Daily Briefing (cron 08:00 → taski + leady → Telegram) |
+| 5 | Podmiana NEXT_PUBLIC_N8N_WEBHOOK_URL na HF Space w .env.local |
+| 6 | Lead magnet formularz (tylko email + imię) |
+
+**Chat 2: Frontend Shell (Cockpit + DEV + CRM fixy)**
+| Lp. | Task |
+|-----|------|
+| 1 | Cockpit — przepisać na Vantix DS (TodayTasks, WeekCalendar, PriorityList, AIRecommendations) |
+| 2 | DEV /dev — pełna strona z ProjectCard + RoadmapTimeline |
+| 3 | LeadList bugfix — zsynchronizować initialLeads prop z mock danymi |
+| 4 | Footer — dodać prawdziwe linki social media (LinkedIn, Twitter/X) |
+
+### Gdzie skończono
+
+- Pełny przegląd architektury i stanu projektu wykonany
+- Plan podziału na 2 równoległe chaty gotowy — czeka na decyzję Kacpra który chat odpalić jako pierwszy
+- Sesja kontynuowana w nowych chatach
+
+### Następny krok
+
+Decyzja Kacpra: który chat pierwszy? (Chat 1: Backend / Chat 2: Frontend)
+
+### Blokery i otwarte pytania
+
+- n8n webhook URL wciąż testowy — do podmiany na HF Space
+- LeadList.tsx nie używa initialLeads — bug do naprawy
+- Cockpit — część komponentów już przepisana na Vantix DS, TodayTasks wymaga dokończenia
