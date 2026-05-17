@@ -1,0 +1,331 @@
+// ============================================================
+// Prisma Schema — Vantix OS (Phase 2)
+// Baza: Neon Postgres (serverless)
+// Generator: prisma-client-js
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// 1. AUTH
+// ============================================================
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  email         String    @unique @db.VarChar(255)
+  name          String?   @db.VarChar(255)
+  avatarUrl     String?   @map("avatar_url") @db.Text
+  role          String    @default("owner") @db.VarChar(50)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  lastLoginAt   DateTime? @map("last_login_at") @db.Timestamptz()
+
+  sessions        Session[]
+  leads           Lead[]           @relation("LeadAssignee")
+  leadActivities  LeadActivity[]   @relation("ActivityCreator")
+  leadNotes       LeadNote[]       @relation("NoteCreator")
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  token     String   @unique @db.VarChar(500)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@map("sessions")
+}
+
+// ============================================================
+// 2. CRM
+// ============================================================
+
+model Lead {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  company    String?  @db.VarChar(255)
+  email      String?  @db.VarChar(255)
+  phone      String?  @db.VarChar(50)
+  source     String?  @db.VarChar(100)
+  stage      String   @default("new") @db.VarChar(100)
+  value      Decimal? @db.Decimal(10, 2)
+  notes      String?  @db.Text
+  tags       String[]
+  assignedTo String?  @map("assigned_to") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  assignee   User?            @relation("LeadAssignee", fields: [assignedTo], references: [id])
+  activities LeadActivity[]
+  notes_rel  LeadNote[]
+  finance    FinanceEntry[]
+
+  @@index([stage])
+  @@index([createdAt(sort: Desc)])
+  @@map("leads")
+}
+
+model LeadActivity {
+  id          String   @id @default(uuid()) @db.Uuid
+  leadId      String   @map("lead_id") @db.Uuid
+  type        String   @db.VarChar(100)
+  description String?  @db.Text
+  oldValue    String?  @map("old_value") @db.VarChar(255)
+  newValue    String?  @map("new_value") @db.VarChar(255)
+  createdBy   String?  @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  lead    Lead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  creator User? @relation("ActivityCreator", fields: [createdBy], references: [id])
+
+  @@index([leadId])
+  @@map("lead_activity")
+}
+
+model LeadNote {
+  id        String   @id @default(uuid()) @db.Uuid
+  leadId    String   @map("lead_id") @db.Uuid
+  content   String   @db.Text
+  createdBy String?  @map("created_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  lead    Lead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  creator User? @relation("NoteCreator", fields: [createdBy], references: [id])
+
+  @@index([leadId])
+  @@map("lead_notes")
+}
+
+// ============================================================
+// 3. DEV TOOL
+// ============================================================
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  code        String   @unique @db.VarChar(50)
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  status      String   @default("active") @db.VarChar(100)
+  phase       String?  @db.VarChar(50)
+  clientName  String?  @map("client_name") @db.VarChar(255)
+  clientEmail String?  @map("client_email") @db.VarChar(255)
+  budget      Decimal? @db.Decimal(10, 2)
+  paid        Decimal  @default(0) @db.Decimal(10, 2)
+  repoUrl     String?  @map("repo_url") @db.Text
+  deployUrl   String?  @map("deploy_url") @db.Text
+  stack       String[]
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  todos     ProjectTodo[]
+  logs      ProjectLog[]
+  decisions ProjectDecision[]
+  tasks     Task[]
+  notes     Note[]
+  finance   FinanceEntry[]
+
+  @@index([status])
+  @@map("projects")
+}
+
+model ProjectTodo {
+  id          String    @id @default(uuid()) @db.Uuid
+  projectId   String    @map("project_id") @db.Uuid
+  title       String    @db.Text
+  description String?   @db.Text
+  status      String    @default("todo") @db.VarChar(50)
+  priority    String    @default("medium") @db.VarChar(50)
+  phase       String?   @db.VarChar(50)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz()
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([status])
+  @@map("project_todos")
+}
+
+model ProjectLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  projectId    String   @map("project_id") @db.Uuid
+  sessionDate  DateTime @map("session_date") @db.Date
+  title        String?  @db.VarChar(255)
+  whatWasDone  String?  @map("what_was_done") @db.Text
+  whereStopped String?  @map("where_stopped") @db.Text
+  nextStep     String?  @map("next_step") @db.Text
+  blockers     String?  @db.Text
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("project_logs")
+}
+
+model ProjectDecision {
+  id           String   @id @default(uuid()) @db.Uuid
+  projectId    String   @map("project_id") @db.Uuid
+  code         String?  @db.VarChar(20)
+  title        String   @db.VarChar(255)
+  decision     String   @db.Text
+  rationale    String?  @db.Text
+  alternatives String?  @db.Text
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("project_decisions")
+}
+
+// ============================================================
+// 4. COCKPIT
+// ============================================================
+
+model Task {
+  id          String    @id @default(uuid()) @db.Uuid
+  title       String    @db.Text
+  description String?   @db.Text
+  status      String    @default("todo") @db.VarChar(50)
+  priority    String    @default("medium") @db.VarChar(50)
+  projectId   String?   @map("project_id") @db.Uuid
+  dueDate     DateTime? @map("due_date") @db.Date
+  completedAt DateTime? @map("completed_at") @db.Timestamptz()
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([dueDate])
+  @@index([projectId])
+  @@map("tasks")
+}
+
+model Note {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String?  @db.VarChar(255)
+  content   String   @db.Text
+  tags      String[]
+  projectId String?  @map("project_id") @db.Uuid
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@map("notes")
+}
+
+// ============================================================
+// 5. FINANSE
+// ============================================================
+
+model FinanceEntry {
+  id            String   @id @default(uuid()) @db.Uuid
+  type          String   @db.VarChar(20)
+  amount        Decimal  @db.Decimal(10, 2)
+  currency      String   @default("PLN") @db.VarChar(10)
+  category      String?  @db.VarChar(100)
+  description   String?  @db.Text
+  projectId     String?  @map("project_id") @db.Uuid
+  leadId        String?  @map("lead_id") @db.Uuid
+  invoiceNumber String?  @map("invoice_number") @db.VarChar(100)
+  date          DateTime @db.Date
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  lead    Lead?    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([date(sort: Desc)])
+  @@index([type])
+  @@index([projectId])
+  @@map("finance_entries")
+}
+
+// ============================================================
+// 6. BRAIN / VANTIXRAG
+// ============================================================
+
+model BrainSection {
+  id           String    @id @default(uuid()) @db.Uuid
+  sectionKey   String    @unique @map("section_key") @db.VarChar(255)
+  title        String    @db.VarChar(255)
+  content      String?   @db.Text
+  category     String?   @db.VarChar(100)
+  status       String    @default("draft") @db.VarChar(50)
+  lastSyncedAt DateTime? @map("last_synced_at") @db.Timestamptz()
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([category])
+  @@index([status])
+  @@map("brain_sections")
+}
+
+model BrainMemory {
+  id          String    @id @default(uuid()) @db.Uuid
+  scope       String    @db.VarChar(100)
+  key         String    @db.VarChar(255)
+  value       String?   @db.Text
+  sessionDate DateTime? @map("session_date") @db.Date
+  expiresAt   DateTime? @map("expires_at") @db.Timestamptz()
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@unique([scope, key])
+  @@index([scope])
+  @@map("brain_memory")
+}
+
+// ============================================================
+// 7. SETTINGS / INTEGRATIONS
+// ============================================================
+
+model Integration {
+  id         String    @id @default(uuid()) @db.Uuid
+  name       String    @unique @db.VarChar(100)
+  status     String    @default("inactive") @db.VarChar(50)
+  config     Json?     @db.JsonB
+  lastPingAt DateTime? @map("last_ping_at") @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("integrations")
+}
+
+// ============================================================
+// 8. WORKFLOWS
+// ============================================================
+
+model WorkflowLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  workflowName  String   @map("workflow_name") @db.VarChar(255)
+  triggerType   String?  @map("trigger_type") @db.VarChar(100)
+  status        String   @db.VarChar(50)
+  payload       Json?    @db.JsonB
+  result        Json?    @db.JsonB
+  error         String?  @db.Text
+  durationMs    Int?     @map("duration_ms")
+  correlationId String   @default(uuid()) @map("correlation_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("workflow_logs")
+}
