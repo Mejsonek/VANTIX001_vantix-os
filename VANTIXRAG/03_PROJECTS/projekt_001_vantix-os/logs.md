@@ -1325,3 +1325,46 @@ Pliki zmienione:
 ### Blokery i otwarte pytania
 
 - Brak (sesja wykonana i zamknięta)
+
+---
+
+## 2026-05-18 — TASK-S05: Analytics Page — Token & Cost Dashboard (sesja 20)
+
+**Sesja:** Przepisanie `app/(system)/system/analytics/page.tsx` — metryki tokenów i kosztów AI
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~10 min
+
+### Co zostało zrobione
+
+- Przepisano `app/(system)/system/analytics/page.tsx` z placeholder "coming soon" na pełny dashboard telemetrii AI
+  - **Top bar**: etykieta "Analytics" + heading "AI Telemetry" (font-display 26px) + badge "May 12–18" (vx-badge-gold)
+  - **Summary stats (4 karty)**: Total Tokens MTD, Total Cost MTD ($1.24), Avg Daily Cost ($0.18), Jobs Ran (7) — każda karta `vx-card vx-3d fade-up` z value-lg i stat-accent-line
+  - **Bar chart (CSS only)**: 7 słupków dla 7 dni (05-12 do 05-18) — wysokość proporcjonalna `(cost/maxCost)*80px`, etykieta $ nad słupkiem (text-gold 9px), data pod słupkiem (text-ivory/30 9px), baseline gold/10. Animacje `row-enter` ze stagger delay.
+  - **Model breakdown table (3 wiersze)**: Claude Sonnet 4.6 (62%), DeepSeek R1 (28%), Claude Haiku 4.5 (10%) — kolumny: Model, Role, Tokens, Cost, % Share z mini-progress barem
+  - **TypeScript strict**: interfejsy `DailyCost` i `ModelBreakdown`, `useMemo` dla stats i maxCost, brak `any`
+  - Użyte istniejące klasy CSS: `vx-card`, `vx-3d`, `vx-badge-gold`, `vx-label`, `label-xs`, `body-sm`, `value-lg`, `fade-up`, `row-enter`, `mini-progress`, `stat-accent-line`, `grid-bg`
+
+### Pliki zmienione
+
+| Plik | Akcja |
+|------|-------|
+| `app/(system)/system/analytics/page.tsx` | Przepisany (z 9 linii placeholder → ~170 linii z bar chartem + tabelą) |
+
+### Warunki akceptacji
+- [x] Bar chart z 7 słupkami (only CSS/HTML, zero bibliotek)
+- [x] Wysokość słupka proporcjonalna: `(cost/maxCost)*80px` — max height 80px
+- [x] Tabela model breakdown z 3 wierszami i progress barem % share
+- [x] 4 summary karty z danymi (Total Tokens, Total Cost, Avg Daily, Jobs Ran)
+- [x] Top bar "ANALYTICS / AI TELEMETRY"
+- [x] `'use client'` (useMemo)
+
+### Następny krok
+
+System Panel ciąg dalszy:
+1. [ ] Workflows page (`/system/workflows`) — lista n8n flowów
+2. [ ] Settings page (`/system/settings`) — konfiguracja systemu
+3. [ ] Phase 2 — Prisma + NextAuth + Cognitive Mesh
+
+### Blokery i otwarte pytania
+
+- Brak (sesja wykonana i zamknięta)
