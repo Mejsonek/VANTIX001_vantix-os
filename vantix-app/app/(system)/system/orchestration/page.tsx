@@ -66,10 +66,10 @@ export default function OrchestrationPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-void">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="grid-bg" />
 
-      <div className="relative z-10 p-6 space-y-6">
+      <div className="relative z-10 flex-1 overflow-y-auto p-6 space-y-6">
         {/* ── TOP BAR ── */}
         <div className="flex items-center justify-between">
           <div>

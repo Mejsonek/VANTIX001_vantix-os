@@ -1,7 +1,7 @@
 # todo.md — Lista Zadań VANTIX001
 
 > Aktualizuj po każdej sesji. To jest żywy dokument — nie archiwum.
-> Ostatnia aktualizacja: 2026-05-18 (sesja 11 — nowe teksty Hero + FAQ)
+> Ostatnia aktualizacja: 2026-05-18 (sesja 21 — System Panel wszystkie strony ✅)
 > Pełny plan: `plan_master.md`
 
 ---
@@ -45,10 +45,10 @@ FAZA D — Phase 2 Backend
 
 ## 🟠 FAZA C — Shell Mockupy (priorytet #3)
 
-- [ ] Dashboard — podpiąć `CentralBrainFocus` do `app/(shell)/dashboard/page.tsx` *(5 min)*
-- [ ] CRM `/crm` — lista leadów + kanban lejek + modal z AI opisem leada
-- [ ] Cockpit `/cockpit` — przepisać na Vantix Design System (aktualnie stary white design)
-- [ ] DEV `/dev` — projekty, roadmapa, TODO, logi sesji
+- [x] Dashboard — podpiąć `CentralBrainFocus` do `app/(shell)/dashboard/page.tsx` *(sesja 17)*
+- [x] CRM `/crm` — lista leadów + kanban lejek — skeleton z mock data *(sesja 18 DeepSeek)*
+- [x] Cockpit `/cockpit` — przepisany na Vantix Design System, Tailwind v4 *(sesja 17 + 21)*
+- [x] DEV `/dev` — ProjectCard + RoadmapTimeline z mock data *(sesja 18 DeepSeek)*
 
 ---
 
@@ -66,20 +66,20 @@ FAZA D — Phase 2 Backend
 - [x] `components/shell/IsometricMetricLedger.tsx` — metryki placeholder (leady, projekty, taski, flows)
 - [ ] `components/shell/SystemStatusBar.tsx` — pasek statusu na dole *(opcjonalne — status jest w IsometricMetricLedger)*
 - [x] `app/(shell)/layout.tsx` — grid `[auto_1fr_auto]`, Dock + Focus + Metrics
-- [x] `app/(shell)/dashboard/page.tsx` — stworzony (placeholder; CentralBrainFocus do podpięcia)
+- [x] `app/(shell)/dashboard/page.tsx` — CentralBrainFocus podpięty *(sesja 17)*
 
 **Mockupy modułów — `(shell)/`**
-- [ ] `app/(shell)/crm/` — lista leadów, lejek kanban, AddLeadModal *(placeholder gotowy)*
-- [x] `app/(shell)/cockpit/` — przeniesiony z `/cockpit` *(design mismatch — do przepisania na Vantix DS)*
-- [ ] `app/(shell)/dev/` — projekty, roadmapa, TODO, logi sesji *(placeholder gotowy)*
+- [x] `app/(shell)/crm/` — lista leadów, lejek kanban, mock data *(sesja 18 DeepSeek)*
+- [x] `app/(shell)/cockpit/` — przepisany na Vantix DS, Tailwind v4 *(sesja 17 + 21)*
+- [x] `app/(shell)/dev/` — ProjectCard + RoadmapTimeline, mock data *(sesja 18 DeepSeek)*
 
 **System Panel — `(system)/`**
-- [x] `app/(system)/layout.tsx` — ciemny layout (`bg-[#020202]`)
-- [x] `app/(system)/system/brain/` — placeholder gotowy
-- [x] `app/(system)/system/orchestration/` — placeholder gotowy
-- [x] `app/(system)/system/workflows/` — placeholder gotowy
-- [x] `app/(system)/system/analytics/` — placeholder gotowy
-- [x] `app/(system)/system/settings/` — placeholder gotowy
+- [x] `app/(system)/layout.tsx` — sidebar 200px z nawigacją, aktywny link gold *(TASK-S01)*
+- [x] `app/(system)/system/brain/` — VANTIXRAG Section Browser, search, 10 kart *(TASK-S02)*
+- [x] `app/(system)/system/orchestration/` — AI Job Monitor, 5 jobów, stats row *(TASK-S03)*
+- [x] `app/(system)/system/workflows/` — n8n Flow Monitor, 5 flows, trigger btn *(TASK-S04)*
+- [x] `app/(system)/system/analytics/` — bar chart CSS, model breakdown, stats *(TASK-S05)*
+- [x] `app/(system)/system/settings/` — API Keys, Model Registry, System Info *(TASK-S06)*
 
 ---
 

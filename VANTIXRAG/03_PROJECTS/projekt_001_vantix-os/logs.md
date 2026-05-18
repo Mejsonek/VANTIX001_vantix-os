@@ -1328,6 +1328,87 @@ Pliki zmienione:
 
 ---
 
+## 2026-05-18 — TASK-S03 + S04 + S06: Orchestration, Workflows, Settings pages (sesja 21)
+
+**Sesja:** Implementacja pozostałych 3 stron System Panel
+**Agent:** Claude Sonnet 4.6 (Claude Code)
+**Czas:** ~25 min
+
+### Co zostało zrobione
+
+#### TASK-S03 — Orchestration Page (`/system/orchestration`)
+- Przepisano `app/(system)/system/orchestration/page.tsx` z placeholder na AI Job Monitor
+- Top bar: "COGNITIVE MESH / ORCHESTRATION" + badge "3 completed today"
+- Stats row (4 karty): Jobs Today, Success Rate (75%), Total Tokens, Total Cost — wszystkie obliczone przez `useMemo` z mock data
+- Tabela 5 jobów: JOB-001–005, kolumny Job ID | Type | Orch → Worker | Status | Tokens | Cost | Time | Created
+- Status badges: `vx-badge-green` completed, `vx-badge-gold` processing/pending, `vx-badge-red` failed
+- Type badges: `vx-badge-dim` dla decompose/implement/review
+- TypeScript strict: `Job` interface, `Record<>` na mapach badge/label, `useMemo` dla stats
+
+#### TASK-S04 — Workflows Page (`/system/workflows`)
+- Przepisano `app/(system)/system/workflows/page.tsx` z placeholder na n8n Flow Monitor
+- Top bar: "WORKFLOWS / n8n" + badge "WARN — sleeping" (`vx-badge-gold`)
+- Stats row (3 karty): Active Flows (4/5), Runs Today, Errors Today — `useMemo`, dynamiczne kolorowanie errors
+- Tabela 5 flows: WF-001–005, kolumny Flow | Trigger | Status | Last Run | Runs | Errors | [Trigger btn]
+- Status: `vx-badge-green` active, `vx-badge-dim` inactive
+- Trigger type: `vx-badge-gold` webhook, `vx-badge-blue` cron, `vx-badge-dim` manual
+- Przycisk "Trigger" disabled (`opacity-40 cursor-not-allowed`)
+
+#### TASK-S06 — Settings Page (`/system/settings`)
+- Przepisano `app/(system)/system/settings/page.tsx` z placeholder na Config Panel
+- Top bar: "SETTINGS / Configuration" + "System Online" dot
+- Sekcja "API Keys" (5 wpisów): tabela Name | Provider | Key (zamaskowana) | Status — badges green/gold/dim
+- Sekcja "Model Registry" (3 modele): tabela Model ID | Name | Role (Orchestrator złoty, Worker niebieski) | Provider | Cost
+- Sekcja "System Info": 3 karty — Version (v0.2.1-alpha), Environment (DEVELOPMENT), Last Deploy (pending)
+- Klucze zawsze zamaskowane — `select-none` na key column, `***` w środku każdego klucza
+
+### Pliki zmienione
+
+| Plik | Akcja |
+|------|-------|
+| `app/(system)/system/orchestration/page.tsx` | Przepisany (placeholder → 170 linii AI Job Monitor) |
+| `app/(system)/system/workflows/page.tsx` | Przepisany (placeholder → 150 linii n8n Flow Monitor) |
+| `app/(system)/system/settings/page.tsx` | Przepisany (placeholder → 170 linii Config Panel) |
+
+### Warunki akceptacji — wszystkie ✅
+
+| TASK | Check |
+|------|-------|
+| S03: Tabela z 5 jobami, status kolorowany | ✅ |
+| S03: Stats row 4 karty z useMemo | ✅ |
+| S04: 5 flows, prawidłowe kolorowanie statusów | ✅ |
+| S04: Przycisk Trigger disabled | ✅ |
+| S04: n8n status badge "WARN" | ✅ |
+| S06: 5 API keys z zamaskowanymi kluczami | ✅ |
+| S06: 3 modele w Model Registry | ✅ |
+| S06: Klucze nigdy nie pokazują pełnej wartości | ✅ |
+
+### Stan System Panel po sesji
+
+| Strona | Status |
+|--------|--------|
+| `layout.tsx` (sidebar nav) | ✅ TASK-S01 |
+| `/system/brain` | ✅ TASK-S02 |
+| `/system/orchestration` | ✅ TASK-S03 |
+| `/system/workflows` | ✅ TASK-S04 |
+| `/system/analytics` | ✅ TASK-S05 |
+| `/system/settings` | ✅ TASK-S06 |
+
+**System Panel: wszystkie 5 stron + layout kompletne.**
+
+### Następny krok
+
+1. **Phase 2** — Prisma + NextAuth + Cognitive Mesh (backend MVP)
+2. **FAZA A** pending: podmiana `NEXT_PUBLIC_N8N_WEBHOOK_URL` na HF Space (Kacper)
+3. **n8n flows**: New Lead Alert, VANTIXRAG GitHub Sync, Daily Briefing
+
+### Blokery i otwarte pytania
+
+- Deploy na Vercel — branch main wymaga `git push` żeby Vercel zdeployował zmiany
+- n8n webhook URL wciąż testowy — do podmiany przez Kacpra
+
+---
+
 ## 2026-05-18 — TASK-S05: Analytics Page — Token & Cost Dashboard (sesja 20)
 
 **Sesja:** Przepisanie `app/(system)/system/analytics/page.tsx` — metryki tokenów i kosztów AI

@@ -51,10 +51,10 @@ export default function WorkflowsPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-void">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <div className="grid-bg" />
 
-      <div className="relative z-10 p-6 space-y-6">
+      <div className="relative z-10 flex-1 overflow-y-auto p-6 space-y-6">
         {/* ── TOP BAR ── */}
         <div className="flex items-center justify-between">
           <div>
@@ -71,13 +71,13 @@ export default function WorkflowsPage() {
         {/* ── STATS ROW ── */}
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Active Flows', value: stats.active, sub: 'of 5 total' },
-            { label: 'Runs Today', value: stats.runsToday, sub: 'May 18' },
-            { label: 'Errors Today', value: stats.errorsToday, sub: stats.errorsToday > 0 ? 'needs attention' : 'clean' },
+            { label: 'Active Flows', value: stats.active, sub: 'of 5 total', valueClass: 'value-lg' },
+            { label: 'Runs Today', value: stats.runsToday, sub: 'May 18', valueClass: 'value-lg' },
+            { label: 'Errors Today', value: stats.errorsToday, sub: stats.errorsToday > 0 ? 'needs attention' : 'clean', valueClass: stats.errorsToday > 0 ? 'font-display text-[22px] font-black text-vred' : 'font-display text-[22px] font-black text-vgreen' },
           ].map((stat, i) => (
             <div key={stat.label} className={`vx-card vx-3d fade-up delay-${i + 1}`}>
               <span className="label-xs">{stat.label}</span>
-              <p className="value-lg mt-2">{stat.value}</p>
+              <p className={`${stat.valueClass} mt-2`}>{stat.value}</p>
               <span className="label-xs mt-1">{stat.sub}</span>
               <div className="stat-accent-line" />
             </div>
